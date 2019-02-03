@@ -9,17 +9,19 @@ public class GameMain {
     private static final int GAME_HEIGHT = 512;
 
     private static JFrame frame;
+    private static Menu menu;
 
     public static void main(String[] args) {
         Resources.load();
         frame = new JFrame(GAME_TITLE);
-        createWindow(frame);
-        Menu menu = new Menu(GAME_WIDTH, GAME_HEIGHT);
+        initFrame(frame);
+        menu = new Menu(GAME_WIDTH, GAME_HEIGHT);
+        menu.setVisible(true);
         frame.add(menu);
         frame.revalidate();
     }
 
-    private static void createWindow(JFrame frame) {
+    private static void initFrame(JFrame frame) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -28,15 +30,11 @@ public class GameMain {
     }
 
     static void startGame() {
-        System.out.println("Game Started");
-    }
-
-    static int getGameWidth() {
-        return GAME_WIDTH;
-    }
-
-    static int getGameHeight() {
-        return GAME_HEIGHT;
+        Game game = new Game(GAME_WIDTH, GAME_HEIGHT);
+        frame.add(game);
+        menu.setVisible(false);
+        game.setVisible(true);
+        frame.revalidate();
     }
 
 }

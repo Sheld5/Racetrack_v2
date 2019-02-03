@@ -16,12 +16,11 @@ class Menu extends JPanel {
         init();
         initMenuSelection();
         initGameModeSelection();
-        setVisible(true);
         System.out.println("Menu initialized");
     }
 
     private void init() {
-        setSize(GameMain.getGameWidth(), GameMain.getGameHeight());
+        setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
     }
@@ -38,7 +37,7 @@ class Menu extends JPanel {
         playButton = new JButton("Play");
         playButton.setBounds(x , 50, width, height);
         playButton.addActionListener(e -> goToGameModeSelection());
-        setVisible(true);
+        playButton.setVisible(true);
         add(playButton);
     }
 
@@ -46,7 +45,7 @@ class Menu extends JPanel {
         exitButton = new JButton("Exit");
         exitButton.setBounds(x , 150, width, height);
         exitButton.addActionListener(e -> System.exit(0));
-        setVisible(true);
+        exitButton.setVisible(true);
         add(exitButton);
     }
 
