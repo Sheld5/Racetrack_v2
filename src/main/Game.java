@@ -13,8 +13,8 @@ class Game extends JPanel {
 
     Game(int width, int height) {
         init(width, height);
-        initMap();
         initCar();
+        initMap();
         System.out.println("Game initialized");
     }
 
