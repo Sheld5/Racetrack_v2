@@ -7,25 +7,24 @@ import java.awt.*;
 
 public class Map extends JPanel {
 
-    private int width, height;
+    private int widthInTiles, heightInTiles;
     private int tileSize;
     private enum Tile {
         START, FINISH, CHECKPOINT, ROAD, GRASS, WATER, WALL, SAND
     }
     private Tile[][] mapTile;
 
-    public Map(int width, int height, int tileSize, int[][] mapInt) {
-        init(width, height, tileSize);
+    public Map(int widthInTiles, int heightInTiles, int tileSize, int[][] mapInt) {
+        init(widthInTiles, heightInTiles, tileSize);
         initMapTile(mapInt);
     }
 
     private void init(int width, int height, int tileSize) {
-        this.width = width * tileSize;
-        this.height = height * tileSize;
+        this.widthInTiles = width * tileSize;
+        this.heightInTiles = height * tileSize;
         this.tileSize = tileSize;
-        setSize(width, height);
+        setSize(width * tileSize, height * tileSize);
         setBackground(Color.BLACK);
-        setLayout(null);
     }
 
     private void initMapTile(int[][] mapInt) {

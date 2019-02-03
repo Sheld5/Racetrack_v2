@@ -1,5 +1,6 @@
 package main;
 
+import model.Car;
 import model.Map;
 
 import javax.swing.*;
@@ -7,18 +8,17 @@ import java.awt.*;
 
 class Game extends JPanel {
 
-    private int width, height;
     private Map map;
+    private Car car;
 
     Game(int width, int height) {
         init(width, height);
         initMap();
+        initCar();
         System.out.println("Game initialized");
     }
 
     private void init(int width, int height) {
-        this.width = width;
-        this.height = height;
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
@@ -50,9 +50,16 @@ class Game extends JPanel {
                 }
         );
 
-        map.setBounds(50, 50, 20 * 16, 20 * 16);
+        map.setLocation(50, 50);
         map.setVisible(true);
         add(map);
+    }
+
+    private void initCar() {
+        car = new Car(16, 16);
+        car.setLocation(50 + 3 * 16, 50 + 9 * 16);
+        car.setVisible(true);
+        add(car);
     }
 
 }

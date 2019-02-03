@@ -5,7 +5,6 @@ import java.awt.*;
 
 class Menu extends JPanel {
 
-    private int width, height;
     private JButton playButton, exitButton;
     private JLabel gameModeSelection;
     private JButton startButton, backButton;
@@ -18,8 +17,6 @@ class Menu extends JPanel {
     }
 
     private void init(int width, int height) {
-        this.width = width;
-        this.height = height;
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
@@ -28,7 +25,7 @@ class Menu extends JPanel {
     private void initMenuSelection() {
         int buttonWidth = 100;
         int buttonHeight = 50;
-        int selectionX = width / 2 - buttonWidth / 2;
+        int selectionX = getWidth() / 2 - buttonWidth / 2;
         initPlayButton(selectionX, buttonWidth, buttonHeight);
         initExitButton(selectionX, buttonWidth, buttonHeight);
     }
@@ -51,18 +48,18 @@ class Menu extends JPanel {
 
     private void initGameModeSelection() {
         gameModeSelection = new JLabel("Game Mode Selection");
-        gameModeSelection.setBounds(width / 2 - 125, height / 2 - 225, 250, 50);
+        gameModeSelection.setBounds(getWidth() / 2 - 125, getHeight() / 2 - 225, 250, 50);
         gameModeSelection.setVisible(false);
         add(gameModeSelection);
 
         startButton = new JButton("Start Game");
-        startButton.setBounds(width / 2 - 50, height / 2 + 25, 100, 50);
+        startButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 + 25, 100, 50);
         startButton.addActionListener(e -> GameMain.startGame());
         startButton.setVisible(false);
         add(startButton);
 
         backButton = new JButton("Back");
-        backButton.setBounds(width / 2 - 50, height / 2 + 125, 100, 50);
+        backButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 + 125, 100, 50);
         backButton.addActionListener(e -> goToMainMenu());
         backButton.setVisible(false);
         add(backButton);
