@@ -4,12 +4,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-class Resources {
+public class Resources {
     static BufferedImage windowIcon;
-    static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand;
+    public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand;
 
     private static int numberOfErrors = 0;
-
 
     static void load() {
         windowIcon = loadImage("carIcon.png");

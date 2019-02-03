@@ -11,15 +11,15 @@ class Menu extends JPanel {
     private JButton startButton, backButton;
 
     Menu(int width, int height) {
-        this.width = width;
-        this.height = height;
-        init();
+        init(width, height);
         initMenuSelection();
         initGameModeSelection();
         System.out.println("Menu initialized");
     }
 
-    private void init() {
+    private void init(int width, int height) {
+        this.width = width;
+        this.height = height;
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
