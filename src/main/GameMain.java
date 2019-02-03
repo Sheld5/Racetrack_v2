@@ -8,12 +8,15 @@ public class GameMain {
     private static final int GAME_WIDTH = 512;
     private static final int GAME_HEIGHT = 512;
 
+    private static JFrame frame;
+
     public static void main(String[] args) {
         Resources.load();
-        JFrame frame = new JFrame(GAME_TITLE);
+        frame = new JFrame(GAME_TITLE);
         createWindow(frame);
         Menu menu = new Menu();
         frame.add(menu);
+        frame.revalidate();
     }
 
     private static void createWindow(JFrame frame) {
