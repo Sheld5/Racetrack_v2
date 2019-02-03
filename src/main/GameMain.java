@@ -14,7 +14,7 @@ public class GameMain {
         Resources.load();
         frame = new JFrame(GAME_TITLE);
         createWindow(frame);
-        Menu menu = new Menu();
+        Menu menu = new Menu(GAME_WIDTH, GAME_HEIGHT);
         frame.add(menu);
         frame.revalidate();
     }

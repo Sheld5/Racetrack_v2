@@ -5,15 +5,17 @@ import java.awt.*;
 
 class Menu extends JPanel {
 
-    private final int BUTTON_WIDTH = 100;
-    private final int BUTTON_HEIGHT = 50;
-    private final int SELECTION_X = (GameMain.getGameWidth() / 2) - (BUTTON_WIDTH / 2);
+    private int width, height;
+    private JButton playButton, exitButton;
+    private JLabel gameModeSelection;
+    private JButton startButton, backButton;
 
-    private JButton playButton, exitButton, pvpButton, pvaiButton, aivaiButton, backButton;
-
-    Menu() {
+    Menu(int width, int height) {
+        this.width = width;
+        this.height = height;
         init();
-        initSelection();
+        initMenuSelection();
+        initGameModeSelection();
         setVisible(true);
         System.out.println("Menu initialized");
     }
@@ -24,79 +26,68 @@ class Menu extends JPanel {
         setLayout(null);
     }
 
-    private void initSelection() {
-        initPlayButton();
-        initExitButton();
-        initPVPButton();
-        initPVAIButton();
-        initAIVAIButton();
-        initBackButton();
+    private void initMenuSelection() {
+        int buttonWidth = 100;
+        int buttonHeight = 50;
+        int selectionX = width / 2 - buttonWidth / 2;
+        initPlayButton(selectionX, buttonWidth, buttonHeight);
+        initExitButton(selectionX, buttonWidth, buttonHeight);
     }
 
-    private void initPlayButton() {
+    private void initPlayButton(int x, int width, int height) {
         playButton = new JButton("Play");
-        playButton.setBounds(SELECTION_X, 50, BUTTON_WIDTH, BUTTON_HEIGHT);
+        playButton.setBounds(x , 50, width, height);
         playButton.addActionListener(e -> goToGameModeSelection());
+        setVisible(true);
         add(playButton);
-        setVisible(true);
     }
 
-    private void initExitButton() {
+    private void initExitButton(int x, int width, int height) {
         exitButton = new JButton("Exit");
-        exitButton.setBounds(SELECTION_X, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
-        exitButton.addActionListener(e -> System.exit(0)    );
-        add(exitButton);
+        exitButton.setBounds(x , 150, width, height);
+        exitButton.addActionListener(e -> System.exit(0));
         setVisible(true);
+        add(exitButton);
     }
 
-    private void initPVPButton() {
-        pvpButton = new JButton("PVP");
-        pvpButton.setBounds(SELECTION_X, 50, BUTTON_WIDTH, BUTTON_HEIGHT);
-        pvpButton.addActionListener(e -> System.out.println("PVP button pressed"));
-        add(pvpButton);
-        pvpButton.setVisible(false);
-    }
+    private void initGameModeSelection() {
+        gameModeSelection = new JLabel("Game Mode Selection");
+        gameModeSelection.setBounds(width / 2 - 125, height / 2 - 225, 250, 50);
+        gameModeSelection.setVisible(false);
+        add(gameModeSelection);
 
-    private void initPVAIButton() {
-        pvaiButton = new JButton("PVAI");
-        pvaiButton.setBounds(SELECTION_X, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
-        pvaiButton.addActionListener(e -> System.out.println("PVAI button pressed"));
-        add(pvaiButton);
-        pvaiButton.setVisible(false);
-    }
+        startButton = new JButton("Start Game");
+        startButton.setBounds(width / 2 - 50, height / 2 + 25, 100, 50);
+        startButton.addActionListener(e -> GameMain.startGame());
+        startButton.setVisible(false);
+        add(startButton);
 
-    private void initAIVAIButton() {
-        aivaiButton = new JButton("AIVAI");
-        aivaiButton.setBounds(SELECTION_X, 250, BUTTON_WIDTH, BUTTON_HEIGHT);
-        aivaiButton.addActionListener(e -> System.out.println("AIVAI button pressed"));
-        add(aivaiButton);
-        aivaiButton.setVisible(false);
-    }
-
-    private void initBackButton() {
         backButton = new JButton("Back");
-        backButton.setBounds(SELECTION_X, 350, BUTTON_WIDTH, BUTTON_HEIGHT);
+        backButton.setBounds(width / 2 - 50, height / 2 + 125, 100, 50);
         backButton.addActionListener(e -> goToMainMenu());
-        add(backButton);
         backButton.setVisible(false);
+        add(backButton);
     }
 
     private void goToGameModeSelection() {
-        playButton.setVisible(false);
-        exitButton.setVisible(false);
-        pvpButton.setVisible(true);
-        pvaiButton.setVisible(true);
-        aivaiButton.setVisible(true);
-        backButton.setVisible(true);
+        setVisibleMainMenu(false);
+        setVisibleGameModeSelection(true);
     }
 
     private void goToMainMenu() {
-        pvpButton.setVisible(false);
-        pvaiButton.setVisible(false);
-        aivaiButton.setVisible(false);
-        backButton.setVisible(false);
-        playButton.setVisible(true);
-        exitButton.setVisible(true);
+        setVisibleGameModeSelection(false);
+        setVisibleMainMenu(true);
+    }
+
+    private void setVisibleMainMenu(boolean b) {
+        playButton.setVisible(b);
+        exitButton.setVisible(b);
+    }
+
+    private void setVisibleGameModeSelection(boolean b) {
+        gameModeSelection.setVisible(b);
+        startButton.setVisible(b);
+        backButton.setVisible(b);
     }
 
 }
