@@ -1,6 +1,7 @@
 package main;
 
 import model.Car;
+import model.Crosshair;
 import model.Map;
 
 import javax.swing.*;
@@ -8,12 +9,16 @@ import java.awt.*;
 
 class Game extends JPanel {
 
+    private final int TILE_SIZE = 16;
+
     private Map map;
-    private Car car;
+    private Car[] cars;
+    private Crosshair[] ch;
 
     Game(int width, int height) {
         init(width, height);
-        initCar();
+        initCrosshair();
+        initCars();
         initMap();
         System.out.println("Game initialized");
     }
@@ -25,7 +30,7 @@ class Game extends JPanel {
     }
 
     private void initMap() {
-        map = new Map(20, 20, 16,
+        map = new Map(20, 20, TILE_SIZE,
                 new int[][] {
                     {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
                     {7,3,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,7},
@@ -55,11 +60,24 @@ class Game extends JPanel {
         add(map);
     }
 
-    private void initCar() {
-        car = new Car(16, 16);
-        car.setLocation(50 + 3 * 16, 50 + 9 * 16);
-        car.setVisible(true);
-        add(car);
+    private void initCars() {
+        cars = new Car[4];
+        for (int i = 0; i < cars.length; i++) {
+            cars[i] = new Car(TILE_SIZE);
+            cars[i].setLocation(50 + 3 * TILE_SIZE, 50 + 9 * TILE_SIZE);
+            cars[i].setVisible(true);
+            add(cars[i]);
+        }
+    }
+
+    private void initCrosshair() {
+        ch = new Crosshair[9];
+        for (int i = 0; i < ch.length; i++) {
+            ch[i] = new Crosshair(TILE_SIZE);
+            ch[i].setLocation(50 + 3 * TILE_SIZE, 50 + 9 * TILE_SIZE);
+            ch[i].setVisible(false);
+            add(ch[i]);
+        }
     }
 
 }

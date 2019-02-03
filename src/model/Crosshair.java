@@ -5,9 +5,9 @@ import main.Resources;
 import javax.swing.*;
 import java.awt.*;
 
-public class Car extends JPanel {
+public class Crosshair extends JPanel {
 
-    public Car(int size) {
+    public Crosshair(int size) {
         setSize(size, size);
         setBackground(new Color(0, 255, 0, 0));
     }
@@ -15,7 +15,7 @@ public class Car extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Resources.car.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
+        g.drawImage(Resources.crosshair.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
     }
 
 }
