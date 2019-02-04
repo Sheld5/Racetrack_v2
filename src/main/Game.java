@@ -1,24 +1,24 @@
 package main;
 
 import model.Car;
-import model.Crosshair;
+import model.CrossHair;
 import model.Map;
 
 import javax.swing.*;
 import java.awt.*;
 
-class Game extends JPanel {
+public class Game extends JPanel {
 
     private final int TILE_SIZE = 16;
     private final int MAP_INDENT = 50;
 
     private Map map;
     private Car[] cars;
-    private Crosshair[] ch;
+    private CrossHair[] ch;
 
     Game(int width, int height) {
         init(width, height);
-        initCrosshair();
+        initCrossHair();
         initCars();
         initMap();
         System.out.println("Game initialized");
@@ -64,7 +64,7 @@ class Game extends JPanel {
     private void initCars() {
         cars = new Car[4];
         cars[0] = new Car(TILE_SIZE);
-        setCarXY(cars[0], 3, 9);
+        moveCar(cars[0], 3, 9);
         cars[0].setVisible(true);
         add(cars[0]);
         /*for (int i = 0; i < cars.length; i++) {
@@ -75,26 +75,44 @@ class Game extends JPanel {
         }*/
     }
 
-    private void initCrosshair() {
-        ch = new Crosshair[9];
+    private void initCrossHair() {
+        ch = new CrossHair[9];
         for (int i = 0; i < ch.length; i++) {
-            ch[i] = new Crosshair(TILE_SIZE);
-            ch[i].setLocation(MAP_INDENT + (3 - 1 + i%3) * TILE_SIZE, MAP_INDENT + (9 - 1 + i/3) * TILE_SIZE);
+            ch[i] = new CrossHair(i, TILE_SIZE, this);
             ch[i].setVisible(true);
             add(ch[i]);
         }
+        moveCH(3,9);
     }
 
-    private void setCarXY(Car car, int x, int y) {
+    private void moveCar(Car car, int x, int y) {
         car.setTileXY(x,y);
         car.setLocation(MAP_INDENT + x * TILE_SIZE, MAP_INDENT + y * TILE_SIZE);
     }
 
-    private void setCHXY(int x, int y) {
+    private void moveCH(int x, int y) {
         for (int i = 0; i < ch.length; i++) {
             ch[i].setTileXY(x - 1 + i%3, y - 1 + i/3);
             ch[i].setLocation(MAP_INDENT + (x - 1 + i%3) * TILE_SIZE, MAP_INDENT + (y - 1 + i/3) * TILE_SIZE);
         }
+    }
+
+    public void onCHClick(int index) {
+        System.out.println("CrossHair" + index + " clicked");
+
+        if (index < 3) {
+            cars[0].accelVelY(-1);
+        } else if (index > 5) {
+            cars[0].accelVelY(1);
+        }
+        if (index%3 == 0) {
+            cars[0].accelVelX(-1);
+        } else if (index%3 == 2) {
+            cars[0].accelVelX(1);
+        }
+
+        moveCar(cars[0], ch[index].getTileX(), ch[index].getTileY());
+        moveCH(ch[index].getTileX() + cars[0].getVelX(), ch[index].getTileY() + cars[0].getVelY());
     }
 
 }
