@@ -10,6 +10,7 @@ import java.awt.*;
 class Game extends JPanel {
 
     private final int TILE_SIZE = 16;
+    private final int MAP_INDENT = 50;
 
     private Map map;
     private Car[] cars;
@@ -62,21 +63,37 @@ class Game extends JPanel {
 
     private void initCars() {
         cars = new Car[4];
-        for (int i = 0; i < cars.length; i++) {
+        cars[0] = new Car(TILE_SIZE);
+        setCarXY(cars[0], 3, 9);
+        cars[0].setVisible(true);
+        add(cars[0]);
+        /*for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(TILE_SIZE);
-            cars[i].setLocation(50 + 3 * TILE_SIZE, 50 + 9 * TILE_SIZE);
+            cars[i].setLocation(MAP_INDENT + 3 * TILE_SIZE, MAP_INDENT + 9 * TILE_SIZE);
             cars[i].setVisible(true);
             add(cars[i]);
-        }
+        }*/
     }
 
     private void initCrosshair() {
         ch = new Crosshair[9];
         for (int i = 0; i < ch.length; i++) {
             ch[i] = new Crosshair(TILE_SIZE);
-            ch[i].setLocation(50 + 3 * TILE_SIZE, 50 + 9 * TILE_SIZE);
-            ch[i].setVisible(false);
+            ch[i].setLocation(MAP_INDENT + (3 - 1 + i%3) * TILE_SIZE, MAP_INDENT + (9 - 1 + i/3) * TILE_SIZE);
+            ch[i].setVisible(true);
             add(ch[i]);
+        }
+    }
+
+    private void setCarXY(Car car, int x, int y) {
+        car.setTileXY(x,y);
+        car.setLocation(MAP_INDENT + x * TILE_SIZE, MAP_INDENT + y * TILE_SIZE);
+    }
+
+    private void setCHXY(int x, int y) {
+        for (int i = 0; i < ch.length; i++) {
+            ch[i].setTileXY(x - 1 + i%3, y - 1 + i/3);
+            ch[i].setLocation(MAP_INDENT + (x - 1 + i%3) * TILE_SIZE, MAP_INDENT + (y - 1 + i/3) * TILE_SIZE);
         }
     }
 
