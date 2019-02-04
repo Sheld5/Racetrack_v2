@@ -16,6 +16,8 @@ public class Game extends JPanel {
     private Car[] cars;
     private CrossHair[] ch;
 
+    private int activeCar = 0;
+
     Game(int width, int height) {
         init(width, height);
         initCrossHair();
@@ -63,16 +65,12 @@ public class Game extends JPanel {
 
     private void initCars() {
         cars = new Car[4];
-        cars[0] = new Car(TILE_SIZE);
-        moveCar(cars[0], 3, 9);
-        cars[0].setVisible(true);
-        add(cars[0]);
-        /*for (int i = 0; i < cars.length; i++) {
+        for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(TILE_SIZE);
-            cars[i].setLocation(MAP_INDENT + 3 * TILE_SIZE, MAP_INDENT + 9 * TILE_SIZE);
+            moveCar(cars[i], 3, 9);
             cars[i].setVisible(true);
             add(cars[i]);
-        }*/
+        }
     }
 
     private void initCrossHair() {
@@ -101,18 +99,25 @@ public class Game extends JPanel {
         System.out.println("CrossHair" + index + " clicked");
 
         if (index < 3) {
-            cars[0].accelVelY(-1);
+            cars[activeCar].accelVelY(-1);
         } else if (index > 5) {
-            cars[0].accelVelY(1);
+            cars[activeCar].accelVelY(1);
         }
         if (index%3 == 0) {
-            cars[0].accelVelX(-1);
+            cars[activeCar].accelVelX(-1);
         } else if (index%3 == 2) {
-            cars[0].accelVelX(1);
+            cars[activeCar].accelVelX(1);
         }
 
-        moveCar(cars[0], ch[index].getTileX(), ch[index].getTileY());
-        moveCH(ch[index].getTileX() + cars[0].getVelX(), ch[index].getTileY() + cars[0].getVelY());
+        moveCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+
+        if (activeCar == cars.length - 1) {
+            activeCar = 0;
+            moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        } else {
+            activeCar++;
+            moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        }
     }
 
 }
