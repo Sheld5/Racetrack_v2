@@ -93,9 +93,10 @@ public class Game extends JPanel {
 
 
 
+    // manages the next turns of the cars and calls the drive() method
     private void run() {
         if (!(drivers == null) && activeCar < drivers.length) {
-            go(drivers[activeCar].drive());
+            drive(drivers[activeCar].drive());
             nextCar();
             if (!allCarsFinished()) {
                 run();
@@ -105,7 +106,8 @@ public class Game extends JPanel {
         }
     }
 
-    private void go(int move) {
+    // changes the velocities of the cars and calls the relocateCar() function
+    private void drive(int move) {
         if (move < 3) {
             cars[activeCar].accelVelY(-1);
         } else if (move > 5) {
@@ -117,8 +119,17 @@ public class Game extends JPanel {
             cars[activeCar].accelVelX(1);
         }
 
-        moveCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        relocateCar(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
     }
+
+    //
+    private void relocateCar(int x, int y) {
+        if (map.getTile(x, y) == Map.Tile.ROAD || map.getTile(x, y) == Map.Tile.START || map.getTile(x, y) == Map.Tile.CHECKPOINT || map.getTile(x, y) == Map.Tile.FINISH) {
+            moveCar(cars[activeCar], x, y);
+        }
+    }
+
+
 
     private void moveCar(Car car, int x, int y) {
         car.setTileXY(x,y);
@@ -156,7 +167,7 @@ public class Game extends JPanel {
 
     public void onCHClick(int index) {
         hideCH();
-        go(index);
+        drive(index);
         nextCar();
         if (!allCarsFinished()) {
             run();
