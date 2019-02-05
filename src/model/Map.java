@@ -7,22 +7,22 @@ import java.awt.*;
 
 public class Map extends JPanel {
 
-    private int widthInTiles, heightInTiles;
+    private int width, height;
     private int tileSize;
-    private enum Tile {
+    public enum Tile {
         START, FINISH, CHECKPOINT, ROAD, GRASS, WATER, WALL, SAND
     }
     private Tile[][] mapTile;
 
     public Map(int widthInTiles, int heightInTiles, int tileSize, int[][] mapInt) {
-        init(widthInTiles, heightInTiles, tileSize);
+        width = widthInTiles;
+        height = heightInTiles;
+        this.tileSize = tileSize;
+        init(widthInTiles, heightInTiles);
         initMapTile(mapInt);
     }
 
-    private void init(int width, int height, int tileSize) {
-        this.widthInTiles = width * tileSize;
-        this.heightInTiles = height * tileSize;
-        this.tileSize = tileSize;
+    private void init(int width, int height) {
         setSize(width * tileSize, height * tileSize);
         setBackground(Color.BLACK);
     }
@@ -94,6 +94,18 @@ public class Map extends JPanel {
                 }
             }
         }
+    }
+
+    public Tile getTile(int x, int y) {
+        return mapTile[y][x];
+    }
+
+    public int getWidthInTiles() {
+        return width;
+    }
+
+    public int getHeightInTiles() {
+        return height;
     }
 
 }

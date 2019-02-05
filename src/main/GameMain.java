@@ -30,7 +30,7 @@ public class GameMain {
     }
 
     static void startGame() {
-        Game game = new Game(GAME_WIDTH, GAME_HEIGHT);
+        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, 4, null);
         frame.add(game);
         menu.setVisible(false);
         game.setVisible(true);

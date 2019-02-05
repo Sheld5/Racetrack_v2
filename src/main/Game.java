@@ -2,6 +2,7 @@ package main;
 
 import model.Car;
 import model.CrossHair;
+import model.DriverAI;
 import model.Map;
 
 import javax.swing.*;
@@ -15,15 +16,22 @@ public class Game extends JPanel {
     private Map map;
     private Car[] cars;
     private CrossHair[] ch;
+    private DriverAI[] drivers;
 
-    private int activeCar = 0;
+    private int activeCar;
 
-    Game(int width, int height) {
+
+
+    Game(int width, int height, int numberOfCars, DriverAI[] drivers) {
         init(width, height);
         initCrossHair();
-        initCars();
+        initCars(numberOfCars);
         initMap();
+        this.drivers = drivers;
+        activeCar = 0;
         System.out.println("Game initialized");
+
+        run();
     }
 
     private void init(int width, int height) {
@@ -63,8 +71,8 @@ public class Game extends JPanel {
         add(map);
     }
 
-    private void initCars() {
-        cars = new Car[4];
+    private void initCars(int n) {
+        cars = new Car[n];
         for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(TILE_SIZE);
             moveCar(cars[i], 3, 9);
@@ -83,6 +91,35 @@ public class Game extends JPanel {
         moveCH(3,9);
     }
 
+
+
+    private void run() {
+        if (!(drivers == null) && activeCar < drivers.length) {
+            go(drivers[activeCar].drive());
+            nextCar();
+            if (!allCarsFinished()) {
+                run();
+            }
+        } else {
+            showCH();
+        }
+    }
+
+    private void go(int move) {
+        if (move < 3) {
+            cars[activeCar].accelVelY(-1);
+        } else if (move > 5) {
+            cars[activeCar].accelVelY(1);
+        }
+        if (move%3 == 0) {
+            cars[activeCar].accelVelX(-1);
+        } else if (move%3 == 2) {
+            cars[activeCar].accelVelX(1);
+        }
+
+        moveCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+    }
+
     private void moveCar(Car car, int x, int y) {
         car.setTileXY(x,y);
         car.setLocation(MAP_INDENT + x * TILE_SIZE, MAP_INDENT + y * TILE_SIZE);
@@ -95,28 +132,42 @@ public class Game extends JPanel {
         }
     }
 
+    private void showCH() {
+        moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        for (CrossHair c : ch) {
+            c.setVisible(true);
+        }
+    }
+
+    private void hideCH() {
+        for (CrossHair c : ch) {
+            c.setVisible(false);
+        }
+    }
+
+    private boolean allCarsFinished() {
+        for (Car car : cars) {
+            if (!(map.getTile(car.getTileX(), car.getTileY()) == Map.Tile.FINISH)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void onCHClick(int index) {
-        System.out.println("CrossHair" + index + " clicked");
-
-        if (index < 3) {
-            cars[activeCar].accelVelY(-1);
-        } else if (index > 5) {
-            cars[activeCar].accelVelY(1);
+        hideCH();
+        go(index);
+        nextCar();
+        if (!allCarsFinished()) {
+            run();
         }
-        if (index%3 == 0) {
-            cars[activeCar].accelVelX(-1);
-        } else if (index%3 == 2) {
-            cars[activeCar].accelVelX(1);
-        }
+    }
 
-        moveCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
-
-        if (activeCar == cars.length - 1) {
-            activeCar = 0;
-            moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
-        } else {
+    private void nextCar() {
+        if (activeCar < cars.length - 1) {
             activeCar++;
-            moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        } else {
+            activeCar = 0;
         }
     }
 

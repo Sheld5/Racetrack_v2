@@ -13,6 +13,8 @@ public class Car extends JPanel {
 
     public Car(int size) {
         this.size = size;
+        x = 0;
+        y = 0;
         velX = 0;
         velY = 0;
         setSize(size, size);
