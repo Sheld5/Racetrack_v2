@@ -27,7 +27,7 @@ public class Game extends JPanel {
         initCrossHair();
         initCars(numberOfCars);
         initMap();
-        this.drivers = drivers;
+        initDrivers(drivers);
         activeCar = 0;
         System.out.println("Game initialized");
 
@@ -91,11 +91,20 @@ public class Game extends JPanel {
         moveCH(3,9);
     }
 
+    private void initDrivers(DriverAI[] drivers) {
+        if (drivers != null){
+            this.drivers = drivers;
+            for (int i = 0; i < drivers.length; i++) {
+                drivers[i].init(cars[i], map);
+            }
+        }
+    }
+
 
 
     // manages the next turns of the cars and calls the drive() method
     private void run() {
-        if (!(drivers == null) && activeCar < drivers.length) {
+        if (drivers != null && activeCar < drivers.length) {
             drive(drivers[activeCar].drive());
             nextCar();
             if (!allCarsFinished()) {
@@ -119,13 +128,19 @@ public class Game extends JPanel {
             cars[activeCar].accelVelX(1);
         }
 
-        relocateCar(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        relocateCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
     }
 
-    //
-    private void relocateCar(int x, int y) {
+    // receives the coordinates to which the driver wishes to move and determines where will the car actually end up
+    private void relocateCar(Car car, int x, int y) {
+        ToDo: collision detection and stuff
+    }
+
+    private boolean checkTile(int x, int y) {
         if (map.getTile(x, y) == Map.Tile.ROAD || map.getTile(x, y) == Map.Tile.START || map.getTile(x, y) == Map.Tile.CHECKPOINT || map.getTile(x, y) == Map.Tile.FINISH) {
-            moveCar(cars[activeCar], x, y);
+            return true;
+        } else {
+            return false;
         }
     }
 

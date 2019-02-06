@@ -14,7 +14,7 @@ public abstract class DriverAI {
     private Car car;
     private Map map;
 
-    public DriverAI(Car car, Map map) {
+    public void init(Car car, Map map) {
         this.car = car;
         this.map = map;
     }

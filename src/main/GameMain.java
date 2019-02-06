@@ -1,5 +1,8 @@
 package main;
 
+import model.DriverAI;
+import model.TestAI;
+
 import javax.swing.*;
 
 public class GameMain {
@@ -30,6 +33,7 @@ public class GameMain {
     }
 
     static void startGame() {
+        DriverAI[] drivers = new DriverAI[] {new TestAI()};
         Game game = new Game(GAME_WIDTH, GAME_HEIGHT, 4, null);
         frame.add(game);
         menu.setVisible(false);
