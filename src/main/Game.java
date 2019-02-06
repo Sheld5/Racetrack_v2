@@ -133,14 +133,11 @@ public class Game extends JPanel {
 
     // receives the coordinates to which the driver wishes to move and determines where will the car actually end up
     private void relocateCar(Car car, int x, int y) {
-        ToDo: collision detection and stuff
-    }
-
-    private boolean checkTile(int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.ROAD || map.getTile(x, y) == Map.Tile.START || map.getTile(x, y) == Map.Tile.CHECKPOINT || map.getTile(x, y) == Map.Tile.FINISH) {
-            return true;
+        if (map.isTileRideable(x, y)) {
+            moveCar(car, x, y);
         } else {
-            return false;
+            car.setVelX(0);
+            car.setVelY(0);
         }
     }
 

@@ -100,6 +100,14 @@ public class Map extends JPanel {
         return mapTile[y][x];
     }
 
+    public boolean isTileRideable(int x, int y) {
+        if (getTile(x, y) == Map.Tile.ROAD || getTile(x, y) == Map.Tile.START || getTile(x, y) == Map.Tile.CHECKPOINT || getTile(x, y) == Map.Tile.FINISH) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public int getWidthInTiles() {
         return width;
     }
