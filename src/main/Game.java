@@ -115,17 +115,26 @@ public class Game extends JPanel {
         }
     }
 
+    public void onCHClick(int index) {
+        hideCH();
+        drive(index);
+        nextCar();
+        if (!allCarsFinished()) {
+            run();
+        }
+    }
+
     // changes the velocities of the cars and calls the relocateCar() function
     private void drive(int move) {
         if (move < 3) {
-            cars[activeCar].accelVelY(-1);
+            cars[activeCar].accelY(-1);
         } else if (move > 5) {
-            cars[activeCar].accelVelY(1);
+            cars[activeCar].accelY(1);
         }
         if (move%3 == 0) {
-            cars[activeCar].accelVelX(-1);
+            cars[activeCar].accelX(-1);
         } else if (move%3 == 2) {
-            cars[activeCar].accelVelX(1);
+            cars[activeCar].accelX(1);
         }
 
         relocateCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
@@ -175,15 +184,6 @@ public class Game extends JPanel {
             }
         }
         return true;
-    }
-
-    public void onCHClick(int index) {
-        hideCH();
-        drive(index);
-        nextCar();
-        if (!allCarsFinished()) {
-            run();
-        }
     }
 
     private void nextCar() {

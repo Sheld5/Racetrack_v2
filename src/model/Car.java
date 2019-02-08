@@ -32,17 +32,17 @@ public class Car extends JPanel {
         this.y = y;
     }
 
-    public void accelVelX(int a) {
+    public void accelX(int a) {
         if (a < -1 || a > 1) {
-            throw new IllegalArgumentException("method accelVelX only accepts values of {-1;0;1}");
+            throw new IllegalArgumentException("method accelX only accepts values of {-1;0;1}");
         } else {
             velX += a;
         }
     }
 
-    public void accelVelY(int a) {
+    public void accelY(int a) {
         if (a < -1 || a > 1) {
-            throw new IllegalArgumentException("method accelVelY only accepts values of {-1;0;1}");
+            throw new IllegalArgumentException("method accelY only accepts values of {-1;0;1}");
         } else {
             velY += a;
         }
