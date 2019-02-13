@@ -8,6 +8,9 @@ import model.Map;
 import javax.swing.*;
 import java.awt.*;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+
 public class Game extends JPanel {
 
     private final int TILE_SIZE = 16;
@@ -19,6 +22,7 @@ public class Game extends JPanel {
     private DriverAI[] drivers;
 
     private int activeCar;
+    private boolean crashed;
 
 
 
@@ -107,7 +111,7 @@ public class Game extends JPanel {
         if (drivers != null && activeCar < drivers.length) {
             drive(drivers[activeCar].drive());
             nextCar();
-            if (!allCarsFinished()) {
+            if (!allCarsFinished() && !crashed) {
                 run();
             }
         } else {
@@ -124,7 +128,7 @@ public class Game extends JPanel {
         }
     }
 
-    // changes the velocities of the cars and calls the relocateCar() function
+    // changes the velocities of the cars and calls the goThroughTilesInPath() function
     private void drive(int move) {
         if (move < 3) {
             cars[activeCar].accelY(-1);
@@ -137,16 +141,72 @@ public class Game extends JPanel {
             cars[activeCar].accelX(1);
         }
 
-        relocateCar(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        goThroughTilesInPath(cars[activeCar], cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
     }
 
     // receives the coordinates to which the driver wishes to move and determines where will the car actually end up
-    private void relocateCar(Car car, int x, int y) {
-        if (map.isTileRideable(x, y)) {
-            moveCar(car, x, y);
+    private void goThroughTilesInPath(Car car, int x, int y) {
+        int initX = car.getTileX();
+        int initY = car.getTileY();
+        int nextX;
+        int nextY;
+        System.out.println();
+        System.out.println("car" + activeCar + " is moving from " + initX + " " + initY + " to " + x + " " + y);
+
+        if (x - initX == 0 && y - initY == 0) {
+            System.out.println("car" + activeCar + " is not moving");
+
+        } else if (x - initX == 0) {
+            System.out.println("car" + activeCar + " is moving parallel to y axis");
+            int s;
+            if (y - initY > 0) {
+                s = 1;
+            } else {
+                s = -1;
+            }
+            for (int dy = 1; dy <= abs(y - initY); dy++) {
+                nextX = initX;
+                nextY = initY + s * dy;
+                determineRideability(car, nextX, nextY);
+                if (crashed) {
+                    break;
+                }
+            }
+
         } else {
+            double direction = (double)(y - initY) / (double)(x - initX);
+            System.out.println("car" + activeCar + " is moving in direction " + direction);
+            int s;
+            if (x - initX > 0) {
+                s = 1;
+            } else {
+                s = -1;
+            }
+            double dx = sqrt(1 / (1 + direction * direction));
+            for ( ; dx <= abs(x - initX); dx += dx) {
+                nextX = initX + (int)(s * dx + s * 0.5);
+                nextY = initY + (int)(s * dx * direction + s * 0.5);
+                determineRideability(car, nextX, nextY);
+                if (crashed) {
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private void determineRideability(Car car, int x, int y) {
+        System.out.print(x + " " + y + " " + map.getTile(x, y));
+        if (map.isTileRideable(x, y)) {
+            System.out.println(" RIDEABLE");
+            moveCar(car, x, y);
+            crashed = false;
+        } else {
+            System.out.println(" NOT RIDEABLE");
+            System.out.println("car" + activeCar + " crashed");
             car.setVelX(0);
             car.setVelY(0);
+            crashed = true;
         }
     }
 
