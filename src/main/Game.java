@@ -126,7 +126,7 @@ public class Game extends JPanel {
         }
     }
 
-    // changes the velocities of the cars and calls the relocateCar() function
+    // changes the velocities of the cars and calls the goThroughPath() function
     private void drive(Car car, int move) {
         if (move < 3) {
             car.accelY(-1);
@@ -140,12 +140,12 @@ public class Game extends JPanel {
         }
 
         System.out.println();
-        relocateCar(car);
+        goThroughPath(car);
     }
 
     // goes through the path of the car tile by tile and calls the checkForCollision() function
     @SuppressWarnings("Duplicates")
-    private void relocateCar(Car car) {
+    private void goThroughPath(Car car) {
 
         final double MAX_RANGE = 0.5;
 
