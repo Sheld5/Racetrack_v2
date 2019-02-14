@@ -27,10 +27,15 @@ public abstract class DriverAI {
     // Returns type of the tile with corresponding coordinates.
     // Coordinates of the map start at 0. (If the map is 20x20 tiles, x and y coordinates range from 0 to 19.)
     private Map.Tile getTile(int x, int y) {
-        if (x < 0 || x >= getMapWidth() || y < 0 || y >= getMapHeight()) {
-            throw new IllegalArgumentException("getTile(int x, int y) method has been called with coordinates out of bounds of the map as its arguments");
+        try {
+            return map.getTile(x, y);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("AI called getTile(int x, int y) method with x and/or y out of bounds of the map");
+            e.printStackTrace();
+
+            // toDo: domakat tenhle exception
+            return null;
         }
-        return map.getTile(x, y);
     }
 
     // Returns the x coordinate of the car.

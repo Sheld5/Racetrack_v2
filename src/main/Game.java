@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
@@ -21,6 +22,7 @@ public class Game extends JPanel {
     private DriverAI[] drivers;
 
     private int activeCar;
+    private boolean crashed;
 
 
 
@@ -31,6 +33,7 @@ public class Game extends JPanel {
         initMap();
         initDrivers(drivers);
         activeCar = 0;
+        crashed = false;
         System.out.println("Game initialized");
 
         run();
@@ -77,7 +80,7 @@ public class Game extends JPanel {
         cars = new Car[n];
         for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(TILE_SIZE);
-            moveCar(cars[i], 0, 0);
+            moveCar(cars[i], 3, 10);
             cars[i].setVisible(true);
             add(cars[i]);
         }
@@ -147,8 +150,6 @@ public class Game extends JPanel {
     @SuppressWarnings("Duplicates")
     private void goThroughPath(Car car) {
 
-        final double MAX_RANGE = 0.5;
-
         int initX = car.getTileX();
         int initY = car.getTileY();
         int targetX = initX + car.getVelX();
@@ -158,41 +159,94 @@ public class Game extends JPanel {
         System.out.println("direction: " + dirX + " " + dirY);
 
         if (initX == targetX) {
-            for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
-                System.out.println(initX + " " + y + " " + map.getTile(initX, y));
-                moveCar(car, initX, y);
+            for (int y = initY; y - dirY != targetY; y += dirY) {
+                checkForCollision(car, initX, y);
+                if (crashed) {
+                    break;
+                }
             }
 
         } else if (initY == targetY) {
-            for (int x = initX + dirX; x - dirX != targetX; x += dirX) {
-                System.out.println(x + " " + initY + " " + map.getTile(x, initY));
-                moveCar(car, x, initY);
+            for (int x = initX; x - dirX != targetX; x += dirX) {
+                checkForCollision(car, x, initY);
+                if (crashed) {
+                    break;
+                }
             }
 
         } else if (abs(initX - targetX) == abs(initY - targetY)) {
             int x, y;
-            for (int i = 1; i <= abs(initX - targetX); i++) {
+            for (int i = 0; i <= abs(initX - targetX); i++) {
                 x = initX + dirX * i;
                 y = initY + dirY * i;
-                System.out.println(x + " " + y + " " + map.getTile(x, y));
-                moveCar(car, x, y);
+                checkForCollision(car, x, y);
+                if (crashed) {
+                    break;
+                }
             }
 
         } else {
+            int a = -(targetY - initY);
+            int b = targetX - initX;
+            int c = - a * initX - b * initY;
+
             if (abs(initX - targetX) > abs(initY - targetY)) {
                 for (int x = initX; x - dirX != targetX; x += dirX) {
                     for (int y = initY; y - dirY != targetY; y += dirY) {
-                        System.out.println(x + " " + y + " " + map.getTile(x, y));
-                        moveCar(car, x, y);
+                        checkForCollision(car, x, y, a, b, c);
+                        if (crashed) {
+                            break;
+                        }
+                    }
+                    if (crashed) {
+                        break;
                     }
                 }
             } else {
-                for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
-                    for (int x = initX + dirX; x - dirX != targetX; x += dirX) {
-                        System.out.println(x + " " + y + " " + map.getTile(x, y));
-                        moveCar(car, x, y);
+                for (int y = initY; y - dirY != targetY; y += dirY) {
+                    for (int x = initX; x - dirX != targetX; x += dirX) {
+                        checkForCollision(car, x, y, a, b, c);
+                        if (crashed) {
+                            break;
+                        }
+                    }
+                    if (crashed) {
+                        break;
                     }
                 }
+            }
+        }
+
+        crashed = false;
+    }
+
+    // checks next tile for its rideability and moves the car accordingly
+    @SuppressWarnings("Duplicates")
+    private void checkForCollision(Car car, int x, int y) {
+        System.out.print(x + " " + y + " " + map.getTile(x, y));
+        if (map.isTileRideable(x, y)) {
+            System.out.println(" RIDEABLE");
+            moveCar(car, x, y);
+        } else {
+            System.out.println(" NOT RIDEABLE");
+            car.setVelX(0);
+            car.setVelY(0);
+            crashed = true;
+        }
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void checkForCollision(Car car, int x, int y, int a, int b, int c) {
+        if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
+            System.out.print(x + " " + y + " " + map.getTile(x, y));
+            if (map.isTileRideable(x, y)) {
+                System.out.println(" RIDEABLE");
+                moveCar(car, x, y);
+            } else {
+                System.out.println(" NOT RIDEABLE");
+                car.setVelX(0);
+                car.setVelY(0);
+                crashed = true;
             }
         }
     }
