@@ -1,9 +1,6 @@
 package main;
 
-import model.Car;
-import model.CrossHair;
-import model.DriverAI;
-import model.Map;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,9 +17,11 @@ public class Game extends JPanel {
     private Car[] cars;
     private CrossHair[] ch;
     private DriverAI[] drivers;
+    private Checkpoint[] checkpoints;
 
     private int activeCar;
     private boolean crashed;
+    private boolean foundCheckpoint;
 
 
 
@@ -34,6 +33,7 @@ public class Game extends JPanel {
         initDrivers(drivers);
         activeCar = 0;
         crashed = false;
+        initCheckpoints();
         System.out.println("Game initialized");
 
         run();
@@ -43,6 +43,8 @@ public class Game extends JPanel {
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
+
+        System.out.println("game initialized");
     }
 
     private void initMap() {
@@ -74,6 +76,8 @@ public class Game extends JPanel {
         map.setLocation(50, 50);
         map.setVisible(true);
         add(map);
+
+        System.out.println("map initialized");
     }
 
     private void initCars(int n) {
@@ -84,6 +88,8 @@ public class Game extends JPanel {
             cars[i].setVisible(true);
             add(cars[i]);
         }
+
+        System.out.println(cars.length + " cars initialized");
     }
 
     private void initCrossHair() {
@@ -94,6 +100,8 @@ public class Game extends JPanel {
             add(ch[i]);
         }
         moveCH(3,9);
+
+        System.out.println("crosshair initialized");
     }
 
     private void initDrivers(DriverAI[] drivers) {
@@ -103,6 +111,51 @@ public class Game extends JPanel {
                 drivers[i].init(cars[i], map);
             }
         }
+
+        System.out.println(drivers.length + " driverAIs initialized");
+    }
+
+    private void initCheckpoints() {
+
+        checkpoints = new Checkpoint[0];
+        foundCheckpoint = false;
+        for (int x = 0; x < map.getWidthInTiles(); x++) {
+            for (int y = 0; y < map.getHeightInTiles(); y++) {
+
+                if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
+                    for (Checkpoint ch : checkpoints) {
+                        for (int i = 0; i < ch.getNoOfTiles(); i++) {
+                            if ((ch.getXOfTile(i) - 1 <= x) && (x <= ch.getXOfTile(i) + 1) && (ch.getYOfTile(i) - 1 <= y) && (y <= ch.getYOfTile(i) + 1)) {
+                                ch.addTile(x, y);
+                                foundCheckpoint = true;
+                            }
+                            if (foundCheckpoint) {
+                                break;
+                            }
+                        }
+                        if (foundCheckpoint) {
+                            break;
+                        }
+                    }
+
+                    if (!foundCheckpoint) {
+                        Checkpoint[] checkTemp = new Checkpoint[checkpoints.length + 1];
+                        for (int i = 0; i < checkpoints.length; i++) {
+                            checkTemp[i] = checkpoints[i];
+                        }
+                        Checkpoint ch = new Checkpoint(x, y);
+                        checkTemp[checkTemp.length - 1] = ch;
+                        checkpoints = checkTemp;
+                    }
+
+                    foundCheckpoint = false;
+                }
+
+            }
+        }
+
+        System.out.println(checkpoints.length + " checkpoints initialized");
+
     }
 
 
