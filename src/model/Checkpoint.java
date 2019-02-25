@@ -3,11 +3,17 @@ package model;
 public class Checkpoint {
 
     private int[][] coordinates;
+    private boolean[] carsPassed;
 
-    public Checkpoint(int x, int y) {
+    public Checkpoint(int x, int y, int numberOfCars) {
         coordinates = new int[1][2];
         coordinates[0][0] = x;
         coordinates[0][1] = y;
+
+        carsPassed = new boolean[numberOfCars];
+        for (boolean b : carsPassed) {
+            b = false;
+        }
     }
 
     public void addTile(int x, int y) {
@@ -34,6 +40,23 @@ public class Checkpoint {
 
     public int getYOfTile(int tileIndex) {
         return coordinates[tileIndex][1];
+    }
+
+    public boolean tileBelongsTo(int x, int y) {
+        for (int[] tile : coordinates) {
+            if (tile[0] == x && tile[1] == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void carPassed(int car) {
+        carsPassed[car] = true;
+    }
+
+    public boolean getCarPassed(int car) {
+        return carsPassed[car];
     }
 
 }
