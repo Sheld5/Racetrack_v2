@@ -19,8 +19,20 @@ public abstract class DriverAI {
         this.map = map;
     }
 
-    // This method should include all the AI logic.
-    public abstract int drive();
+    // Is called by the game each turn to determine what will the car driven by this AI do.
+    // Calls logic() and returns the same index if it is valid.
+    // Returns the index 4 (going straight and not changing the velocity) if the index returned by logic() is not valid.
+    public int drive() {
+        int nextMove = logic();
+        if (0 <= nextMove && nextMove < 9) {
+            return nextMove;
+        } else {
+            return 4;
+        }
+    }
+
+    // This method should include all the AI logic and return the index of the next move (0-8).
+    abstract int logic();
 
 
 

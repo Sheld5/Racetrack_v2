@@ -3,7 +3,7 @@ package model;
 public class TestAI extends DriverAI {
 
     @Override
-    public int drive() {
+    int logic() {
         return 1;
     }
 
