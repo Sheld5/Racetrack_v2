@@ -10,6 +10,7 @@ public class Car extends JPanel {
     private int x, y;
     private int velX, velY;
     private int size;
+    private boolean finished;
 
     public Car(int size) {
         this.size = size;
@@ -17,6 +18,7 @@ public class Car extends JPanel {
         y = 0;
         velX = 0;
         velY = 0;
+        finished = false;
         setSize(size, size);
         setBackground(new Color(0, 255, 0, 0));
     }
@@ -70,6 +72,14 @@ public class Car extends JPanel {
 
     public int getVelY() {
         return velY;
+    }
+
+    public void finished() {
+        finished = true;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
 }

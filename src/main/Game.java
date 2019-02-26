@@ -18,10 +18,10 @@ public class Game extends JPanel {
     private CrossHair[] ch;
     private DriverAI[] drivers;
     private Checkpoint[] checkpoints;
+    private Checkpoint finish;
 
     private int activeCar;
     private boolean crashed;
-    private boolean foundCheckpoint;
 
 
 
@@ -34,6 +34,8 @@ public class Game extends JPanel {
         activeCar = cars.length - 1;
         crashed = false;
         initCheckpoints(numberOfCars);
+        initFinish(numberOfCars);
+        System.out.println();
 
         nextTurn();
     }
@@ -117,11 +119,12 @@ public class Game extends JPanel {
     private void initCheckpoints(int numberOfCars) {
 
         checkpoints = new Checkpoint[0];
-        foundCheckpoint = false;
+        boolean foundCheckpoint = false;
+
         for (int x = 0; x < map.getWidthInTiles(); x++) {
             for (int y = 0; y < map.getHeightInTiles(); y++) {
 
-                if (map.getTile(x, y) == Map.Tile.CHECKPOINT || map.getTile(x, y) == Map.Tile.FINISH) {
+                if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
                     for (Checkpoint ch : checkpoints) {
                         for (int i = 0; i < ch.getNoOfTiles(); i++) {
                             if ((ch.getXOfTile(i) - 1 <= x) && (x <= ch.getXOfTile(i) + 1) && (ch.getYOfTile(i) - 1 <= y) && (y <= ch.getYOfTile(i) + 1)) {
@@ -157,14 +160,43 @@ public class Game extends JPanel {
 
     }
 
+    private void initFinish(int numberOfCars) {
+        boolean errorOccurred = false;
+        boolean addedToFinish;
+        for (int x = 0; x < map.getWidthInTiles(); x++) {
+            for (int y = 0; y < map.getHeightInTiles(); y++) {
+                if (map.getTile(x, y) == Map.Tile.FINISH) {
+                    if (finish == null) {
+                        finish = new Checkpoint(x, y, numberOfCars);
+                    } else {
+                        addedToFinish = false;
+                        for (int i = 0; i < finish.getNoOfTiles(); i++) {
+                            if ((finish.getXOfTile(i) - 1 <= x) && (x <= finish.getXOfTile(i) + 1) && (finish.getYOfTile(i) - 1 <= y) && (y <= finish.getYOfTile(i) + 1)) {
+                                finish.addTile(x, y);
+                                addedToFinish = true;
+                                break;
+                            }
+                        }
+                        if (!addedToFinish && !errorOccurred) {
+                            System.out.println("Error: More than one finish found on the map.");
+                            System.out.println("Only one finish will be recognized.");
+                            errorOccurred = true;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("Finish initialized");
+    }
+
 
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
     private void nextTurn() {
-        nextCar();
         if (allCarsFinished()) {
             System.out.println("Game finished!");
         } else {
+            nextCar();
             if (drivers != null && activeCar < drivers.length) {
                 drive(cars[activeCar], drivers[activeCar].drive());
                 nextTurn();
@@ -180,8 +212,6 @@ public class Game extends JPanel {
         nextTurn();
     }
 
-
-
     // changes the velocities of the cars and calls the goThroughPath() function
     private void drive(Car car, int move) {
         if (move < 3) {
@@ -194,8 +224,6 @@ public class Game extends JPanel {
         } else if (move%3 == 2) {
             car.accelX(1);
         }
-
-        System.out.println();
         goThroughPath(car);
     }
 
@@ -209,7 +237,6 @@ public class Game extends JPanel {
         int targetY = initY + car.getVelY();
         int dirX = initDir(initX, targetX);
         int dirY = initDir(initY, targetY);
-        System.out.println("direction: " + dirX + " " + dirY);
 
         if (initX == targetX) {
             for (int y = initY; y - dirY != targetY; y += dirY) {
@@ -276,13 +303,10 @@ public class Game extends JPanel {
     // checks next tile for its rideability and moves the car accordingly
     @SuppressWarnings("Duplicates")
     private void checkForCollision(Car car, int x, int y) {
-        System.out.print(x + " " + y + " " + map.getTile(x, y));
         if (map.isTileRideable(x, y)) {
-            System.out.println(" RIDEABLE");
             moveCar(car, x, y);
-            checkForCheckpoint(x, y);
+            checkForSpecialTile(x, y);
         } else {
-            System.out.println(" NOT RIDEABLE");
             car.setVelX(0);
             car.setVelY(0);
             crashed = true;
@@ -292,13 +316,10 @@ public class Game extends JPanel {
     @SuppressWarnings("Duplicates")
     private void checkForCollision(Car car, int x, int y, int a, int b, int c) {
         if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-            System.out.print(x + " " + y + " " + map.getTile(x, y));
             if (map.isTileRideable(x, y)) {
-                System.out.println(" RIDEABLE");
                 moveCar(car, x, y);
-                checkForCheckpoint(x, y);
+                checkForSpecialTile(x, y);
             } else {
-                System.out.println(" NOT RIDEABLE");
                 car.setVelX(0);
                 car.setVelY(0);
                 crashed = true;
@@ -306,21 +327,34 @@ public class Game extends JPanel {
         }
     }
 
+    private void checkForSpecialTile(int x, int y) {
+        checkForCheckpoint(x, y);
+        checkForFinish(x, y);
+    }
+
     private void checkForCheckpoint(int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.CHECKPOINT || map.getTile(x, y) == Map.Tile.FINISH) {
+        if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
             for (int i = 0; i < checkpoints.length; i++) {
                 if (checkpoints[i].tileBelongsTo(x, y) && !checkpoints[i].getCarPassed(activeCar)) {
                     checkpoints[i].carPassed(activeCar);
-                    if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
-                        System.out.println("car" + activeCar + " passed checkpoint" + i);
-                    } else {
-                        System.out.println("car" + activeCar + " passed the finish");
-                    }
+                    System.out.println("car" + activeCar + " passed checkpoint" + i);
                 }
                 if (checkpoints[i].tileBelongsTo(x, y)) {
                     break;
                 }
             }
+        }
+    }
+
+    private void checkForFinish(int x, int y) {
+        if (map.getTile(x, y) == Map.Tile.FINISH) {
+            for (Checkpoint ch : checkpoints) {
+                if (!ch.getCarPassed(activeCar)) {
+                    return;
+                }
+            }
+            cars[activeCar].finished();
+            System.out.println("Car" + activeCar + " finished the race.");
         }
     }
 
@@ -350,17 +384,22 @@ public class Game extends JPanel {
     }
 
     private boolean allCarsFinished() {
-        for (Checkpoint ch : checkpoints) {
-            for (int i = 0; i < cars.length; i++) {
-                if (!ch.getCarPassed(i)) {
-                    return false;
-                }
+        for (Car c : cars) {
+            if (!c.isFinished()) {
+                return false;
             }
         }
         return true;
     }
 
     private void nextCar() {
+        rotateCar();
+        if (cars[activeCar].isFinished()) {
+            rotateCar();
+        }
+    }
+
+    private void rotateCar() {
         if (activeCar < cars.length - 1) {
             activeCar++;
         } else {
