@@ -31,11 +31,11 @@ public class Game extends JPanel {
         initCars(numberOfCars);
         initMap();
         initDrivers(drivers);
-        activeCar = 0;
+        activeCar = cars.length - 1;
         crashed = false;
         initCheckpoints(numberOfCars);
 
-        run();
+        nextTurn();
     }
 
     private void init(int width, int height) {
@@ -108,9 +108,9 @@ public class Game extends JPanel {
             for (int i = 0; i < drivers.length; i++) {
                 drivers[i].init(cars[i], map);
             }
-            System.out.println(drivers.length + " AI divers initialized");
+            System.out.println(drivers.length + " AIdrivers initialized");
         } else {
-            System.out.println("0 AI drivers initialized");
+            System.out.println("0 AIdrivers initialized");
         }
     }
 
@@ -160,30 +160,27 @@ public class Game extends JPanel {
 
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
-    private void run() {
-        if (drivers != null && activeCar < drivers.length) {
-            drive(cars[activeCar], drivers[activeCar].drive());
-            nextCar();
-            nextTurn();
+    private void nextTurn() {
+        nextCar();
+        if (allCarsFinished()) {
+            System.out.println("Game finished!");
         } else {
-            showCH();
+            if (drivers != null && activeCar < drivers.length) {
+                drive(cars[activeCar], drivers[activeCar].drive());
+                nextTurn();
+            } else {
+                showCH();
+            }
         }
     }
 
     public void onCHClick(int index) {
         hideCH();
         drive(cars[activeCar], index);
-        nextCar();
         nextTurn();
     }
 
-    private void nextTurn() {
-        if (!allCarsFinished()) {
-            run();
-        } else {
-            System.out.println("Game finished!");
-        }
-    }
+
 
     // changes the velocities of the cars and calls the goThroughPath() function
     private void drive(Car car, int move) {
