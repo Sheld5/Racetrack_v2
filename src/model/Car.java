@@ -9,11 +9,9 @@ public class Car extends JPanel {
 
     private int x, y;
     private int velX, velY;
-    private int size;
     private boolean finished;
 
     public Car(int size) {
-        this.size = size;
         x = 0;
         y = 0;
         velX = 0;
