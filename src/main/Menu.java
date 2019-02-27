@@ -5,6 +5,9 @@ import java.awt.*;
 
 class Menu extends JPanel {
 
+    private static final int BUTTON_WIDTH = 100;
+    private static final int BUTTON_HEIGHT = 50;
+
     private JButton playButton, exitButton;
     private JLabel gameModeSelection;
     private JButton startButton, backButton;
@@ -23,24 +26,16 @@ class Menu extends JPanel {
     }
 
     private void initMenuSelection() {
-        int buttonWidth = 100;
-        int buttonHeight = 50;
-        int selectionX = getWidth() / 2 - buttonWidth / 2;
-        initPlayButton(selectionX, buttonWidth, buttonHeight);
-        initExitButton(selectionX, buttonWidth, buttonHeight);
-    }
+        int buttonX = getWidth() / 2 - BUTTON_WIDTH / 2;
 
-    private void initPlayButton(int x, int width, int height) {
         playButton = new JButton("Play");
-        playButton.setBounds(x , 50, width, height);
+        playButton.setBounds(buttonX , 50, BUTTON_WIDTH, BUTTON_HEIGHT);
         playButton.addActionListener(e -> goToGameModeSelection());
         playButton.setVisible(true);
         add(playButton);
-    }
 
-    private void initExitButton(int x, int width, int height) {
         exitButton = new JButton("Exit");
-        exitButton.setBounds(x , 150, width, height);
+        exitButton.setBounds(buttonX , 150, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> System.exit(0));
         exitButton.setVisible(true);
         add(exitButton);
@@ -52,14 +47,16 @@ class Menu extends JPanel {
         gameModeSelection.setVisible(false);
         add(gameModeSelection);
 
+        int buttonX = getWidth() / 2 - 50;
+
         startButton = new JButton("Start Game");
-        startButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 + 25, 100, 50);
+        startButton.setBounds(buttonX, getHeight() / 2 + 25, BUTTON_WIDTH, BUTTON_HEIGHT);
         startButton.addActionListener(e -> GameMain.startGame());
         startButton.setVisible(false);
         add(startButton);
 
         backButton = new JButton("Back");
-        backButton.setBounds(getWidth() / 2 - 50, getHeight() / 2 + 125, 100, 50);
+        backButton.setBounds(buttonX, getHeight() / 2 + 125, BUTTON_WIDTH, BUTTON_HEIGHT);
         backButton.addActionListener(e -> goToMainMenu());
         backButton.setVisible(false);
         add(backButton);
