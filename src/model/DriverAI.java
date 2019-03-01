@@ -52,12 +52,12 @@ public abstract class DriverAI {
 
     // Returns the x coordinate of the car.
     int getCarX() {
-        return car.getX();
+        return car.getTileX();
     }
 
     // Returns the y coordinate of the car.
     int getCarY() {
-        return car.getY();
+        return car.getTileY();
     }
 
     // Returns the velocity of the car in the direction of the x axis.

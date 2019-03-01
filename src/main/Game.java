@@ -12,6 +12,7 @@ public class Game extends JPanel {
 
     private final int TILE_SIZE = 16;
     private final int MAP_INDENT = 50;
+    private final int TURN_MAX = 1000;
 
     private Map map;
     private Car[] cars;
@@ -22,8 +23,7 @@ public class Game extends JPanel {
 
     private int activeCar;
     private boolean crashed;
-
-
+    private int turn;
 
     Game(int width, int height, int numberOfCars, DriverAI[] drivers) {
         init(width, height);
@@ -31,10 +31,14 @@ public class Game extends JPanel {
         initCars(numberOfCars);
         initMap();
         initDrivers(drivers);
-        activeCar = cars.length - 1;
-        crashed = false;
         initCheckpoints(numberOfCars);
         initFinish(numberOfCars);
+
+        activeCar = cars.length - 1;
+        crashed = false;
+        turn = 0;
+
+        System.out.println("Game initialized");
         System.out.println();
 
         nextTurn();
@@ -44,7 +48,6 @@ public class Game extends JPanel {
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
-        System.out.println("Game initialized");
     }
 
     private void initMap() {
@@ -96,7 +99,7 @@ public class Game extends JPanel {
         ch = new CrossHair[9];
         for (int i = 0; i < ch.length; i++) {
             ch[i] = new CrossHair(i, TILE_SIZE, this);
-            ch[i].setVisible(true);
+            ch[i].setVisible(false);
             add(ch[i]);
         }
         moveCH(3,9);
@@ -193,8 +196,11 @@ public class Game extends JPanel {
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
     private void nextTurn() {
+        turn++;
         if (allCarsFinished()) {
             System.out.println("Game finished!");
+        } else if (turn > TURN_MAX) {
+            System.out.println("Turn limit reached!");
         } else {
             nextCar();
             if (drivers != null && activeCar < drivers.length) {
