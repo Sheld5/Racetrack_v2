@@ -307,8 +307,7 @@ public class Game extends JPanel {
             moveCar(car, x, y);
             checkForSpecialTile(x, y);
         } else {
-            car.setVelX(0);
-            car.setVelY(0);
+            onCarCrash(car);
             crashed = true;
         }
     }
@@ -320,11 +319,16 @@ public class Game extends JPanel {
                 moveCar(car, x, y);
                 checkForSpecialTile(x, y);
             } else {
-                car.setVelX(0);
-                car.setVelY(0);
+                onCarCrash(car);
                 crashed = true;
             }
         }
+    }
+
+    private void onCarCrash(Car car) {
+        car.setVelX(0);
+        car.setVelY(0);
+        System.out.println("car" + activeCar + " crashed");
     }
 
     private void checkForSpecialTile(int x, int y) {

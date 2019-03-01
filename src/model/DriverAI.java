@@ -38,7 +38,7 @@ public abstract class DriverAI {
 
     // Returns type of the tile with corresponding coordinates.
     // Coordinates of the map start at 0. (If the map is 20x20 tiles, x and y coordinates range from 0 to 19.)
-    private Map.Tile getTile(int x, int y) {
+    Map.Tile getTile(int x, int y) {
         try {
             return map.getTile(x, y);
         } catch (IndexOutOfBoundsException e) {
@@ -51,32 +51,32 @@ public abstract class DriverAI {
     }
 
     // Returns the x coordinate of the car.
-    private int getCarX() {
+    int getCarX() {
         return car.getX();
     }
 
     // Returns the y coordinate of the car.
-    private int getCarY() {
+    int getCarY() {
         return car.getY();
     }
 
     // Returns the velocity of the car in the direction of the x axis.
-    private int getVelX() {
+    int getVelX() {
         return car.getVelX();
     }
 
     // Returns the velocity of the car in the direction of the y axis.
-    private int getVelY() {
+    int getVelY() {
         return car.getVelY();
     }
 
     // Returns the width of the map as a number of tiles.
-    private int getMapWidth() {
+    int getMapWidth() {
         return map.getWidthInTiles();
     }
 
     // Returns the height of the map as a number of tiles.
-    private int getMapHeight() {
+    int getMapHeight() {
         return map.getHeightInTiles();
     }
 

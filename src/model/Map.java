@@ -31,7 +31,7 @@ public class Map extends JPanel {
         mapTile = new Tile[mapInt.length][mapInt[0].length];
         for (int y = 0; y < mapInt.length; y++) {
             for (int x = 0; x < mapInt[0].length; x++) {
-                switch(mapInt[y][x]) {
+                switch (mapInt[y][x]) {
                     case 6:
                         mapTile[y][x] = Tile.START;
                         break;
