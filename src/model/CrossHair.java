@@ -1,7 +1,7 @@
 package model;
 
 import main.Game;
-import main.Resources;
+import util.Resources;
 
 import javax.swing.*;
 import java.awt.*;

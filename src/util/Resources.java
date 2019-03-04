@@ -1,4 +1,4 @@
-package main;
+package util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -6,13 +6,13 @@ import java.io.IOException;
 
 public class Resources {
 
-    static BufferedImage windowIcon;
+    public static BufferedImage windowIcon;
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand;
     public static BufferedImage car, crosshair;
 
     private static int numberOfErrors = 0;
 
-    static void load() {
+    public static void load() {
         windowIcon = loadImage("carIcon.png");
         tileStart = loadImage("tileStart.png");
         tileFinish = loadImage("tileFinish.png");
@@ -39,7 +39,7 @@ public class Resources {
     private static BufferedImage loadImage(String fileName) {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(Resources.class.getResourceAsStream("/resources/" + fileName));
+            image = ImageIO.read(Resources.class.getResourceAsStream("/resources/images/" + fileName));
         } catch (IOException e) {
             System.out.println("Error while loading " + fileName);
             e.printStackTrace();
