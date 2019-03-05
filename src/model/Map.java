@@ -4,6 +4,7 @@ import util.Resources;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class Map extends JPanel {
 
@@ -14,12 +15,12 @@ public class Map extends JPanel {
     }
     private Tile[][] mapTile;
 
-    public Map(int widthInTiles, int heightInTiles, int tileSize, int[][] mapInt) {
+    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, int tileSize, HashMap<Integer, Tile> tileSet) {
         width = widthInTiles;
         height = heightInTiles;
         this.tileSize = tileSize;
         init(widthInTiles, heightInTiles);
-        initMapTile(mapInt);
+        initMapTile(mapInt, tileSet);
     }
 
     private void init(int width, int height) {
@@ -27,35 +28,15 @@ public class Map extends JPanel {
         setBackground(Color.BLACK);
     }
 
-    private void initMapTile(int[][] mapInt) {
+    private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) {
         mapTile = new Tile[mapInt.length][mapInt[0].length];
         for (int y = 0; y < mapInt.length; y++) {
             for (int x = 0; x < mapInt[0].length; x++) {
-                switch (mapInt[y][x]) {
-                    case 6:
-                        mapTile[y][x] = Tile.START;
+                for (Integer i : tileSet.keySet()) {
+                    if (i == mapInt[y][x]) {
+                        mapTile[y][x] = tileSet.get(i);
                         break;
-                    case 2:
-                        mapTile[y][x] = Tile.FINISH;
-                        break;
-                    case 1:
-                        mapTile[y][x] = Tile.CHECKPOINT;
-                        break;
-                    case 4:
-                        mapTile[y][x] = Tile.ROAD;
-                        break;
-                    case 3:
-                        mapTile[y][x] = Tile.GRASS;
-                        break;
-                    case 8:
-                        mapTile[y][x] = Tile.WATER;
-                        break;
-                    case 7:
-                        mapTile[y][x] = Tile.WALL;
-                        break;
-                    case 5:
-                        mapTile[y][x] = Tile.SAND;
-                        break;
+                    }
                 }
             }
         }

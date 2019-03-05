@@ -5,6 +5,7 @@ import util.MapReader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -52,8 +53,7 @@ public class Game extends JPanel {
     }
 
     private void initMap() {
-        MapReader reader = new MapReader("Map01.tmx");
-        map = new Map(reader.getMapSizeX(), reader.getMapSizeY(), TILE_SIZE, reader.getData());
+        map = new Map(MapReader.getData("Map01.tmx"), MapReader.getMapSizeX(), MapReader.getMapSizeY(), TILE_SIZE, MapReader.getTileSet("RacetrackTileSet.tsx"));
         map.setLocation(50, 50);
         map.setVisible(true);
         add(map);
