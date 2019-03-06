@@ -5,7 +5,6 @@ import util.MapReader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -14,7 +13,7 @@ public class Game extends JPanel {
 
     private final int TILE_SIZE = 16;
     private final int MAP_INDENT = 50;
-    private final int TURN_MAX = 1000;
+    private final int TURN_MAX = 500;
 
     private Map map;
     private Car[] cars;

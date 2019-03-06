@@ -13,7 +13,9 @@ public abstract class DriverAI {
 
     private Car car;
     private Map map;
-    private int mapWidth, mapHeight;
+
+    // AIs should use these variables to get map dimensions.
+    protected int mapWidth, mapHeight;
 
     public void init(Car car, Map map, int mapWidth, int mapHeight) {
         this.car = car;
@@ -22,9 +24,9 @@ public abstract class DriverAI {
         this.mapHeight = mapHeight;
     }
 
-    // Is called by the game each turn to determine what will the car driven by this AI do.
+    // Is called by the game each turn to determine what will the car driven by the AI do.
     // Calls logic() and returns the same index if it is valid.
-    // Returns the index 4 (going straight and not changing the velocity) if the index returned by logic() is not valid.
+    // Returns the index 4 (not changing velX nor velY) if the index returned by logic() is not valid.
     public int drive() {
         int nextMove = logic();
         if (0 <= nextMove && nextMove < 9) {
@@ -34,13 +36,16 @@ public abstract class DriverAI {
         }
     }
 
-    // This method should include all the AI logic and return the index of the next move (0-8).
-    abstract int logic();
+    // This method should include all the AI logic and everything the AI does every turn.
+    // It should return the index of the next move (0-8).
+    protected abstract int logic();
 
 
+
+    // Get-methods should be used by the AI to get necessary information about the map and the state of the car.
 
     // Returns type of the tile with corresponding coordinates.
-    Map.Tile getTile(int x, int y) {
+    protected Map.Tile getTile(int x, int y) {
         try {
             return map.getTile(x, y);
         } catch (IndexOutOfBoundsException e) {
@@ -51,7 +56,7 @@ public abstract class DriverAI {
     }
 
     // Returns whether the tile with corresponding coordinates is rideable or not.
-    boolean isTileRideable(int x, int y) {
+    protected boolean isTileRideable(int x, int y) {
         try {
             return map.isTileRideable(x, y);
         } catch (IndexOutOfBoundsException e) {
@@ -62,22 +67,22 @@ public abstract class DriverAI {
     }
 
     // Returns the x coordinate of the car.
-    int getCarX() {
+    protected int getCarX() {
         return car.getTileX();
     }
 
     // Returns the y coordinate of the car.
-    int getCarY() {
+    protected int getCarY() {
         return car.getTileY();
     }
 
     // Returns the velocity of the car in the direction of the x axis.
-    int getVelX() {
+    protected int getVelX() {
         return car.getVelX();
     }
 
     // Returns the velocity of the car in the direction of the y axis.
-    int getVelY() {
+    protected int getVelY() {
         return car.getVelY();
     }
 

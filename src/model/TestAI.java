@@ -2,9 +2,9 @@ package model;
 
 public class TestAI extends DriverAI {
 
-    int dir = 3;
+    private int dir = 3;
 
-    int logic() {
+    protected int logic() {
         if (getVelX() == 0 && getVelY() == 0) {
             rotateDir();
         }
