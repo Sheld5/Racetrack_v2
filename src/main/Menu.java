@@ -8,14 +8,18 @@ class Menu extends JPanel {
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 50;
 
+    private Font font;
+    private JLabel racetrack;
     private JButton playButton, exitButton;
-    private JLabel gameModeSelection;
+    private JLabel gmSelection;
     private JButton startButton, backButton;
 
     Menu(int width, int height) {
         init(width, height);
+        font = new Font(Font.SANS_SERIF, Font.BOLD, 24);
         initMenuSelection();
         initGameModeSelection();
+        setVisibleMainMenu(true);
         System.out.println("Menu initialized");
     }
 
@@ -26,26 +30,35 @@ class Menu extends JPanel {
     }
 
     private void initMenuSelection() {
+        racetrack = new JLabel("Racetrack");
+        racetrack.setFont(font);
+        racetrack.setBounds(getWidth() / 2 - 60, getHeight() / 2 - 225, 250, 50);
+        racetrack.setForeground(Color.orange);
+        racetrack.setVisible(false);
+        add(racetrack);
+
         int buttonX = getWidth() / 2 - BUTTON_WIDTH / 2;
 
         playButton = new JButton("Play");
-        playButton.setBounds(buttonX , 50, BUTTON_WIDTH, BUTTON_HEIGHT);
+        playButton.setBounds(buttonX , 150, BUTTON_WIDTH, BUTTON_HEIGHT);
         playButton.addActionListener(e -> goToGameModeSelection());
-        playButton.setVisible(true);
+        playButton.setVisible(false);
         add(playButton);
 
         exitButton = new JButton("Exit");
-        exitButton.setBounds(buttonX , 150, BUTTON_WIDTH, BUTTON_HEIGHT);
+        exitButton.setBounds(buttonX , 250, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> System.exit(0));
-        exitButton.setVisible(true);
+        exitButton.setVisible(false);
         add(exitButton);
     }
 
     private void initGameModeSelection() {
-        gameModeSelection = new JLabel("Game Mode Selection");
-        gameModeSelection.setBounds(getWidth() / 2 - 125, getHeight() / 2 - 225, 250, 50);
-        gameModeSelection.setVisible(false);
-        add(gameModeSelection);
+        gmSelection = new JLabel("Game Mode Selection");
+        gmSelection.setFont(font);
+        gmSelection.setBounds(getWidth() / 2 - 125, getHeight() / 2 - 225, 250, 50);
+        gmSelection.setForeground(Color.orange);
+        gmSelection.setVisible(false);
+        add(gmSelection);
 
         int buttonX = getWidth() / 2 - 50;
 
@@ -62,6 +75,8 @@ class Menu extends JPanel {
         add(backButton);
     }
 
+
+
     private void goToGameModeSelection() {
         setVisibleMainMenu(false);
         setVisibleGameModeSelection(true);
@@ -73,12 +88,13 @@ class Menu extends JPanel {
     }
 
     private void setVisibleMainMenu(boolean b) {
+        racetrack.setVisible(b);
         playButton.setVisible(b);
         exitButton.setVisible(b);
     }
 
     private void setVisibleGameModeSelection(boolean b) {
-        gameModeSelection.setVisible(b);
+        gmSelection.setVisible(b);
         startButton.setVisible(b);
         backButton.setVisible(b);
     }
