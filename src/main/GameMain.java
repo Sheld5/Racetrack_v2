@@ -2,7 +2,6 @@ package main;
 
 import model.DriverAI;
 import model.TestAI;
-import util.MapReader;
 import util.Resources;
 
 import javax.swing.*;
