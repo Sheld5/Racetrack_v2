@@ -210,7 +210,7 @@ public class Game extends JPanel {
         goThroughPath(car);
     }
 
-    // goes through the path of the car tile by tile and calls the checkForCollision() function
+    // goes through the path of the car tile by tile and calls the checkTile() function
     @SuppressWarnings("Duplicates")
     private void goThroughPath(Car car) {
 
@@ -222,16 +222,16 @@ public class Game extends JPanel {
         int dirY = initDir(initY, targetY);
 
         if (initX == targetX) {
-            for (int y = initY; y - dirY != targetY; y += dirY) {
-                checkForCollision(car, initX, y);
+            for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
+                checkTile(car, initX, y);
                 if (crashed) {
                     break;
                 }
             }
 
         } else if (initY == targetY) {
-            for (int x = initX; x - dirX != targetX; x += dirX) {
-                checkForCollision(car, x, initY);
+            for (int x = initX + dirX; x - dirX != targetX; x += dirX) {
+                checkTile(car, x, initY);
                 if (crashed) {
                     break;
                 }
@@ -239,10 +239,10 @@ public class Game extends JPanel {
 
         } else if (abs(initX - targetX) == abs(initY - targetY)) {
             int x, y;
-            for (int i = 0; i <= abs(initX - targetX); i++) {
+            for (int i = 1; i <= abs(initX - targetX); i++) {
                 x = initX + dirX * i;
                 y = initY + dirY * i;
-                checkForCollision(car, x, y);
+                checkTile(car, x, y);
                 if (crashed) {
                     break;
                 }
@@ -252,11 +252,16 @@ public class Game extends JPanel {
             int a = -(targetY - initY);
             int b = targetX - initX;
             int c = - a * initX - b * initY;
+            boolean firstTile = true;
 
             if (abs(initX - targetX) > abs(initY - targetY)) {
                 for (int x = initX; x - dirX != targetX; x += dirX) {
                     for (int y = initY; y - dirY != targetY; y += dirY) {
-                        checkForCollision(car, x, y, a, b, c);
+                        if (firstTile) {
+                            firstTile = false;
+                        } else {
+                            checkTile(car, x, y, a, b, c);
+                        }
                         if (crashed) {
                             break;
                         }
@@ -268,7 +273,11 @@ public class Game extends JPanel {
             } else {
                 for (int y = initY; y - dirY != targetY; y += dirY) {
                     for (int x = initX; x - dirX != targetX; x += dirX) {
-                        checkForCollision(car, x, y, a, b, c);
+                        if (firstTile) {
+                            firstTile = false;
+                        } else {
+                            checkTile(car, x, y, a, b, c);
+                        }
                         if (crashed) {
                             break;
                         }
@@ -285,10 +294,10 @@ public class Game extends JPanel {
 
     // checks next tile for its rideability and moves the car accordingly
     @SuppressWarnings("Duplicates")
-    private void checkForCollision(Car car, int x, int y) {
+    private void checkTile(Car car, int x, int y) {
         if (map.isTileRideable(x, y)) {
             moveCar(car, x, y);
-            checkForSpecialTile(x, y);
+            checkForSpecialTiles(car, x, y);
         } else {
             onCarCrash(car);
             crashed = true;
@@ -296,11 +305,11 @@ public class Game extends JPanel {
     }
 
     @SuppressWarnings("Duplicates")
-    private void checkForCollision(Car car, int x, int y, int a, int b, int c) {
+    private void checkTile(Car car, int x, int y, int a, int b, int c) {
         if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
             if (map.isTileRideable(x, y)) {
                 moveCar(car, x, y);
-                checkForSpecialTile(x, y);
+                checkForSpecialTiles(car, x, y);
             } else {
                 onCarCrash(car);
                 crashed = true;
@@ -311,12 +320,12 @@ public class Game extends JPanel {
     private void onCarCrash(Car car) {
         car.setVelX(0);
         car.setVelY(0);
-        System.out.println("car" + activeCar + " crashed");
     }
 
-    private void checkForSpecialTile(int x, int y) {
+    private void checkForSpecialTiles(Car car, int x, int y) {
         checkForCheckpoint(x, y);
-        checkForFinish(x, y);
+        checkForFinish(car, x, y);
+        checkForSand(car, x, y);
     }
 
     private void checkForCheckpoint(int x, int y) {
@@ -333,15 +342,23 @@ public class Game extends JPanel {
         }
     }
 
-    private void checkForFinish(int x, int y) {
+    private void checkForFinish(Car car, int x, int y) {
         if (map.getTile(x, y) == Map.Tile.FINISH) {
             for (Checkpoint ch : checkpoints) {
                 if (!ch.getCarPassed(activeCar)) {
                     return;
                 }
             }
-            cars[activeCar].finished();
+            car.finished();
             System.out.println("Car" + activeCar + " finished the race.");
+        }
+    }
+
+    private void checkForSand(Car car, int x, int y) {
+        if (map.getTile(x, y) == Map.Tile.SAND) {
+            car.setVelX(0);
+            car.setVelY(0);
+            crashed = true;
         }
     }
 

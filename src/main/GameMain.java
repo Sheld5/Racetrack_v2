@@ -36,7 +36,7 @@ public class GameMain {
 
     static void startGame() {
         DriverAI[] drivers = new DriverAI[] {new TestAI()};
-        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, 1, drivers);
+        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, 1, null);
         frame.add(game);
         menu.setVisible(false);
         game.setVisible(true);

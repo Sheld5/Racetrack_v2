@@ -82,7 +82,7 @@ public class Map extends JPanel {
     }
 
     public boolean isTileRideable(int x, int y) {
-        if (getTile(x, y) == Map.Tile.ROAD || getTile(x, y) == Map.Tile.START || getTile(x, y) == Map.Tile.CHECKPOINT || getTile(x, y) == Map.Tile.FINISH) {
+        if (getTile(x, y) == Tile.ROAD || getTile(x, y) == Tile.START || getTile(x, y) == Tile.CHECKPOINT || getTile(x, y) == Tile.FINISH || getTile(x, y) == Tile.SAND || getTile(x, y) == Tile.GRASS) {
             return true;
         } else {
             return false;
