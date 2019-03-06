@@ -46,22 +46,22 @@ public class MapReader {
         NodeList nList = doc.getElementsByTagName("tile");
         String imageFileName;
         for (int i = 0; i < nList.getLength(); i++) {
-            imageFileName = nList.item(i).getChildNodes().item(1).getAttributes().item(1).getNodeValue();
-            if (imageFileName.equals("../TileCheckpoint.png")) {
+            imageFileName = nList.item(i).getChildNodes().item(1).getAttributes().item(1).getNodeValue().substring(3);
+            if (imageFileName.equals("TileCheckpoint.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.CHECKPOINT);
-            } else if (imageFileName.equals("../TileFinish.png")) {
+            } else if (imageFileName.equals("TileFinish.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.FINISH);
-            } else if (imageFileName.equals("../TileGrass.png")) {
+            } else if (imageFileName.equals("TileGrass.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.GRASS);
-            } else if (imageFileName.equals("../TileRoad.png")) {
+            } else if (imageFileName.equals("TileRoad.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.ROAD);
-            } else if (imageFileName.equals("../TileSand.png")) {
+            } else if (imageFileName.equals("TileSand.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.SAND);
-            } else if (imageFileName.equals("../TileStart.png")) {
+            } else if (imageFileName.equals("TileStart.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.START);
-            } else if (imageFileName.equals("../TileWall.png")) {
+            } else if (imageFileName.equals("TileWall.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.WALL);
-            } else if (imageFileName.equals("../TileWater.png")) {
+            } else if (imageFileName.equals("TileWater.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.WATER);
             }
         }
