@@ -89,7 +89,7 @@ public class Game extends JPanel {
         if (drivers != null){
             this.drivers = drivers;
             for (int i = 0; i < drivers.length; i++) {
-                drivers[i].init(cars[i], map);
+                drivers[i].init(cars[i], map, map.getWidthInTiles(), map.getHeightInTiles());
             }
             System.out.println(drivers.length + " AIdrivers initialized");
         } else {

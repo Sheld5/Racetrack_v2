@@ -32,7 +32,7 @@ class Menu extends JPanel {
     private void initMenuSelection() {
         racetrack = new JLabel("Racetrack");
         racetrack.setFont(font);
-        racetrack.setBounds(getWidth() / 2 - 60, getHeight() / 2 - 225, 250, 50);
+        racetrack.setBounds(getWidth() / 2 - 60, 50, 250, 50);
         racetrack.setForeground(Color.orange);
         racetrack.setVisible(false);
         add(racetrack);
@@ -40,13 +40,13 @@ class Menu extends JPanel {
         int buttonX = getWidth() / 2 - BUTTON_WIDTH / 2;
 
         playButton = new JButton("Play");
-        playButton.setBounds(buttonX , 150, BUTTON_WIDTH, BUTTON_HEIGHT);
+        playButton.setBounds(buttonX , 250, BUTTON_WIDTH, BUTTON_HEIGHT);
         playButton.addActionListener(e -> goToGameModeSelection());
         playButton.setVisible(false);
         add(playButton);
 
         exitButton = new JButton("Exit");
-        exitButton.setBounds(buttonX , 250, BUTTON_WIDTH, BUTTON_HEIGHT);
+        exitButton.setBounds(buttonX , 350, BUTTON_WIDTH, BUTTON_HEIGHT);
         exitButton.addActionListener(e -> System.exit(0));
         exitButton.setVisible(false);
         add(exitButton);
@@ -55,7 +55,7 @@ class Menu extends JPanel {
     private void initGameModeSelection() {
         gmSelection = new JLabel("Game Mode Selection");
         gmSelection.setFont(font);
-        gmSelection.setBounds(getWidth() / 2 - 125, getHeight() / 2 - 225, 250, 50);
+        gmSelection.setBounds(getWidth() / 2 - 125, 50, 250, 50);
         gmSelection.setForeground(Color.orange);
         gmSelection.setVisible(false);
         add(gmSelection);

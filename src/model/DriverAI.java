@@ -13,10 +13,13 @@ public abstract class DriverAI {
 
     private Car car;
     private Map map;
+    private int mapWidth, mapHeight;
 
-    public void init(Car car, Map map) {
+    public void init(Car car, Map map, int mapWidth, int mapHeight) {
         this.car = car;
         this.map = map;
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
     }
 
     // Is called by the game each turn to determine what will the car driven by this AI do.
@@ -37,16 +40,24 @@ public abstract class DriverAI {
 
 
     // Returns type of the tile with corresponding coordinates.
-    // Coordinates of the map start at 0. (If the map is 20x20 tiles, x and y coordinates range from 0 to 19.)
     Map.Tile getTile(int x, int y) {
         try {
             return map.getTile(x, y);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("AI called getTile(int x, int y) method with x and/or y out of bounds of the map");
             e.printStackTrace();
-
-            // toDo: domakat tenhle exception
             return null;
+        }
+    }
+
+    // Returns whether the tile with corresponding coordinates is rideable or not.
+    boolean isTileRideable(int x, int y) {
+        try {
+            return map.isTileRideable(x, y);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("AI called isTileRideable(int x, int y) method with x and/or y out of bounds of the map");
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -68,16 +79,6 @@ public abstract class DriverAI {
     // Returns the velocity of the car in the direction of the y axis.
     int getVelY() {
         return car.getVelY();
-    }
-
-    // Returns the width of the map as a number of tiles.
-    int getMapWidth() {
-        return map.getWidthInTiles();
-    }
-
-    // Returns the height of the map as a number of tiles.
-    int getMapHeight() {
-        return map.getHeightInTiles();
     }
 
 }
