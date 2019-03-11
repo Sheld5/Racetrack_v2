@@ -99,7 +99,12 @@ public class Map extends JPanel {
     }
 
     public Tile[][] getMapCopy() {
-        mapCopy = mapTile;
+        mapCopy = new Tile[mapTile.length][mapTile[0].length];
+        for (int x = 0; x < mapTile.length; x++) {
+            for (int y = 0; y < mapTile[0].length; y++) {
+                mapCopy[x][y] = mapTile[x][y];
+            }
+        }
         return mapCopy;
     }
 
