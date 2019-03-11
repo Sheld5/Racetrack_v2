@@ -14,6 +14,7 @@ public class Map extends JPanel {
         START, FINISH, CHECKPOINT, ROAD, GRASS, WATER, WALL, SAND
     }
     private Tile[][] mapTile;
+    private Tile[][] mapCopy;
 
     public Map(int[][] mapInt, int widthInTiles, int heightInTiles, int tileSize, HashMap<Integer, Tile> tileSet) {
         width = widthInTiles;
@@ -95,6 +96,11 @@ public class Map extends JPanel {
 
     public int getHeightInTiles() {
         return height;
+    }
+
+    public Tile[][] getMapCopy() {
+        mapCopy = mapTile;
+        return mapCopy;
     }
 
 }

@@ -22,7 +22,8 @@ public class Game extends JPanel {
     private Checkpoint[] checkpoints;
     private Checkpoint finish;
 
-    private int activeCar;
+    private int activeCarIndex;
+    private Car activeCar;
     private boolean crashed;
     private int turn;
 
@@ -31,11 +32,11 @@ public class Game extends JPanel {
         initCrossHair();
         initCars(numberOfCars);
         initMap();
-        initDrivers(drivers);
+        this.drivers = drivers;
         initCheckpoints(numberOfCars);
         initFinish(numberOfCars);
 
-        activeCar = cars.length - 1;
+        activeCarIndex = cars.length - 1;
         crashed = false;
         turn = 0;
 
@@ -82,18 +83,6 @@ public class Game extends JPanel {
         moveCH(3,9);
 
         System.out.println("crosshair initialized");
-    }
-
-    private void initDrivers(DriverAI[] drivers) {
-        if (drivers != null){
-            this.drivers = drivers;
-            for (int i = 0; i < drivers.length; i++) {
-                drivers[i].init(cars[i], map, map.getWidthInTiles(), map.getHeightInTiles());
-            }
-            System.out.println(drivers.length + " AIdrivers initialized");
-        } else {
-            System.out.println("0 AIdrivers initialized");
-        }
     }
 
     private void initCheckpoints(int numberOfCars) {
@@ -173,15 +162,17 @@ public class Game extends JPanel {
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
     private void nextTurn() {
-        turn++;
+        if (activeCarIndex == 0) {
+            turn++;
+        }
         if (allCarsFinished()) {
             System.out.println("Game finished!");
         } else if (turn > TURN_MAX) {
             System.out.println("Turn limit reached!");
         } else {
             nextCar();
-            if (drivers != null && activeCar < drivers.length) {
-                drive(cars[activeCar], drivers[activeCar].drive());
+            if (drivers != null && activeCarIndex < drivers.length) {
+                drive(activeCar, drivers[activeCarIndex].drive(activeCar.getTileX(), activeCar.getTileY(), activeCar.getVelX(), activeCar.getVelY(), map.getMapCopy()));
                 nextTurn();
             } else {
                 showCH();
@@ -191,7 +182,7 @@ public class Game extends JPanel {
 
     public void onCHClick(int index) {
         hideCH();
-        drive(cars[activeCar], index);
+        drive(activeCar, index);
         nextTurn();
     }
 
@@ -331,9 +322,9 @@ public class Game extends JPanel {
     private void checkForCheckpoint(int x, int y) {
         if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
             for (int i = 0; i < checkpoints.length; i++) {
-                if (checkpoints[i].tileBelongsTo(x, y) && !checkpoints[i].getCarPassed(activeCar)) {
-                    checkpoints[i].carPassed(activeCar);
-                    System.out.println("car" + activeCar + " passed checkpoint" + i);
+                if (checkpoints[i].tileBelongsTo(x, y) && !checkpoints[i].getCarPassed(activeCarIndex)) {
+                    checkpoints[i].carPassed(activeCarIndex);
+                    System.out.println("car" + activeCarIndex + " passed checkpoint" + i);
                 }
                 if (checkpoints[i].tileBelongsTo(x, y)) {
                     break;
@@ -345,12 +336,12 @@ public class Game extends JPanel {
     private void checkForFinish(Car car, int x, int y) {
         if (map.getTile(x, y) == Map.Tile.FINISH) {
             for (Checkpoint ch : checkpoints) {
-                if (!ch.getCarPassed(activeCar)) {
+                if (!ch.getCarPassed(activeCarIndex)) {
                     return;
                 }
             }
             car.finished();
-            System.out.println("Car" + activeCar + " finished the race.");
+            System.out.println("Car" + activeCarIndex + " finished the race.");
         }
     }
 
@@ -375,7 +366,7 @@ public class Game extends JPanel {
     }
 
     private void showCH() {
-        moveCH(cars[activeCar].getTileX() + cars[activeCar].getVelX(), cars[activeCar].getTileY() + cars[activeCar].getVelY());
+        moveCH(cars[activeCarIndex].getTileX() + cars[activeCarIndex].getVelX(), cars[activeCarIndex].getTileY() + cars[activeCarIndex].getVelY());
         for (CrossHair c : ch) {
             c.setVisible(true);
         }
@@ -398,16 +389,17 @@ public class Game extends JPanel {
 
     private void nextCar() {
         rotateCar();
-        if (cars[activeCar].isFinished()) {
+        if (cars[activeCarIndex].isFinished()) {
             rotateCar();
         }
+        activeCar = cars[activeCarIndex];
     }
 
     private void rotateCar() {
-        if (activeCar < cars.length - 1) {
-            activeCar++;
+        if (activeCarIndex < cars.length - 1) {
+            activeCarIndex++;
         } else {
-            activeCar = 0;
+            activeCarIndex = 0;
         }
     }
 
