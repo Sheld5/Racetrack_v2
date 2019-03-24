@@ -11,8 +11,8 @@ import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
-    private final int TILE_SIZE = 16;
-    private final int MAP_INDENT = 50;
+    private final int TILE_SIZE = 32;
+    private final int MAP_INDENT = 16;
     private final int TURN_MAX = 500;
 
     private Map map;
@@ -27,11 +27,11 @@ public class Game extends JPanel {
     private boolean crashed;
     private int turn;
 
-    Game(int width, int height, int numberOfCars, DriverAI[] drivers) {
+    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) {
         init(width, height);
         initCrossHair();
         initCars(numberOfCars);
-        initMap();
+        initMap(mapName);
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
         initFinish(numberOfCars);
@@ -50,11 +50,12 @@ public class Game extends JPanel {
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
+        setAutoscrolls(true);
     }
 
-    private void initMap() {
-        map = new Map(MapReader.getData("Map01.tmx"), MapReader.getMapSizeX(), MapReader.getMapSizeY(), TILE_SIZE, MapReader.getTileSet("RacetrackTileSet.tsx"));
-        map.setLocation(50, 50);
+    private void initMap(String mapName) {
+        map = new Map(MapReader.getData(mapName), MapReader.getMapSizeX(), MapReader.getMapSizeY(), TILE_SIZE, MapReader.getTileSet("RacetrackTileSet.tsx"));
+        map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
         add(map);
 

@@ -1,78 +1,125 @@
 package main;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.text.NumberFormat;
 
 class Menu extends JPanel {
+    private final int DEFAULT_IPAD = 5;
 
-    private static final int BUTTON_WIDTH = 100;
-    private static final int BUTTON_HEIGHT = 50;
-
-    private Font font;
+    private Font fontBig, fontSmall;
     private JLabel racetrack;
     private JButton playButton, exitButton;
     private JLabel gmSelection;
     private JButton startButton, backButton;
+    private JLabel numberOfCars, mapName;
+    private JFormattedTextField cars;
+    private JTextField map;
 
     Menu(int width, int height) {
-        init(width, height);
-        font = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+        fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+        fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
+        initMenu(width, height);
         initMenuSelection();
         initGameModeSelection();
         setVisibleMainMenu(true);
+
         System.out.println("Menu initialized");
     }
 
-    private void init(int width, int height) {
+    private void initMenu(int width, int height) {
         setSize(width, height);
         setBackground(Color.BLACK);
-        setLayout(null);
+        setLayout(new GridBagLayout());
     }
 
+    @SuppressWarnings("Duplicates")
     private void initMenuSelection() {
-        racetrack = new JLabel("Racetrack");
-        racetrack.setFont(font);
-        racetrack.setBounds(getWidth() / 2 - 60, 50, 250, 50);
-        racetrack.setForeground(Color.orange);
-        racetrack.setVisible(false);
-        add(racetrack);
+        GridBagConstraints c = new GridBagConstraints();
+        c.weighty = 1;
+        c.ipadx = DEFAULT_IPAD;
+        c.ipady = DEFAULT_IPAD;
 
-        int buttonX = getWidth() / 2 - BUTTON_WIDTH / 2;
+        racetrack = new JLabel("Racetrack");
+        racetrack.setVisible(false);
+        racetrack.setForeground(Color.orange);
+        racetrack.setFont(fontBig);
+        c.gridy = 0;
+        add(racetrack, c);
 
         playButton = new JButton("Play");
-        playButton.setBounds(buttonX , 250, BUTTON_WIDTH, BUTTON_HEIGHT);
-        playButton.addActionListener(e -> goToGameModeSelection());
         playButton.setVisible(false);
-        add(playButton);
+        playButton.addActionListener(e -> goToGameModeSelection());
+        c.gridy = 1;
+        add(playButton, c);
 
         exitButton = new JButton("Exit");
-        exitButton.setBounds(buttonX , 350, BUTTON_WIDTH, BUTTON_HEIGHT);
-        exitButton.addActionListener(e -> System.exit(0));
         exitButton.setVisible(false);
-        add(exitButton);
+        exitButton.addActionListener(e -> System.exit(0));
+        c.gridy = 2;
+        add(exitButton, c);
     }
 
+    @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
-        gmSelection = new JLabel("Game Mode Selection");
-        gmSelection.setFont(font);
-        gmSelection.setBounds(getWidth() / 2 - 125, 50, 250, 50);
-        gmSelection.setForeground(Color.orange);
-        gmSelection.setVisible(false);
-        add(gmSelection);
+        GridBagConstraints c = new GridBagConstraints();
+        c.weighty = 1;
+        c.ipadx = DEFAULT_IPAD;
+        c.ipady = DEFAULT_IPAD;
 
-        int buttonX = getWidth() / 2 - 50;
+        c.gridy = 0;
+
+        gmSelection = new JLabel("Game Mode Selection");
+        gmSelection.setVisible(false);
+        gmSelection.setForeground(Color.orange);
+        gmSelection.setFont(fontBig);
+        c.gridwidth = 2;
+        add(gmSelection, c);
+        c.gridwidth = 1;
+
+        c.gridy = 3;
 
         startButton = new JButton("Start Game");
-        startButton.setBounds(buttonX, getHeight() / 2 + 25, BUTTON_WIDTH, BUTTON_HEIGHT);
-        startButton.addActionListener(e -> GameMain.startGame());
         startButton.setVisible(false);
-        add(startButton);
+        startButton.addActionListener(e -> GameMain.startGame());
+        add(startButton, c);
 
         backButton = new JButton("Back");
-        backButton.setBounds(buttonX, getHeight() / 2 + 125, BUTTON_WIDTH, BUTTON_HEIGHT);
-        backButton.addActionListener(e -> goToMainMenu());
         backButton.setVisible(false);
-        add(backButton);
+        backButton.addActionListener(e -> goToMainMenu());
+        add(backButton, c);
+
+        c.gridy = 1;
+
+        numberOfCars = new JLabel("Number of Cars:");
+        numberOfCars.setVisible(false);
+        numberOfCars.setForeground(Color.white);
+        numberOfCars.setFont(fontSmall);
+        add(numberOfCars, c);
+
+        NumberFormatter nf = new NumberFormatter(NumberFormat.getIntegerInstance());
+        nf.setAllowsInvalid(false);
+        cars = new JFormattedTextField(nf);
+        cars.setVisible(false);
+        cars.setValue(1);
+        c.ipadx = 15;
+        add(cars, c);
+        c.ipadx = DEFAULT_IPAD;
+
+        c.gridy = 2;
+
+        mapName = new JLabel("Map:");
+        mapName.setVisible(false);
+        mapName.setForeground(Color.white);
+        mapName.setFont(fontSmall);
+        add(mapName, c);
+
+        map = new JTextField("Map01");
+        map.setVisible(false);
+        c.ipadx = 50;
+        add(map, c);
+        c.ipadx = DEFAULT_IPAD;
     }
 
 
@@ -97,6 +144,18 @@ class Menu extends JPanel {
         gmSelection.setVisible(b);
         startButton.setVisible(b);
         backButton.setVisible(b);
+        numberOfCars.setVisible(b);
+        cars.setVisible(b);
+        mapName.setVisible(b);
+        map.setVisible(b);
+    }
+
+    int  getNumberOfCars() {
+        return Integer.parseInt(cars.getText());
+    }
+
+    String getMapName() {
+        return map.getText() + ".tmx";
     }
 
 }

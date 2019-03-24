@@ -27,7 +27,7 @@ public class GameMain {
 
     private static void initFrame(JFrame frame) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setSize(GAME_WIDTH, GAME_HEIGHT);
         frame.setIconImage(Resources.windowIcon);
         frame.setVisible(true);
@@ -35,7 +35,7 @@ public class GameMain {
 
     static void startGame() {
         DriverAI[] drivers = new DriverAI[] {new TestAI()};
-        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, 2, drivers);
+        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
         frame.add(game);
         menu.setVisible(false);
         game.setVisible(true);
