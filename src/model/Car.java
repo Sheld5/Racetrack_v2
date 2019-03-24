@@ -18,7 +18,7 @@ public class Car extends JPanel {
         velY = 0;
         finished = false;
         setSize(size, size);
-        setBackground(new Color(0, 255, 0, 0));
+        setBackground(new Color(0, 0, 0, 0));
     }
 
     @Override

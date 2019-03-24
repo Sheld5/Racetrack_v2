@@ -11,7 +11,7 @@ import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
-    private final int TILE_SIZE = 32;
+    private final int TILE_SIZE = 16;
     private final int MAP_INDENT = 16;
     private final int TURN_MAX = 500;
 

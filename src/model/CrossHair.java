@@ -20,7 +20,7 @@ public class CrossHair extends JPanel implements MouseListener {
         x = 0;
         y = 0;
         setSize(size, size);
-        setBackground(new Color(0, 255, 0, 0));
+        setBackground(new Color(0, 0, 0, 0));
         addMouseListener(this);
     }
 
