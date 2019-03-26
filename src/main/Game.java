@@ -78,7 +78,11 @@ public class Game extends JPanel {
             add(cars[i]);
         }
 
-        System.out.println(cars.length + " cars initialized");
+        if (cars.length == 1) {
+            System.out.println("1 car initialized");
+        } else {
+            System.out.println(cars.length + " cars initialized");
+        }
     }
 
     private void initCrossHair() {
@@ -433,7 +437,7 @@ public class Game extends JPanel {
 
     private void endRace() {
         System.out.println();
-        System.out.println("Race finished!");
+        System.out.println("Race finished");
     }
 
 }
