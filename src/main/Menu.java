@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.awt.*;
 import java.text.NumberFormat;
 
@@ -16,6 +18,8 @@ class Menu extends JPanel {
     private JLabel numberOfCars, mapName;
     private JFormattedTextField cars;
     private JTextField map;
+    private JButton chooseMap;
+    private JButton magic;
 
     Menu(int width, int height) {
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
@@ -78,7 +82,7 @@ class Menu extends JPanel {
         add(gmSelection, c);
         c.gridwidth = 1;
 
-        c.gridy = 3;
+        c.gridy = 4;
 
         startButton = new JButton("Start Game");
         startButton.setVisible(false);
@@ -120,9 +124,28 @@ class Menu extends JPanel {
         c.ipadx = 50;
         add(map, c);
         c.ipadx = DEFAULT_IPAD;
+
+        chooseMap = new JButton("choose Map");
+        chooseMap.setVisible(false);
+
+        c.gridy = 3;
+
+        magic = new JButton("poop");
+        magic.setVisible(false);
+        magic.addActionListener(e -> compile());
+        c.gridwidth = 2;
+        add(magic, c);
+        c.gridwidth = 1;
     }
 
 
+
+    private void compile() {
+        /*
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        compiler.getStandardFileManager(null, null, null);
+        */
+    }
 
     private void goToGameModeSelection() {
         setVisibleMainMenu(false);
@@ -148,6 +171,8 @@ class Menu extends JPanel {
         cars.setVisible(b);
         mapName.setVisible(b);
         map.setVisible(b);
+        chooseMap.setVisible(b);
+        magic.setVisible(b);
     }
 
     int  getNumberOfCars() {

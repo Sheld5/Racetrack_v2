@@ -1,17 +1,20 @@
 package main;
 
+import ai.DriverAI;
 import model.*;
 import util.MapReader;
+import util.StartNotFoundException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
-    private final int TILE_SIZE = 16;
+    private final int TILE_SIZE = 24;
     private final int MAP_INDENT = 16;
     private final int TURN_MAX = 500;
 
@@ -27,11 +30,18 @@ public class Game extends JPanel {
     private boolean crashed;
     private int turn;
 
-    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) {
+    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws FileNotFoundException, StartNotFoundException {
+        System.out.println();
+
         init(width, height);
         initCrossHair();
         initCars(numberOfCars);
         initMap(mapName);
+
+        for (Car car : cars) {
+            moveCar(car, map.getStartX(), map.getStartY());
+        }
+
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
         initFinish(numberOfCars);
@@ -40,7 +50,7 @@ public class Game extends JPanel {
         crashed = false;
         turn = 0;
 
-        System.out.println("Game initialized");
+        System.out.println("Game initialized successfully");
         System.out.println();
 
         nextTurn();
@@ -50,10 +60,9 @@ public class Game extends JPanel {
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
-        setAutoscrolls(true);
     }
 
-    private void initMap(String mapName) {
+    private void initMap(String mapName) throws FileNotFoundException {
         map = new Map(MapReader.getData(mapName), MapReader.getMapSizeX(), MapReader.getMapSizeY(), TILE_SIZE, MapReader.getTileSet("RacetrackTileSet.tsx"));
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
@@ -66,7 +75,6 @@ public class Game extends JPanel {
         cars = new Car[n];
         for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(TILE_SIZE);
-            moveCar(cars[i], 3, 10);
             cars[i].setVisible(true);
             add(cars[i]);
         }

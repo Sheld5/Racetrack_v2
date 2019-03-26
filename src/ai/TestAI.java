@@ -1,4 +1,6 @@
-package model;
+package ai;
+
+import model.Map;
 
 public class TestAI implements DriverAI {
 

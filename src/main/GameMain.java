@@ -1,10 +1,11 @@
 package main;
 
-import model.DriverAI;
-import model.TestAI;
+import ai.DriverAI;
 import util.Resources;
+import util.StartNotFoundException;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 
 public class GameMain {
 
@@ -34,12 +35,18 @@ public class GameMain {
     }
 
     static void startGame() {
-        DriverAI[] drivers = new DriverAI[] {new TestAI()};
-        Game game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
-        frame.add(game);
-        menu.setVisible(false);
-        game.setVisible(true);
-        frame.revalidate();
+        try {
+            DriverAI[] drivers = null;
+            Game game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
+            frame.add(game);
+            menu.setVisible(false);
+            game.setVisible(true);
+            frame.revalidate();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred. The game could not be initiated.");
+        } catch (StartNotFoundException e) {
+            System.out.println("An error occurred. The game could not be initiated.");
+        }
     }
 
 }

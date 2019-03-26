@@ -1,6 +1,7 @@
 package model;
 
 import util.Resources;
+import util.StartNotFoundException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,6 +107,32 @@ public class Map extends JPanel {
             }
         }
         return mapCopy;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public int getStartX() throws StartNotFoundException {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (getTile(x, y) == Tile.START) {
+                    return x;
+                }
+            }
+        }
+        System.out.println("Error: start not found on the map");
+        throw new StartNotFoundException();
+    }
+
+    @SuppressWarnings("Duplicates")
+    public int getStartY() throws StartNotFoundException {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (getTile(x, y) == Tile.START) {
+                    return y;
+                }
+            }
+        }
+        System.out.println("Error: start not found on the map");
+        throw new StartNotFoundException();
     }
 
 }

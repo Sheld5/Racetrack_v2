@@ -7,11 +7,12 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 public class MapReader {
 
-    private static Document createDocFromFile(String fileName) {
+    private static Document createDocFromFile(String fileName) throws FileNotFoundException {
         try {
             File file = new File("src/resources/maps/" + fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -20,14 +21,14 @@ public class MapReader {
             doc.getDocumentElement().normalize();
             return doc;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("File " + "src/resources/maps/" + fileName + " not found");
+            throw new FileNotFoundException();
         }
-        return null;
     }
 
     private static int[][] data;
 
-    public static int[][] getData(String mapFile) {
+    public static int[][] getData(String mapFile) throws FileNotFoundException {
         String[] dataRows = createDocFromFile(mapFile).getElementsByTagName("data").item(0).getTextContent().split("\n");
         String[] row;
         data = new int[dataRows.length - 1][dataRows[1].split(",").length];
@@ -40,7 +41,7 @@ public class MapReader {
         return data;
     }
 
-    public static HashMap<Integer, Map.Tile> getTileSet(String fileName) {
+    public static HashMap<Integer, Map.Tile> getTileSet(String fileName) throws FileNotFoundException {
         HashMap<Integer, Map.Tile> tileSet = new HashMap<>();
         Document doc = createDocFromFile(fileName);
         NodeList nList = doc.getElementsByTagName("tile");
