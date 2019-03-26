@@ -9,7 +9,7 @@ public class Car extends JPanel {
 
     private int x, y;
     private int velX, velY;
-    private boolean finished;
+    private boolean crashed, finished;
 
     public Car(int size) {
         x = 0;
@@ -72,8 +72,16 @@ public class Car extends JPanel {
         return velY;
     }
 
+    public void crashed() {
+        crashed = true;
+    }
+
     public void finished() {
         finished = true;
+    }
+
+    public boolean isCrashed() {
+        return crashed;
     }
 
     public boolean isFinished() {

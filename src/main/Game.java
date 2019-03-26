@@ -23,7 +23,7 @@ public class Game extends JPanel {
     private CrossHair[] ch;
     private DriverAI[] drivers;
     private Checkpoint[] checkpoints;
-    private Checkpoint finish;
+    //private Checkpoint finish;
 
     private int activeCarIndex;
     private Car activeCar;
@@ -44,7 +44,6 @@ public class Game extends JPanel {
 
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
-        initFinish(numberOfCars);
 
         activeCarIndex = cars.length - 1;
         crashed = false;
@@ -138,6 +137,7 @@ public class Game extends JPanel {
 
     }
 
+    /*
     private void initFinish(int numberOfCars) {
         boolean errorOccurred = false;
         boolean addedToFinish;
@@ -166,6 +166,7 @@ public class Game extends JPanel {
         }
         System.out.println("Finish initialized");
     }
+    */
 
 
 
@@ -174,8 +175,8 @@ public class Game extends JPanel {
         if (activeCarIndex == 0) {
             turn++;
         }
-        if (allCarsFinished()) {
-            System.out.println("Game finished!");
+        if (allCarsIdle()) {
+            endRace();
         } else if (turn > TURN_MAX) {
             System.out.println("Turn limit reached!");
         } else {
@@ -326,6 +327,7 @@ public class Game extends JPanel {
         checkForCheckpoint(x, y);
         checkForFinish(car, x, y);
         checkForSand(car, x, y);
+        checkForWater(car, x, y);
     }
 
     private void checkForCheckpoint(int x, int y) {
@@ -350,7 +352,7 @@ public class Game extends JPanel {
                 }
             }
             car.finished();
-            System.out.println("Car" + activeCarIndex + " finished the race.");
+            System.out.println("Car" + activeCarIndex + " finished the race!");
         }
     }
 
@@ -359,6 +361,13 @@ public class Game extends JPanel {
             car.setVelX(0);
             car.setVelY(0);
             crashed = true;
+        }
+    }
+
+    private void checkForWater(Car car, int x, int y) {
+        if (map.getTile(x, y) == Map.Tile.WATER) {
+            car.crashed();
+            System.out.println("Car" + activeCarIndex + " crashed!");
         }
     }
 
@@ -387,9 +396,9 @@ public class Game extends JPanel {
         }
     }
 
-    private boolean allCarsFinished() {
+    private boolean allCarsIdle() {
         for (Car c : cars) {
-            if (!c.isFinished()) {
+            if (!c.isFinished() && !c.isCrashed()) {
                 return false;
             }
         }
@@ -398,7 +407,7 @@ public class Game extends JPanel {
 
     private void nextCar() {
         rotateCar();
-        if (cars[activeCarIndex].isFinished()) {
+        while (cars[activeCarIndex].isCrashed() || cars[activeCarIndex].isFinished()) {
             rotateCar();
         }
         activeCar = cars[activeCarIndex];
@@ -420,6 +429,11 @@ public class Game extends JPanel {
         } else {
             return 0;
         }
+    }
+
+    private void endRace() {
+        System.out.println();
+        System.out.println("Race finished!");
     }
 
 }
