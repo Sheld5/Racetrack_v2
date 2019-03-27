@@ -356,6 +356,7 @@ public class Game extends JPanel {
                 }
             }
             car.finished();
+            car.setTurnOfFinish(turn);
             System.out.println("Car" + activeCarIndex + " finished the race!");
         }
     }
@@ -438,6 +439,15 @@ public class Game extends JPanel {
     private void endRace() {
         System.out.println();
         System.out.println("Race finished");
+        for (int i = 0; i < cars.length; i++) {
+            if (cars[i].isFinished()) {
+                System.out.println("Car" + i + " finished the race in " + cars[i].getTurnOfFinish() + " turns.");
+            } else if (cars[i].isCrashed()) {
+                System.out.println("Car" + i + " went swimming and thus could not finish the race.");
+            } else {
+                System.out.println("Car" + i + " was not able to finish the race in " + TURN_MAX + " turns.");
+            }
+        }
     }
 
 }
