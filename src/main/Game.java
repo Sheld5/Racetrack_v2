@@ -23,7 +23,6 @@ public class Game extends JPanel {
     private CrossHair[] ch;
     private DriverAI[] drivers;
     private Checkpoint[] checkpoints;
-    //private Checkpoint finish;
 
     private int activeCarIndex;
     private Car activeCar;
@@ -140,37 +139,6 @@ public class Game extends JPanel {
         System.out.println(checkpoints.length + " checkpoints initialized");
 
     }
-
-    /*
-    private void initFinish(int numberOfCars) {
-        boolean errorOccurred = false;
-        boolean addedToFinish;
-        for (int x = 0; x < map.getWidthInTiles(); x++) {
-            for (int y = 0; y < map.getHeightInTiles(); y++) {
-                if (map.getTile(x, y) == Map.Tile.FINISH) {
-                    if (finish == null) {
-                        finish = new Checkpoint(x, y, numberOfCars);
-                    } else {
-                        addedToFinish = false;
-                        for (int i = 0; i < finish.getNoOfTiles(); i++) {
-                            if ((finish.getXOfTile(i) - 1 <= x) && (x <= finish.getXOfTile(i) + 1) && (finish.getYOfTile(i) - 1 <= y) && (y <= finish.getYOfTile(i) + 1)) {
-                                finish.addTile(x, y);
-                                addedToFinish = true;
-                                break;
-                            }
-                        }
-                        if (!addedToFinish && !errorOccurred) {
-                            System.out.println("Error: More than one finish found on the map.");
-                            System.out.println("Only one finish will be recognized.");
-                            errorOccurred = true;
-                        }
-                    }
-                }
-            }
-        }
-        System.out.println("Finish initialized");
-    }
-    */
 
 
 
