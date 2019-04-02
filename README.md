@@ -21,3 +21,7 @@ WATER - the car will sink and isn't going to be able to continue the race
 SAND - the car stops and its velocity is set to {0,0} (this results in only being able to move 1 tile per turn on sand)
 
 ICE - if the car finishes the turn on ice, it cannot be controlled next turn and instead moves in the same trajectory and with the same velocity; if the velocity of the car is 0 (it crashed into a wall on ice), it can be controlled next turn as usual
+
+## Testing AI
+
+Add your AI to the resources.ai package and make an instance of it in the DriverAI array at GameMain:45

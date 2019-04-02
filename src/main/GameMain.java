@@ -43,7 +43,7 @@ public class GameMain {
     static void startGame() {
         try {
             DriverAI[] drivers = null;
-            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
+            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), drivers, menu.getMapName());
             frame.add(game);
             menu.setVisible(false);
             game.setVisible(true);
