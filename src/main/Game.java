@@ -170,6 +170,7 @@ public class Game extends JPanel {
     private void nextTurn() {
         if (activeCarIndex == 0) {
             turn++;
+            update();
         }
         if (allCarsIdle()) {
             endRace();
@@ -180,6 +181,9 @@ public class Game extends JPanel {
             if (activeCar.isCrashed()) {
                 activeCar.countdown();
                 nextTurn();
+            } else if (map.getTile(activeCar.getCoordinates()) == Tile.ICE && (activeCar.getVelocity()[0] != 0 || activeCar.getVelocity()[1] != 0)) {
+                drive(activeCar, new int[]{0,0});
+                nextTurn();
             } else {
                 if (drivers != null && activeCarIndex < drivers.length) {
                     drive(activeCar, drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy()));
@@ -189,7 +193,6 @@ public class Game extends JPanel {
                 }
             }
         }
-        update();
     }
 
     public void onCHClick(int index) {
@@ -374,6 +377,7 @@ public class Game extends JPanel {
     private void checkForWater(Car car, int x, int y) {
         if (map.getTile(x, y) == Tile.WATER) {
             car.sunk();
+            stop = true;
             System.out.println("Car" + activeCarIndex + " sunk!");
         }
     }

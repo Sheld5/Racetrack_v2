@@ -64,6 +64,8 @@ public class MapReader {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.WALL);
             } else if (imageFileName.equals("TileWater.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.WATER);
+            } else if (imageFileName.equals("TileIce.png")) {
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.ICE);
             }
         }
         return tileSet;

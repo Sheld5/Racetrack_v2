@@ -71,6 +71,9 @@ public class Map extends JPanel {
                     case SAND:
                         g.drawImage(Resources.tileSand.getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH), x * tileSize, y * tileSize, null);
                         break;
+                    case ICE:
+                        g.drawImage(Resources.tileIce.getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH), x * tileSize, y * tileSize, null);
+                        break;
                 }
             }
         }
@@ -78,6 +81,14 @@ public class Map extends JPanel {
 
     public Tile getTile(int x, int y) {
         return mapTile[y][x];
+    }
+
+    public Tile getTile(int[] coordinates) {
+        if (coordinates.length != 2) {
+            throw new IllegalArgumentException("method getTile only accepts two ints or an int array with the length of 2 as argument");
+        } else {
+            return mapTile[coordinates[1]][coordinates[0]];
+        }
     }
 
     public boolean isTileRideable(int x, int y) {

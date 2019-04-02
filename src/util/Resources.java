@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Resources {
 
     public static BufferedImage windowIcon;
-    public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand;
+    public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
     public static BufferedImage car, crosshair;
 
     private static int numberOfErrors = 0;
@@ -22,6 +22,8 @@ public class Resources {
         tileWater = loadImage("tileWater.png");
         tileWall = loadImage("tileWall.png");
         tileSand = loadImage("tileSand.png");
+        tileIce = loadImage("tileIce.png");
+
         car = loadImage("car.png");
         crosshair = loadImage("crosshair.png");
 
