@@ -1,4 +1,6 @@
-package model;
+package resources.ai;
+
+import model.Tile;
 
 public interface DriverAI {
 
