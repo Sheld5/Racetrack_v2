@@ -1,6 +1,6 @@
 package main;
 
-import ai.DriverAI;
+import model.DriverAI;
 import util.Resources;
 import util.StartNotFoundException;
 

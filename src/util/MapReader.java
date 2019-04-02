@@ -1,34 +1,34 @@
 package util;
 
-import model.Map;
+import model.Tile;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class MapReader {
 
-    private static Document createDocFromFile(String fileName) throws FileNotFoundException {
+    private Document createDocFromFile(String fileName) throws FileNotFoundException {
         try {
-            File file = new File("src/resources/maps/" + fileName);
+            InputStream in = getClass().getResourceAsStream("/resources/maps/" + fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(file);
+            Document doc = dBuilder.parse(in);
             doc.getDocumentElement().normalize();
             return doc;
         } catch (Exception e) {
-            System.out.println("File " + "src/resources/maps/" + fileName + " not found");
+            System.out.println("File " + "/resources/maps/" + fileName + " not found");
             throw new FileNotFoundException();
         }
     }
 
-    private static int[][] data;
+    private int[][] data;
 
-    public static int[][] getData(String mapFile) throws FileNotFoundException {
+    public int[][] getData(String mapFile) throws FileNotFoundException {
         String[] dataRows = createDocFromFile(mapFile).getElementsByTagName("data").item(0).getTextContent().split("\n");
         String[] row;
         data = new int[dataRows.length - 1][dataRows[1].split(",").length];
@@ -41,39 +41,39 @@ public class MapReader {
         return data;
     }
 
-    public static HashMap<Integer, Map.Tile> getTileSet(String fileName) throws FileNotFoundException {
-        HashMap<Integer, Map.Tile> tileSet = new HashMap<>();
+    public HashMap<Integer, Tile> getTileSet(String fileName) throws FileNotFoundException {
+        HashMap<Integer, Tile> tileSet = new HashMap<>();
         Document doc = createDocFromFile(fileName);
         NodeList nList = doc.getElementsByTagName("tile");
         String imageFileName;
         for (int i = 0; i < nList.getLength(); i++) {
             imageFileName = nList.item(i).getChildNodes().item(1).getAttributes().item(1).getNodeValue().substring(3);
             if (imageFileName.equals("TileCheckpoint.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.CHECKPOINT);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.CHECKPOINT);
             } else if (imageFileName.equals("TileFinish.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.FINISH);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.FINISH);
             } else if (imageFileName.equals("TileGrass.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.GRASS);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.GRASS);
             } else if (imageFileName.equals("TileRoad.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.ROAD);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.ROAD);
             } else if (imageFileName.equals("TileSand.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.SAND);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.SAND);
             } else if (imageFileName.equals("TileStart.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.START);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.START);
             } else if (imageFileName.equals("TileWall.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.WALL);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.WALL);
             } else if (imageFileName.equals("TileWater.png")) {
-                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Map.Tile.WATER);
+                tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.WATER);
             }
         }
         return tileSet;
     }
 
-    public static int getMapSizeY() {
+    public int getMapSizeY() {
         return data.length;
     }
 
-    public static int getMapSizeX() {
+    public int getMapSizeX() {
         return data[0].length;
     }
 

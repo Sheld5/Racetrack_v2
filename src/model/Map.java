@@ -11,9 +11,6 @@ public class Map extends JPanel {
 
     private int width, height;
     private int tileSize;
-    public enum Tile {
-        START, FINISH, CHECKPOINT, ROAD, GRASS, WATER, WALL, SAND
-    }
     private Tile[][] mapTile;
     private Tile[][] mapCopy;
 
@@ -84,7 +81,7 @@ public class Map extends JPanel {
     }
 
     public boolean isTileRideable(int x, int y) {
-        if (getTile(x, y) == Tile.WALL) {
+        if (getTile(x, y) == model.Tile.WALL) {
             return false;
         } else {
             return true;
@@ -113,7 +110,7 @@ public class Map extends JPanel {
     public int getStartX() throws StartNotFoundException {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (getTile(x, y) == Tile.START) {
+                if (getTile(x, y) == model.Tile.START) {
                     return x;
                 }
             }
@@ -126,7 +123,7 @@ public class Map extends JPanel {
     public int getStartY() throws StartNotFoundException {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (getTile(x, y) == Tile.START) {
+                if (getTile(x, y) == model.Tile.START) {
                     return y;
                 }
             }

@@ -1,6 +1,4 @@
-package ai;
-
-import model.Map.Tile;
+package model;
 
 public interface DriverAI {
 

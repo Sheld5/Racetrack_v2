@@ -1,6 +1,6 @@
 package main;
 
-import ai.DriverAI;
+import model.DriverAI;
 import model.*;
 import util.MapReader;
 import util.StartNotFoundException;
@@ -40,6 +40,8 @@ public class Game extends JPanel {
         for (Car car : cars) {
             moveCar(car, map.getStartX(), map.getStartY());
         }
+        moveCH(map.getStartX(), map.getStartY());
+
 
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
@@ -61,7 +63,8 @@ public class Game extends JPanel {
     }
 
     private void initMap(String mapName) throws FileNotFoundException {
-        map = new Map(MapReader.getData(mapName), MapReader.getMapSizeX(), MapReader.getMapSizeY(), TILE_SIZE, MapReader.getTileSet("RacetrackTileSet.tsx"));
+        MapReader mr = new MapReader();
+        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), TILE_SIZE, mr.getTileSet("RacetrackTileSet.tsx"));
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
         add(map);
@@ -91,7 +94,6 @@ public class Game extends JPanel {
             ch[i].setVisible(false);
             add(ch[i]);
         }
-        moveCH(3,9);
 
         System.out.println("crosshair initialized");
     }
@@ -104,7 +106,7 @@ public class Game extends JPanel {
         for (int x = 0; x < map.getWidthInTiles(); x++) {
             for (int y = 0; y < map.getHeightInTiles(); y++) {
 
-                if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
+                if (map.getTile(x, y) == Tile.CHECKPOINT) {
                     for (Checkpoint ch : checkpoints) {
                         for (int i = 0; i < ch.getNoOfTiles(); i++) {
                             if ((ch.getXOfTile(i) - 1 <= x) && (x <= ch.getXOfTile(i) + 1) && (ch.getYOfTile(i) - 1 <= y) && (y <= ch.getYOfTile(i) + 1)) {
@@ -303,7 +305,7 @@ public class Game extends JPanel {
     }
 
     private void checkForCheckpoint(int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.CHECKPOINT) {
+        if (map.getTile(x, y) == Tile.CHECKPOINT) {
             for (int i = 0; i < checkpoints.length; i++) {
                 if (checkpoints[i].tileBelongsTo(x, y) && !checkpoints[i].getCarPassed(activeCarIndex)) {
                     checkpoints[i].carPassed(activeCarIndex);
@@ -317,7 +319,7 @@ public class Game extends JPanel {
     }
 
     private void checkForFinish(Car car, int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.FINISH) {
+        if (map.getTile(x, y) == Tile.FINISH) {
             for (Checkpoint ch : checkpoints) {
                 if (!ch.getCarPassed(activeCarIndex)) {
                     return;
@@ -330,7 +332,7 @@ public class Game extends JPanel {
     }
 
     private void checkForSand(Car car, int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.SAND) {
+        if (map.getTile(x, y) == Tile.SAND) {
             car.setVelX(0);
             car.setVelY(0);
             crashed = true;
@@ -338,7 +340,7 @@ public class Game extends JPanel {
     }
 
     private void checkForWater(Car car, int x, int y) {
-        if (map.getTile(x, y) == Map.Tile.WATER) {
+        if (map.getTile(x, y) == Tile.WATER) {
             car.crashed();
             System.out.println("Car" + activeCarIndex + " crashed!");
         }

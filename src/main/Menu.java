@@ -1,9 +1,9 @@
 package main;
 
+import util.AICompiler;
+
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 import java.awt.*;
 import java.text.NumberFormat;
 
@@ -141,10 +141,8 @@ class Menu extends JPanel {
 
 
     private void compile() {
-        /*
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.getStandardFileManager(null, null, null);
-        */
+        AICompiler aic = new AICompiler();
+        aic.compile("TestAI");
     }
 
     private void goToGameModeSelection() {
