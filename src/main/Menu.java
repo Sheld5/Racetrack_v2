@@ -1,7 +1,5 @@
 package main;
 
-import util.AICompiler;
-
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;

@@ -18,6 +18,9 @@ public class Game extends JPanel {
     private final int MAP_INDENT = 16;
     private final int TURN_MAX = 500;
 
+    private JLabel turnLabel;
+    private Font font;
+
     private Map map;
     private Car[] cars;
     private CrossHair[] ch;
@@ -26,7 +29,7 @@ public class Game extends JPanel {
 
     private int activeCarIndex;
     private Car activeCar;
-    private boolean crashed;
+    private boolean stop;
     private int turn;
 
     Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws FileNotFoundException, StartNotFoundException {
@@ -36,19 +39,20 @@ public class Game extends JPanel {
         initCrossHair();
         initCars(numberOfCars);
         initMap(mapName);
+        initTurnLabel();
 
-        for (Car car : cars) {
-            moveCar(car, map.getStartX(), map.getStartY());
-        }
-        moveCH(map.getStartX(), map.getStartY());
-
+        moveCarsToStart();
 
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
 
         activeCarIndex = cars.length - 1;
-        crashed = false;
-        turn = 0;
+        stop = false;
+        if (cars.length == 1) {
+            turn = -1;
+        } else {
+            turn = 0;
+        }
 
         System.out.println("Game initialized successfully");
         System.out.println();
@@ -60,6 +64,17 @@ public class Game extends JPanel {
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
+    }
+
+    private void initTurnLabel() {
+        font = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+
+        turnLabel = new JLabel(String.valueOf(turn));
+        turnLabel.setVisible(true);
+        turnLabel.setFont(font);
+        turnLabel.setForeground(Color.orange);
+        turnLabel.setBounds(map.getX() + map.getWidth() + MAP_INDENT, MAP_INDENT,50, 50);
+        add(turnLabel);
     }
 
     private void initMap(String mapName) throws FileNotFoundException {
@@ -142,6 +157,13 @@ public class Game extends JPanel {
 
     }
 
+    private void moveCarsToStart() throws StartNotFoundException {
+        for (Car car : cars) {
+            moveCar(car, map.getStartX(), map.getStartY());
+        }
+        moveCH(map.getStartX(), map.getStartY());
+    }
+
 
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
@@ -155,13 +177,19 @@ public class Game extends JPanel {
             System.out.println("Turn limit reached!");
         } else {
             nextCar();
-            if (drivers != null && activeCarIndex < drivers.length) {
-                drive(activeCar, drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy()));
+            if (activeCar.isCrashed()) {
+                activeCar.countdown();
                 nextTurn();
             } else {
-                showCH();
+                if (drivers != null && activeCarIndex < drivers.length) {
+                    drive(activeCar, drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy()));
+                    nextTurn();
+                } else {
+                    showCH();
+                }
             }
         }
+        update();
     }
 
     public void onCHClick(int index) {
@@ -203,7 +231,7 @@ public class Game extends JPanel {
         if (initX == targetX) {
             for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
                 checkTile(car, initX, y);
-                if (crashed) {
+                if (stop) {
                     break;
                 }
             }
@@ -211,7 +239,7 @@ public class Game extends JPanel {
         } else if (initY == targetY) {
             for (int x = initX + dirX; x - dirX != targetX; x += dirX) {
                 checkTile(car, x, initY);
-                if (crashed) {
+                if (stop) {
                     break;
                 }
             }
@@ -222,7 +250,7 @@ public class Game extends JPanel {
                 x = initX + dirX * i;
                 y = initY + dirY * i;
                 checkTile(car, x, y);
-                if (crashed) {
+                if (stop) {
                     break;
                 }
             }
@@ -241,11 +269,11 @@ public class Game extends JPanel {
                         } else {
                             checkTile(car, x, y, a, b, c);
                         }
-                        if (crashed) {
+                        if (stop) {
                             break;
                         }
                     }
-                    if (crashed) {
+                    if (stop) {
                         break;
                     }
                 }
@@ -257,18 +285,18 @@ public class Game extends JPanel {
                         } else {
                             checkTile(car, x, y, a, b, c);
                         }
-                        if (crashed) {
+                        if (stop) {
                             break;
                         }
                     }
-                    if (crashed) {
+                    if (stop) {
                         break;
                     }
                 }
             }
         }
 
-        crashed = false;
+        stop = false;
     }
 
     // checks next tile for its rideability and moves the car accordingly
@@ -279,7 +307,6 @@ public class Game extends JPanel {
             checkForSpecialTiles(car, x, y);
         } else {
             onCarCrash(car);
-            crashed = true;
         }
     }
 
@@ -291,13 +318,16 @@ public class Game extends JPanel {
                 checkForSpecialTiles(car, x, y);
             } else {
                 onCarCrash(car);
-                crashed = true;
             }
         }
     }
 
+
+
     private void onCarCrash(Car car) {
         car.setVelocity(new int[]{0,0});
+        car.crashed();
+        stop = true;
     }
 
     private void checkForSpecialTiles(Car car, int x, int y) {
@@ -337,16 +367,18 @@ public class Game extends JPanel {
     private void checkForSand(Car car, int x, int y) {
         if (map.getTile(x, y) == Tile.SAND) {
             car.setVelocity(new int[]{0,0});
-            crashed = true;
+            stop = true;
         }
     }
 
     private void checkForWater(Car car, int x, int y) {
         if (map.getTile(x, y) == Tile.WATER) {
-            car.crashed();
-            System.out.println("Car" + activeCarIndex + " crashed!");
+            car.sunk();
+            System.out.println("Car" + activeCarIndex + " sunk!");
         }
     }
+
+
 
     private void moveCar(Car car, int x, int y) {
         car.setCoordinates(x,y);
@@ -375,7 +407,7 @@ public class Game extends JPanel {
 
     private boolean allCarsIdle() {
         for (Car c : cars) {
-            if (!c.isFinished() && !c.isCrashed()) {
+            if (!c.isFinished() && !c.isSunk()) {
                 return false;
             }
         }
@@ -384,7 +416,7 @@ public class Game extends JPanel {
 
     private void nextCar() {
         rotateCar();
-        while (cars[activeCarIndex].isCrashed() || cars[activeCarIndex].isFinished()) {
+        while (cars[activeCarIndex].isSunk() || cars[activeCarIndex].isFinished()) {
             rotateCar();
         }
         activeCar = cars[activeCarIndex];
@@ -414,12 +446,16 @@ public class Game extends JPanel {
         for (int i = 0; i < cars.length; i++) {
             if (cars[i].isFinished()) {
                 System.out.println("Car" + i + " finished the race in " + cars[i].getTurnOfFinish() + " turns.");
-            } else if (cars[i].isCrashed()) {
+            } else if (cars[i].isSunk()) {
                 System.out.println("Car" + i + " went swimming and thus could not finish the race.");
             } else {
                 System.out.println("Car" + i + " was not able to finish the race in " + TURN_MAX + " turns.");
             }
         }
+    }
+
+    private void update() {
+        turnLabel.setText(String.valueOf(turn));
     }
 
 }

@@ -7,13 +7,17 @@ import java.awt.*;
 
 public class Car extends JPanel {
 
+    private static int TURNS_SKIPPED_ON_CRASH = 3;
+
     private int[] coordinates, velocity;
-    private boolean crashed, finished;
+    private boolean crashed, sunk, finished;
+    private int crashCountdown;
     private int turnOfFinish;
 
     public Car(int size) {
         coordinates = new int[]{0,0};
         velocity = new int[]{0,0};
+        crashCountdown = 0;
         finished = false;
         setSize(size, size);
         setBackground(new Color(0, 0, 0, 0));
@@ -66,6 +70,11 @@ public class Car extends JPanel {
 
     public void crashed() {
         crashed = true;
+        crashCountdown = TURNS_SKIPPED_ON_CRASH;
+    }
+
+    public void sunk() {
+        sunk = true;
     }
 
     public void finished() {
@@ -74,6 +83,10 @@ public class Car extends JPanel {
 
     public boolean isCrashed() {
         return crashed;
+    }
+
+    public boolean isSunk() {
+        return sunk;
     }
 
     public boolean isFinished() {
@@ -86,6 +99,13 @@ public class Car extends JPanel {
 
     public int getTurnOfFinish() {
         return turnOfFinish;
+    }
+
+    public void countdown() {
+        crashCountdown--;
+        if (crashCountdown == 0) {
+            crashed = false;
+        }
     }
 
 }

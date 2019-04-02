@@ -10,8 +10,8 @@ import java.io.FileNotFoundException;
 public class GameMain {
 
     private static final String GAME_TITLE = "Racetrack";
-    private static final int GAME_WIDTH = 512;
-    private static final int GAME_HEIGHT = 512;
+    private static final int GAME_WIDTH = 555;
+    private static final int GAME_HEIGHT = 555;
 
     private static JFrame frame;
     private static Menu menu;
