@@ -141,8 +141,7 @@ class Menu extends JPanel {
 
 
     private void compile() {
-        AICompiler aic = new AICompiler();
-        aic.compile("TestAI");
+        // zatim nic
     }
 
     private void goToGameModeSelection() {

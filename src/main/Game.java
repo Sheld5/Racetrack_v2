@@ -156,7 +156,7 @@ public class Game extends JPanel {
         } else {
             nextCar();
             if (drivers != null && activeCarIndex < drivers.length) {
-                drive(activeCar, drivers[activeCarIndex].drive(activeCar.getTileX(), activeCar.getTileY(), activeCar.getVelX(), activeCar.getVelY(), map.getMapCopy()));
+                drive(activeCar, drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy()));
                 nextTurn();
             } else {
                 showCH();
@@ -166,22 +166,26 @@ public class Game extends JPanel {
 
     public void onCHClick(int index) {
         hideCH();
-        drive(activeCar, index);
+
+        int[] a = new int[]{0,0};
+        if (index < 3) {
+            a[1] = -1;
+        } else if (index > 5) {
+            a[1] = 1;
+        }
+        if (index%3 == 0) {
+            a[0] = -1;
+        } else if (index%3 == 2) {
+            a[0] = 1;
+        }
+
+        drive(activeCar, a);
         nextTurn();
     }
 
     // changes the velocities of the cars and calls the goThroughPath() function
-    private void drive(Car car, int move) {
-        if (move < 3) {
-            car.accelY(-1);
-        } else if (move > 5) {
-            car.accelY(1);
-        }
-        if (move%3 == 0) {
-            car.accelX(-1);
-        } else if (move%3 == 2) {
-            car.accelX(1);
-        }
+    private void drive(Car car, int[] a) {
+        car.accelerate(a);
         goThroughPath(car);
     }
 
@@ -189,10 +193,10 @@ public class Game extends JPanel {
     @SuppressWarnings("Duplicates")
     private void goThroughPath(Car car) {
 
-        int initX = car.getTileX();
-        int initY = car.getTileY();
-        int targetX = initX + car.getVelX();
-        int targetY = initY + car.getVelY();
+        int initX = car.getCoordinates()[0];
+        int initY = car.getCoordinates()[1];
+        int targetX = initX + car.getVelocity()[0];
+        int targetY = initY + car.getVelocity()[1];
         int dirX = initDir(initX, targetX);
         int dirY = initDir(initY, targetY);
 
@@ -293,8 +297,7 @@ public class Game extends JPanel {
     }
 
     private void onCarCrash(Car car) {
-        car.setVelX(0);
-        car.setVelY(0);
+        car.setVelocity(new int[]{0,0});
     }
 
     private void checkForSpecialTiles(Car car, int x, int y) {
@@ -333,8 +336,7 @@ public class Game extends JPanel {
 
     private void checkForSand(Car car, int x, int y) {
         if (map.getTile(x, y) == Tile.SAND) {
-            car.setVelX(0);
-            car.setVelY(0);
+            car.setVelocity(new int[]{0,0});
             crashed = true;
         }
     }
@@ -347,7 +349,7 @@ public class Game extends JPanel {
     }
 
     private void moveCar(Car car, int x, int y) {
-        car.setTileXY(x,y);
+        car.setCoordinates(x,y);
         car.setLocation(MAP_INDENT + x * TILE_SIZE, MAP_INDENT + y * TILE_SIZE);
     }
 
@@ -359,7 +361,7 @@ public class Game extends JPanel {
     }
 
     private void showCH() {
-        moveCH(cars[activeCarIndex].getTileX() + cars[activeCarIndex].getVelX(), cars[activeCarIndex].getTileY() + cars[activeCarIndex].getVelY());
+        moveCH(activeCar.getCoordinates()[0] + activeCar.getVelocity()[0], activeCar.getCoordinates()[1] + activeCar.getVelocity()[1]);
         for (CrossHair c : ch) {
             c.setVisible(true);
         }

@@ -7,16 +7,13 @@ import java.awt.*;
 
 public class Car extends JPanel {
 
-    private int x, y;
-    private int velX, velY;
+    private int[] coordinates, velocity;
     private boolean crashed, finished;
     private int turnOfFinish;
 
     public Car(int size) {
-        x = 0;
-        y = 0;
-        velX = 0;
-        velY = 0;
+        coordinates = new int[]{0,0};
+        velocity = new int[]{0,0};
         finished = false;
         setSize(size, size);
         setBackground(new Color(0, 0, 0, 0));
@@ -28,49 +25,43 @@ public class Car extends JPanel {
         g.drawImage(Resources.car.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
     }
 
-    public void setTileXY(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public void setCoordinates(int x, int y) {
+        coordinates[0] = x;
+        coordinates[1] = y;
     }
 
-    public void accelX(int a) {
-        if (a < -1 || a > 1) {
-            throw new IllegalArgumentException("method accelX only accepts values of {-1;0;1}");
+    public void accelerate(int[] a) {
+        if (a.length != 2) {
+            throw new IllegalArgumentException("method accelerate only accepts an int array with the length of 2 as its argument");
+        } else if (a[0] < -1 || a[0] > 1 || a[1] < -1 || a[1] > 1) {
+            throw new IllegalArgumentException("method accelerate only accepts values of {-1;0;1}");
         } else {
-            velX += a;
+            velocity[0] += a[0];
+            velocity[1] += a[1];
         }
     }
 
-    public void accelY(int a) {
-        if (a < -1 || a > 1) {
-            throw new IllegalArgumentException("method accelY only accepts values of {-1;0;1}");
+    public void setVelocity(int[] velocity) {
+        if (velocity.length != 2) {
+            throw new IllegalArgumentException("method setVelocity only accepts an int array with the length of 2 as its argument");
         } else {
-            velY += a;
+            this.velocity[0] = velocity[0];
+            this.velocity[1] = velocity[1];
         }
     }
 
-    public void setVelX(int velX) {
-        this.velX = velX;
+    public int[] getCoordinates() {
+        int[] coordinatesCopy = new int[2];
+        coordinatesCopy[0] = coordinates[0];
+        coordinatesCopy[1] = coordinates[1];
+        return coordinatesCopy;
     }
 
-    public void setVelY(int velY) {
-        this.velY = velY;
-    }
-
-    public int getTileX() {
-        return x;
-    }
-
-    public int getTileY() {
-        return y;
-    }
-
-    public int getVelX() {
-        return velX;
-    }
-
-    public int getVelY() {
-        return velY;
+    public int[] getVelocity() {
+        int[] velocityCopy = new int[2];
+        velocityCopy[0] = velocity[0];
+        velocityCopy[1] = velocity[1];
+        return velocityCopy;
     }
 
     public void crashed() {

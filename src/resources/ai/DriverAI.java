@@ -4,7 +4,7 @@ import model.Tile;
 
 public interface DriverAI {
 
-    // Should return index of the next move ranging from 0 to 8.
-    int drive(int carX, int carY, int velX, int velY, Tile[][] map);
+    // Should return vector of acceleration of the car with two coordinates with values -1 or 0 or 1.
+    int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map);
 
 }
