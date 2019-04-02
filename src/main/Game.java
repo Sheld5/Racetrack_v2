@@ -18,8 +18,9 @@ public class Game extends JPanel {
     private final int MAP_INDENT = 16;
     private final int TURN_MAX = 500;
 
+    private Font fontBig, fontSmall;
     private JLabel turnLabel;
-    private Font font;
+    private JButton back;
 
     private Map map;
     private Car[] cars;
@@ -39,7 +40,7 @@ public class Game extends JPanel {
         initCrossHair();
         initCars(numberOfCars);
         initMap(mapName);
-        initTurnLabel();
+        initGUI();
 
         moveCarsToStart();
 
@@ -57,7 +58,7 @@ public class Game extends JPanel {
         System.out.println("Game initialized successfully");
         System.out.println();
 
-        nextTurn();
+        initRace();
     }
 
     private void init(int width, int height) {
@@ -66,15 +67,25 @@ public class Game extends JPanel {
         setLayout(null);
     }
 
-    private void initTurnLabel() {
-        font = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+    private void initGUI() {
+        fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+        fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
+        int guiX = map.getX() + map.getWidth() + MAP_INDENT;
 
         turnLabel = new JLabel(String.valueOf(turn));
         turnLabel.setVisible(true);
-        turnLabel.setFont(font);
+        turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
+        turnLabel.setFont(fontBig);
         turnLabel.setForeground(Color.orange);
-        turnLabel.setBounds(map.getX() + map.getWidth() + MAP_INDENT, MAP_INDENT,50, 50);
         add(turnLabel);
+
+        back = new JButton("Back");
+        back.setVisible(true);
+        back.addActionListener(e -> leaveToMenu());
+        back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
+        back.setFont(fontSmall);
+        back.setForeground(Color.orange);
+        add(back);
     }
 
     private void initMap(String mapName) throws FileNotFoundException {
@@ -165,6 +176,15 @@ public class Game extends JPanel {
     }
 
 
+
+    private void initRace() {
+        if (drivers != null) {
+            for (DriverAI ai : drivers) {
+                ai.init(map.getMapCopy());
+            }
+        }
+        nextTurn();
+    }
 
     // manages the turn cycle of the cars and calls the drive() method each turn of each car
     private void nextTurn() {
@@ -460,6 +480,12 @@ public class Game extends JPanel {
 
     private void update() {
         turnLabel.setText(String.valueOf(turn));
+    }
+
+
+
+    private void leaveToMenu() {
+        GameMain.goToMenu();
     }
 
 }

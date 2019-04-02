@@ -15,6 +15,7 @@ public class GameMain {
 
     private static JFrame frame;
     private static Menu menu;
+    private static Game game;
 
     public static void main(String[] args) {
         Resources.load();
@@ -24,6 +25,11 @@ public class GameMain {
         menu.setVisible(true);
         frame.add(menu);
         frame.revalidate();
+    }
+
+    public static void goToMenu() {
+        game.setVisible(false);
+        menu.setVisible(true);
     }
 
     private static void initFrame(JFrame frame) {
@@ -37,7 +43,7 @@ public class GameMain {
     static void startGame() {
         try {
             DriverAI[] drivers = null;
-            Game game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
+            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), null, menu.getMapName());
             frame.add(game);
             menu.setVisible(false);
             game.setVisible(true);
