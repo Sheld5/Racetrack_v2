@@ -1,6 +1,9 @@
 package main;
 
+import util.Resources;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.NumberFormat;
@@ -13,10 +16,10 @@ class Menu extends JPanel {
     private JButton playButton, exitButton;
     private JLabel gmSelection;
     private JButton startButton, backButton;
-    private JLabel numberOfCars, mapName;
-    private JPanel cars;
-    private JFormattedTextField nCars;
-    private JButton minus, plus;
+    private JLabel carsLabel, mapLabel;
+    private JPanel carsPanel, mapPanel;
+    private JFormattedTextField cars;
+    private JButton minus, plus, mapButton;
     private JTextField map;
     private JButton poop;
 
@@ -95,50 +98,67 @@ class Menu extends JPanel {
 
         c.gridy = 1;
 
-        numberOfCars = new JLabel("Number of Cars:");
-        numberOfCars.setVisible(false);
-        numberOfCars.setForeground(Color.white);
-        numberOfCars.setFont(fontSmall);
-        add(numberOfCars, c);
+        carsLabel = new JLabel("Number of Cars:");
+        carsLabel.setVisible(false);
+        carsLabel.setForeground(Color.cyan);
+        carsLabel.setFont(fontSmall);
+        add(carsLabel, c);
 
-        cars = new JPanel();
-        cars.setVisible(false);
-        cars.setLayout(new FlowLayout());
-        cars.setBackground(Color.black);
-        add(cars, c);
+        carsPanel = new JPanel();
+        carsPanel.setVisible(false);
+        carsPanel.setLayout(new FlowLayout());
+        carsPanel.setBackground(Color.black);
+        add(carsPanel, c);
+
+        Dimension buttonSize = new Dimension(42,21);
 
         minus = new JButton("-");
-        minus.setVisible(false);
+        minus.setVisible(true);
         minus.addActionListener(e -> changeCars(-1));
-        cars.add(minus);
+        minus.setPreferredSize(buttonSize);
+        carsPanel.add(minus);
 
         NumberFormatter nf = new NumberFormatter(NumberFormat.getIntegerInstance());
         nf.setAllowsInvalid(false);
-        nCars = new JFormattedTextField(nf);
-        nCars.setVisible(false);
-        nCars.setValue(1);
-        nCars.setBackground(Color.black);
-        nCars.setForeground(Color.white);
-        cars.add(nCars);
+        cars = new JFormattedTextField(nf);
+        cars.setVisible(true);
+        cars.setValue(1);
+        cars.setPreferredSize(buttonSize);
+        cars.setBackground(Color.black);
+        cars.setForeground(Color.white);
+        cars.setHorizontalAlignment(SwingConstants.CENTER);
+        carsPanel.add(cars);
 
         plus = new JButton("+");
-        plus.setVisible(false);
+        plus.setVisible(true);
         plus.addActionListener(e -> changeCars(1));
-        cars.add(plus);
+        plus.setPreferredSize(buttonSize);
+        carsPanel.add(plus);
 
         c.gridy = 2;
 
-        mapName = new JLabel("Map:");
-        mapName.setVisible(false);
-        mapName.setForeground(Color.white);
-        mapName.setFont(fontSmall);
-        add(mapName, c);
+        mapLabel = new JLabel("Map:");
+        mapLabel.setVisible(false);
+        mapLabel.setForeground(Color.cyan);
+        mapLabel.setFont(fontSmall);
+        add(mapLabel, c);
 
-        map = new JTextField("Map01");
-        map.setVisible(false);
-        c.ipadx = 50;
-        add(map, c);
-        c.ipadx = DEFAULT_IPAD;
+        mapPanel = new JPanel();
+        mapPanel.setVisible(false);
+        mapPanel.setLayout(new FlowLayout());
+        mapPanel.setBackground(Color.black);
+        add(mapPanel, c);
+
+        map = new JTextField("Map01.tmx");
+        map.setVisible(true);
+        map.setPreferredSize(new Dimension(84, 21));
+        mapPanel.add(map);
+
+        mapButton = new JButton(new ImageIcon(Resources.fileManagerIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        mapButton.setVisible(true);
+        mapButton.addActionListener(e -> mapFileManager());
+        mapButton.setPreferredSize(buttonSize);
+        mapPanel.add(mapButton);
 
         c.gridy = 3;
 
@@ -151,10 +171,6 @@ class Menu extends JPanel {
     }
 
 
-
-    private void compile() {
-        // zatim nic
-    }
 
     private void goToGameModeSelection() {
         setVisibleMainMenu(false);
@@ -176,26 +192,37 @@ class Menu extends JPanel {
         gmSelection.setVisible(b);
         startButton.setVisible(b);
         backButton.setVisible(b);
-        numberOfCars.setVisible(b);
-        nCars.setVisible(b);
-        mapName.setVisible(b);
-        map.setVisible(b);
+        carsLabel.setVisible(b);
+        mapLabel.setVisible(b);
+        carsPanel.setVisible(b);
+        mapPanel.setVisible(b);
         poop.setVisible(b);
-        minus.setVisible(b);
-        plus.setVisible(b);
-        cars.setVisible(b);
     }
 
     private void changeCars(int d) {
-        nCars.setValue(Integer.parseInt(nCars.getText()) + d);
+        cars.setValue(Integer.parseInt(cars.getText()) + d);
+    }
+
+    private void mapFileManager() {
+        JFileChooser jfc = new JFileChooser("./src/resources/maps");
+        FileNameExtensionFilter fnef = new FileNameExtensionFilter(".tmx", "tmx");
+        jfc.setFileFilter(fnef);
+        int returnValue = jfc.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            map.setText(jfc.getSelectedFile().getName());
+        }
+    }
+
+    private void compile() {
+        // zatim nic
     }
 
     int  getNumberOfCars() {
-        return Integer.parseInt(nCars.getText());
+        return Integer.parseInt(cars.getText());
     }
 
     String getMapName() {
-        return map.getText() + ".tmx";
+        return map.getText();
     }
 
 }

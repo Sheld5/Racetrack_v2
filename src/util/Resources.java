@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Resources {
 
-    public static BufferedImage windowIcon;
+    public static BufferedImage windowIcon, fileManagerIcon;
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
     public static BufferedImage car, crosshair;
 
@@ -14,6 +14,8 @@ public class Resources {
 
     public static void load() {
         windowIcon = loadImage("carIcon.png");
+        fileManagerIcon = loadImage("Windows-10-File-Explorer-icon.png");
+
         tileStart = loadImage("tileStart.png");
         tileFinish = loadImage("tileFinish.png");
         tileCheckpoint = loadImage("tileCheckpoint.png");
