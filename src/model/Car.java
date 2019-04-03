@@ -34,9 +34,17 @@ public class Car extends JPanel {
         coordinates[1] = y;
     }
 
+    public void setCoordinates(int[] coordinates) {
+        if (coordinates.length != 2) {
+            throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
+        } else {
+            this.coordinates = coordinates;
+        }
+    }
+
     public void accelerate(int[] a) {
         if (a.length != 2) {
-            throw new IllegalArgumentException("method accelerate only accepts an int array with the length of 2 as its argument");
+            throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
         } else if (a[0] < -1 || a[0] > 1 || a[1] < -1 || a[1] > 1) {
             throw new IllegalArgumentException("method accelerate only accepts values of {-1;0;1}");
         } else {
@@ -61,11 +69,27 @@ public class Car extends JPanel {
         return coordinatesCopy;
     }
 
+    public int getTileX() {
+        return coordinates[0];
+    }
+
+    public int getTileY() {
+        return coordinates[1];
+    }
+
     public int[] getVelocity() {
         int[] velocityCopy = new int[2];
         velocityCopy[0] = velocity[0];
         velocityCopy[1] = velocity[1];
         return velocityCopy;
+    }
+
+    public int getVelX() {
+        return velocity[0];
+    }
+
+    public int getVelY() {
+        return velocity[1];
     }
 
     public void crashed() {

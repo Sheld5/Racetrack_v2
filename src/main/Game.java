@@ -14,9 +14,9 @@ import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
-    private final int TILE_SIZE = 24;
-    private final int MAP_INDENT = 16;
-    private final int TURN_MAX = 500;
+    private final static int TILE_SIZE = 24;
+    private final static int MAP_INDENT = 16;
+    private final static int TURN_MAX = 500;
 
     private Font fontBig, fontSmall;
     private JLabel turnLabel;
@@ -190,7 +190,7 @@ public class Game extends JPanel {
     private void nextTurn() {
         if (activeCarIndex == 0) {
             turn++;
-            update();
+            updateTurnCount();
         }
         if (allCarsIdle()) {
             endRace();
@@ -201,7 +201,7 @@ public class Game extends JPanel {
             if (activeCar.isCrashed()) {
                 activeCar.countdown();
                 nextTurn();
-            } else if (map.getTile(activeCar.getCoordinates()) == Tile.ICE && (activeCar.getVelocity()[0] != 0 || activeCar.getVelocity()[1] != 0)) {
+            } else if (map.getTile(activeCar.getCoordinates()) == Tile.ICE && (activeCar.getVelX() != 0 || activeCar.getVelY() != 0)) {
                 drive(activeCar, new int[]{0,0});
                 nextTurn();
             } else {
@@ -244,10 +244,10 @@ public class Game extends JPanel {
     @SuppressWarnings("Duplicates")
     private void goThroughPath(Car car) {
 
-        int initX = car.getCoordinates()[0];
-        int initY = car.getCoordinates()[1];
-        int targetX = initX + car.getVelocity()[0];
-        int targetY = initY + car.getVelocity()[1];
+        int initX = car.getTileX();
+        int initY = car.getTileY();
+        int targetX = initX + car.getVelX();
+        int targetY = initY + car.getVelY();
         int dirX = initDir(initX, targetX);
         int dirY = initDir(initY, targetY);
 
@@ -417,7 +417,7 @@ public class Game extends JPanel {
     }
 
     private void showCH() {
-        moveCH(activeCar.getCoordinates()[0] + activeCar.getVelocity()[0], activeCar.getCoordinates()[1] + activeCar.getVelocity()[1]);
+        moveCH(activeCar.getTileX() + activeCar.getVelX(), activeCar.getTileY() + activeCar.getVelY());
         for (CrossHair c : ch) {
             c.setVisible(true);
         }
@@ -478,7 +478,7 @@ public class Game extends JPanel {
         }
     }
 
-    private void update() {
+    private void updateTurnCount() {
         turnLabel.setText(String.valueOf(turn));
     }
 

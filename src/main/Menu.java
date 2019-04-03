@@ -160,7 +160,7 @@ public class Menu extends JPanel {
 
         map = new JTextField("Map01.tmx");
         map.setVisible(true);
-        map.setPreferredSize(new Dimension(84, 21));
+        map.setPreferredSize(new Dimension(128, 21));
         mapPanel.add(map);
 
         mapButton = new JButton(new ImageIcon(Resources.fileManagerIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
