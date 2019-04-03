@@ -22,6 +22,6 @@ SAND - the car stops and its velocity is set to {0,0} (this results in only bein
 
 ICE - if the car finishes the turn on ice, it cannot be controlled next turn and instead moves in the same trajectory and with the same velocity; if the velocity of the car is 0 (it crashed into a wall on ice), it can be controlled next turn as usual
 
-## Testing AI
+## Temporary AI implementation
 
 Add your AI to the resources.ai package and make an instance of it in the DriverAI array at GameMain:45
