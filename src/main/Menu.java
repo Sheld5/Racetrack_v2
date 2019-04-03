@@ -14,10 +14,11 @@ class Menu extends JPanel {
     private JLabel gmSelection;
     private JButton startButton, backButton;
     private JLabel numberOfCars, mapName;
-    private JFormattedTextField cars;
+    private JPanel cars;
+    private JFormattedTextField nCars;
+    private JButton minus, plus;
     private JTextField map;
-    private JButton chooseMap;
-    private JButton magic;
+    private JButton poop;
 
     Menu(int width, int height) {
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
@@ -100,14 +101,30 @@ class Menu extends JPanel {
         numberOfCars.setFont(fontSmall);
         add(numberOfCars, c);
 
+        cars = new JPanel();
+        cars.setVisible(false);
+        cars.setLayout(new FlowLayout());
+        cars.setBackground(Color.black);
+        add(cars, c);
+
+        minus = new JButton("-");
+        minus.setVisible(false);
+        minus.addActionListener(e -> changeCars(-1));
+        cars.add(minus);
+
         NumberFormatter nf = new NumberFormatter(NumberFormat.getIntegerInstance());
         nf.setAllowsInvalid(false);
-        cars = new JFormattedTextField(nf);
-        cars.setVisible(false);
-        cars.setValue(1);
-        c.ipadx = 15;
-        add(cars, c);
-        c.ipadx = DEFAULT_IPAD;
+        nCars = new JFormattedTextField(nf);
+        nCars.setVisible(false);
+        nCars.setValue(1);
+        nCars.setBackground(Color.black);
+        nCars.setForeground(Color.white);
+        cars.add(nCars);
+
+        plus = new JButton("+");
+        plus.setVisible(false);
+        plus.addActionListener(e -> changeCars(1));
+        cars.add(plus);
 
         c.gridy = 2;
 
@@ -123,16 +140,13 @@ class Menu extends JPanel {
         add(map, c);
         c.ipadx = DEFAULT_IPAD;
 
-        chooseMap = new JButton("choose Map");
-        chooseMap.setVisible(false);
-
         c.gridy = 3;
 
-        magic = new JButton("poop");
-        magic.setVisible(false);
-        magic.addActionListener(e -> compile());
+        poop = new JButton("poop");
+        poop.setVisible(false);
+        poop.addActionListener(e -> compile());
         c.gridwidth = 2;
-        add(magic, c);
+        add(poop, c);
         c.gridwidth = 1;
     }
 
@@ -163,15 +177,21 @@ class Menu extends JPanel {
         startButton.setVisible(b);
         backButton.setVisible(b);
         numberOfCars.setVisible(b);
-        cars.setVisible(b);
+        nCars.setVisible(b);
         mapName.setVisible(b);
         map.setVisible(b);
-        chooseMap.setVisible(b);
-        magic.setVisible(b);
+        poop.setVisible(b);
+        minus.setVisible(b);
+        plus.setVisible(b);
+        cars.setVisible(b);
+    }
+
+    private void changeCars(int d) {
+        nCars.setValue(Integer.parseInt(nCars.getText()) + d);
     }
 
     int  getNumberOfCars() {
-        return Integer.parseInt(cars.getText());
+        return Integer.parseInt(nCars.getText());
     }
 
     String getMapName() {
