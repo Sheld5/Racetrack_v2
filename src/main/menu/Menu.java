@@ -1,5 +1,6 @@
-package main;
+package main.menu;
 
+import main.Main;
 import util.Resources;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class Menu extends JPanel {
     private JPanel aiButtonPanel;
     private JButton aiAdd, aiBack;
 
-    Menu(int width, int height) {
+    public Menu(int width, int height) {
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
         fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         initMenu(width, height);
@@ -96,7 +97,7 @@ public class Menu extends JPanel {
 
         startButton = new JButton("Start Game");
         startButton.setVisible(false);
-        startButton.addActionListener(e -> GameMain.startGame());
+        startButton.addActionListener(e -> Main.startGame());
         add(startButton, c);
 
         backButton = new JButton("Back");
@@ -339,11 +340,11 @@ public class Menu extends JPanel {
         return null;
     }
 
-    int  getNumberOfCars() {
+    public int getNumberOfCars() {
         return Integer.parseInt(cars.getText());
     }
 
-    String getMapName() {
+    public String getMapName() {
         return map.getText();
     }
 

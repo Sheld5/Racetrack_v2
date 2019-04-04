@@ -1,5 +1,6 @@
 package main;
 
+import main.menu.Menu;
 import resources.ai.DriverAI;
 import util.Resources;
 import util.StartNotFoundException;
@@ -7,7 +8,7 @@ import util.StartNotFoundException;
 import javax.swing.*;
 import java.io.FileNotFoundException;
 
-public class GameMain {
+public class Main {
 
     private static final String GAME_TITLE = "Racetrack";
     private static final int GAME_WIDTH = 555;
@@ -40,7 +41,7 @@ public class GameMain {
         frame.setVisible(true);
     }
 
-    static void startGame() {
+    public static void startGame() {
         try {
             DriverAI[] drivers = null;
             game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), drivers, menu.getMapName());

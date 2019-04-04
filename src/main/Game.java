@@ -527,7 +527,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void leaveToMenu() {
-        GameMain.goToMenu();
+        Main.goToMenu();
     }
 
     public int getTileSize() {
