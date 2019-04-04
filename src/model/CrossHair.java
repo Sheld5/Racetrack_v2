@@ -10,16 +10,16 @@ import java.awt.event.MouseListener;
 
 public class CrossHair extends JPanel implements MouseListener {
 
+    private Game game;
     private int index;
     private int x, y;
-    private Game game;
 
-    public CrossHair(int index, int size, Game game) {
+    public CrossHair(int index, Game game) {
         this.game = game;
         this.index = index;
         x = 0;
         y = 0;
-        setSize(size, size);
+        setSize(game.getTileSize(), game.getTileSize());
         setBackground(new Color(0, 0, 0, 0));
         addMouseListener(this);
     }
@@ -27,7 +27,8 @@ public class CrossHair extends JPanel implements MouseListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Resources.crosshair.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
+        setSize(game.getTileSize(), game.getTileSize());
+        g.drawImage(Resources.crosshair.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
     }
 
     public void setTileXY(int x, int y) {

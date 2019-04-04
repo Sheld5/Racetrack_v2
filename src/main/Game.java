@@ -7,12 +7,14 @@ import util.StartNotFoundException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
-public class Game extends JPanel {
+public class Game extends JPanel implements KeyListener {
 
     private final static int MAP_INDENT = 16;
     private final static int TURN_MAX = 500;
@@ -63,10 +65,13 @@ public class Game extends JPanel {
     }
 
     private void init(int width, int height) {
-        tileSize = 24;
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
+        setFocusable(true);
+        requestFocusInWindow();
+        tileSize = 24;
+        this.addKeyListener(this);
     }
 
     private void initGUI() {
@@ -92,7 +97,7 @@ public class Game extends JPanel {
 
     private void initMap(String mapName) throws FileNotFoundException {
         MapReader mr = new MapReader();
-        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), tileSize, mr.getTileSet("RacetrackTileSet.tsx"));
+        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), mr.getTileSet("RacetrackTileSet.tsx"), this);
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
         add(map);
@@ -103,7 +108,7 @@ public class Game extends JPanel {
     private void initCars(int n) {
         cars = new Car[n];
         for (int i = 0; i < cars.length; i++) {
-            cars[i] = new Car(tileSize);
+            cars[i] = new Car(this);
             cars[i].setVisible(true);
             add(cars[i]);
         }
@@ -118,7 +123,7 @@ public class Game extends JPanel {
     private void initCrossHair() {
         ch = new CrossHair[9];
         for (int i = 0; i < ch.length; i++) {
-            ch[i] = new CrossHair(i, tileSize, this);
+            ch[i] = new CrossHair(i, this);
             ch[i].setVisible(false);
             add(ch[i]);
         }
@@ -485,9 +490,48 @@ public class Game extends JPanel {
     }
 
 
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_MINUS) {
+            if (tileSize > 4) {
+                tileSize -= 4;
+                updateView();
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
+            if (tileSize < 64) {
+                tileSize += 4;
+                updateView();
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    private void updateView() {
+        for (Car car : cars) {
+            moveCar(car, car.getTileX(), car.getTileY());
+        }
+        moveCH(ch[4].getTileX(), ch[4].getTileY());
+        repaint();
+        moveGUI();
+    }
+
+    private void moveGUI() {
+        int guiX = MAP_INDENT + map.getWidthInTiles() * tileSize + MAP_INDENT;
+        turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
+        back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
+    }
 
     private void leaveToMenu() {
         GameMain.goToMenu();
+    }
+
+    public int getTileSize() {
+        return tileSize;
     }
 
 }

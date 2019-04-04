@@ -1,5 +1,6 @@
 package model;
 
+import main.Game;
 import util.Resources;
 
 import javax.swing.*;
@@ -9,24 +10,27 @@ public class Car extends JPanel {
 
     private static int TURNS_SKIPPED_ON_CRASH = 3;
 
+    private Game game;
     private int[] coordinates, velocity;
     private boolean crashed, sunk, finished;
     private int crashCountdown;
     private int turnOfFinish;
 
-    public Car(int size) {
+    public Car(Game game) {
+        this.game = game;
         coordinates = new int[]{0,0};
         velocity = new int[]{0,0};
         crashCountdown = 0;
         finished = false;
-        setSize(size, size);
+        setSize(game.getTileSize(), game.getTileSize());
         setBackground(new Color(0, 0, 0, 0));
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Resources.car.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
+        setSize(game.getTileSize(), game.getTileSize());
+        g.drawImage(Resources.car.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
     }
 
     public void setCoordinates(int x, int y) {

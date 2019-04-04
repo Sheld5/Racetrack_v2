@@ -1,5 +1,6 @@
 package model;
 
+import main.Game;
 import util.Resources;
 import util.StartNotFoundException;
 
@@ -9,22 +10,18 @@ import java.util.HashMap;
 
 public class Map extends JPanel {
 
+    private Game game;
     private int width, height;
-    private int tileSize;
     private Tile[][] mapTile;
     private Tile[][] mapCopy;
 
-    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, int tileSize, HashMap<Integer, Tile> tileSet) {
+    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) {
+        this.game = game;
         width = widthInTiles;
         height = heightInTiles;
-        this.tileSize = tileSize;
-        init(widthInTiles, heightInTiles);
-        initMapTile(mapInt, tileSet);
-    }
-
-    private void init(int width, int height) {
-        setSize(width * tileSize, height * tileSize);
+        setSize(width * game.getTileSize(), height * game.getTileSize());
         setBackground(Color.BLACK);
+        initMapTile(mapInt, tileSet);
     }
 
     private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) {
@@ -44,6 +41,8 @@ public class Map extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        int tileSize = game.getTileSize();
+        setSize(width * tileSize, height * tileSize);
         for (int y = 0; y < mapTile.length; y++) {
             for (int x = 0; x < mapTile[0].length; x++) {
                 switch(mapTile[y][x]) {
