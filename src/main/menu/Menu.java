@@ -1,6 +1,8 @@
 package main.menu;
 
 import main.Main;
+import resources.ai.DriverAI;
+import util.AICompiler;
 import util.Resources;
 
 import javax.swing.*;
@@ -346,6 +348,11 @@ public class Menu extends JPanel {
 
     public String getMapName() {
         return map.getText();
+    }
+
+    public DriverAI[] getAI() {
+        // ToDo
+        return null;
     }
 
 }
