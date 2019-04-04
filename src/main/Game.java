@@ -14,9 +14,10 @@ import static java.lang.Math.sqrt;
 
 public class Game extends JPanel {
 
-    private final static int TILE_SIZE = 24;
     private final static int MAP_INDENT = 16;
     private final static int TURN_MAX = 500;
+
+    private int tileSize;
 
     private Font fontBig, fontSmall;
     private JLabel turnLabel;
@@ -62,6 +63,7 @@ public class Game extends JPanel {
     }
 
     private void init(int width, int height) {
+        tileSize = 24;
         setSize(width, height);
         setBackground(Color.BLACK);
         setLayout(null);
@@ -90,7 +92,7 @@ public class Game extends JPanel {
 
     private void initMap(String mapName) throws FileNotFoundException {
         MapReader mr = new MapReader();
-        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), TILE_SIZE, mr.getTileSet("RacetrackTileSet.tsx"));
+        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), tileSize, mr.getTileSet("RacetrackTileSet.tsx"));
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
         add(map);
@@ -101,7 +103,7 @@ public class Game extends JPanel {
     private void initCars(int n) {
         cars = new Car[n];
         for (int i = 0; i < cars.length; i++) {
-            cars[i] = new Car(TILE_SIZE);
+            cars[i] = new Car(tileSize);
             cars[i].setVisible(true);
             add(cars[i]);
         }
@@ -116,7 +118,7 @@ public class Game extends JPanel {
     private void initCrossHair() {
         ch = new CrossHair[9];
         for (int i = 0; i < ch.length; i++) {
-            ch[i] = new CrossHair(i, TILE_SIZE, this);
+            ch[i] = new CrossHair(i, tileSize, this);
             ch[i].setVisible(false);
             add(ch[i]);
         }
@@ -406,13 +408,13 @@ public class Game extends JPanel {
 
     private void moveCar(Car car, int x, int y) {
         car.setCoordinates(x,y);
-        car.setLocation(MAP_INDENT + x * TILE_SIZE, MAP_INDENT + y * TILE_SIZE);
+        car.setLocation(MAP_INDENT + x * tileSize, MAP_INDENT + y * tileSize);
     }
 
     private void moveCH(int x, int y) {
         for (int i = 0; i < ch.length; i++) {
             ch[i].setTileXY(x - 1 + i%3, y - 1 + i/3);
-            ch[i].setLocation(MAP_INDENT + (x - 1 + i%3) * TILE_SIZE, MAP_INDENT + (y - 1 + i/3) * TILE_SIZE);
+            ch[i].setLocation(MAP_INDENT + (x - 1 + i%3) * tileSize, MAP_INDENT + (y - 1 + i/3) * tileSize);
         }
     }
 

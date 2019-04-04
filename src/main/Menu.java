@@ -1,6 +1,5 @@
 package main;
 
-import util.AIPanel;
 import util.Resources;
 
 import javax.swing.*;
@@ -222,7 +221,7 @@ public class Menu extends JPanel {
         aiButtonPanel.add(aiAdd, d);
 
         d.gridx = 1;
-        aiBack = new JButton("Back");
+        aiBack = new JButton("Submit");
         aiBack.setVisible(true);
         aiBack.addActionListener(e -> goToGameModeSelection());
         aiButtonPanel.add(aiBack, d);

@@ -1,7 +1,6 @@
-package util;
+package main;
 
 import javax.swing.*;
-import main.Menu;
 
 import java.awt.*;
 import java.io.File;
@@ -23,6 +22,7 @@ public class AIPanel extends JPanel {
         this.setMinimumSize(new Dimension(256, 42));
         this.setPreferredSize(new Dimension(this.getPreferredSize().width, 42));
         this.setMaximumSize(new Dimension(1024, 42));
+        this.setBorder(BorderFactory.createLineBorder(Color.gray));
 
         String name = aiFile.getName();
         name = name.substring(0, name.length() - 5);
