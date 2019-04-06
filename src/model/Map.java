@@ -26,6 +26,7 @@ public class Map extends JPanel {
     }
 
     private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) throws StartNotFoundException {
+        start = new int[2];
         boolean startFound = false;
         mapTile = new Tile[mapInt.length][mapInt[0].length];
         for (int y = 0; y < mapInt.length; y++) {

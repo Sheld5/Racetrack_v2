@@ -10,12 +10,11 @@ public class AIPanel extends JPanel {
 
     private int id;
     private File aiFile;
+    private String name;
     private JLabel aiName;
     private JButton remove;
 
     public AIPanel(int id, File aiFile, Menu menu) {
-        this.id = id;
-        this.aiFile = aiFile;
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.ipadx = 12;
@@ -24,12 +23,17 @@ public class AIPanel extends JPanel {
         this.setMaximumSize(new Dimension(1024, 42));
         this.setBorder(BorderFactory.createLineBorder(Color.gray));
 
-        String name = aiFile.getName();
+        this.id = id;
+        this.aiFile = aiFile;
+        name = aiFile.getName();
         name = name.substring(0, name.length() - 5);
-        if (name.length() > MAX_NAME_LENGTH) {
-            name = name.substring(0, MAX_NAME_LENGTH - 1);
+
+        if (name.length() <= MAX_NAME_LENGTH) {
+            aiName = new JLabel(name);
+        } else {
+            String nameShort = name.substring(0, MAX_NAME_LENGTH - 1);
+            aiName = new JLabel(nameShort);
         }
-        aiName = new JLabel(name);
         c.gridx = 0;
         add(aiName, c);
 
@@ -42,6 +46,10 @@ public class AIPanel extends JPanel {
 
     public int getID() {
         return id;
+    }
+
+    public String getAIName() {
+        return name;
     }
 
     public File getFile() {

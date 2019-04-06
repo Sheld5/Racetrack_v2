@@ -1,7 +1,7 @@
 package main.menu;
 
 import main.Main;
-import resources.ai.DriverAI;
+import model.DriverAI;
 import util.AICompiler;
 import util.Resources;
 
@@ -10,6 +10,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -350,9 +353,15 @@ public class Menu extends JPanel {
         return map.getText();
     }
 
-    public DriverAI[] getAI() {
-        // ToDo
-        return null;
+    public DriverAI[] getAI() throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
+        DriverAI[] drivers = new DriverAI[aiPanels.size()];
+        AICompiler aiCompiler = new AICompiler();
+        int i = 0;
+        for (AIPanel aiPanel : aiPanels) {
+            drivers[i] = aiCompiler.compile(aiPanel);
+            i++;
+        }
+        return drivers;
     }
 
 }

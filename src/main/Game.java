@@ -1,7 +1,7 @@
 package main;
 
 import org.xml.sax.SAXException;
-import resources.ai.DriverAI;
+import model.DriverAI;
 import model.*;
 import util.MapReader;
 import util.StartNotFoundException;
@@ -39,8 +39,6 @@ public class Game extends JPanel implements KeyListener {
     private int turn;
 
     Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
-        System.out.println();
-
         init(width, height);
         initCrossHair();
         initCars(numberOfCars);
@@ -48,10 +46,8 @@ public class Game extends JPanel implements KeyListener {
         initGUI();
 
         moveCarsToStart();
-
         this.drivers = drivers;
         initCheckpoints(numberOfCars);
-
         activeCarIndex = cars.length - 1;
         stop = false;
         if (cars.length == 1) {
@@ -61,7 +57,6 @@ public class Game extends JPanel implements KeyListener {
         }
 
         System.out.println("Game initialized successfully");
-        System.out.println();
 
         initRace();
     }

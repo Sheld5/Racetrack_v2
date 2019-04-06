@@ -49,8 +49,9 @@ public class Main {
             menu.setVisible(false);
             game.setVisible(true);
             frame.revalidate();
-        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException e) {
+        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("An error occurred. The game could not be initiated.");
+            e.printStackTrace();
         }
     }
 
