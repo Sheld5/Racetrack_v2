@@ -31,6 +31,18 @@ public class Car extends JPanel {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
         g.drawImage(Resources.car.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+        if (crashed) {
+            switch (crashCountdown) {
+                case 1:
+                    g.drawImage(Resources.one.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+                case 2:
+                    g.drawImage(Resources.two.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+                case 3:
+                    g.drawImage(Resources.three.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+                default:
+                    // nada
+            }
+        }
     }
 
     public void setCoordinates(int x, int y) {
@@ -99,6 +111,7 @@ public class Car extends JPanel {
     public void crashed() {
         crashed = true;
         crashCountdown = TURNS_SKIPPED_ON_CRASH;
+        game.repaint();
     }
 
     public void sunk() {
@@ -134,6 +147,7 @@ public class Car extends JPanel {
         if (crashCountdown == 0) {
             crashed = false;
         }
+        game.repaint();
     }
 
 }

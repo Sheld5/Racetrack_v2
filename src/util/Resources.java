@@ -8,7 +8,7 @@ public class Resources {
 
     public static BufferedImage windowIcon, fileManagerIcon;
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
-    public static BufferedImage car, crosshair;
+    public static BufferedImage car, crosshair, crosshairRed, one, two, three;
 
     private static int numberOfErrors = 0;
 
@@ -28,6 +28,10 @@ public class Resources {
 
         car = loadImage("car.png");
         crosshair = loadImage("crosshair.png");
+        crosshairRed = loadImage("crosshairRed.png");
+        one = loadImage("one.png");
+        two = loadImage("two.png");
+        three = loadImage("three.png");
 
         if (numberOfErrors == 0) {
             System.out.println("Resources loaded successfully");

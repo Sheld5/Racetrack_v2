@@ -29,7 +29,7 @@ public class Game extends JPanel implements KeyListener {
 
     private Map map;
     private Car[] cars;
-    private CrossHair[] ch;
+    private CrossHair[][] ch;
     private DriverAI[] drivers;
     private Checkpoint[] checkpoints;
 
@@ -37,6 +37,8 @@ public class Game extends JPanel implements KeyListener {
     private Car activeCar;
     private boolean stop;
     private int turn;
+    private int[] nextAiMove;
+    private boolean aiWaiting;
 
     Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
         init(width, height);
@@ -55,6 +57,8 @@ public class Game extends JPanel implements KeyListener {
         } else {
             turn = 0;
         }
+        nextAiMove = new int[]{0,0};
+        aiWaiting = false;
 
         System.out.println("Game initialized successfully");
 
@@ -118,11 +122,13 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void initCrossHair() {
-        ch = new CrossHair[9];
-        for (int i = 0; i < ch.length; i++) {
-            ch[i] = new CrossHair(i, this);
-            ch[i].setVisible(false);
-            add(ch[i]);
+        ch = new CrossHair[3][3];
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                ch[x][y] = new CrossHair(new int[]{x - 1,y - 1}, this);
+                ch[x][y].setVisible(false);
+                add(ch[x][y]);
+            }
         }
 
         System.out.println("crosshair initialized");
@@ -209,33 +215,24 @@ public class Game extends JPanel implements KeyListener {
                 drive(activeCar, new int[]{0,0});
                 nextTurn();
             } else {
-                if (drivers != null && activeCarIndex < drivers.length) {
-                    drive(activeCar, drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy()));
-                    nextTurn();
-                } else {
-                    showCH();
+                showCH();
+                if (!humanOnTurn()) {
+                    nextAiMove = drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
+                    showNextAiMove(true);
+                    aiWaiting = true;
                 }
+                // In case a human player is on turn, wait for their input from CrossHair. ( onCHClick() has to be called )
+                // In case an AI player is on turn, wait for ENTER to be pressed. ( keyPressed(VK_ENTER) has to be called )
             }
         }
     }
 
-    public void onCHClick(int index) {
-        hideCH();
-
-        int[] a = new int[]{0,0};
-        if (index < 3) {
-            a[1] = -1;
-        } else if (index > 5) {
-            a[1] = 1;
+    public void onCHClick(int[] index) {
+        if (humanOnTurn()) {
+            hideCH();
+            drive(activeCar, index);
+            nextTurn();
         }
-        if (index%3 == 0) {
-            a[0] = -1;
-        } else if (index%3 == 2) {
-            a[0] = 1;
-        }
-
-        drive(activeCar, a);
-        nextTurn();
     }
 
     // changes the velocities of the cars and calls the goThroughPath() function
@@ -414,23 +411,47 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void moveCH(int x, int y) {
-        for (int i = 0; i < ch.length; i++) {
-            ch[i].setTileXY(x - 1 + i%3, y - 1 + i/3);
-            ch[i].setLocation(MAP_INDENT + (x - 1 + i%3) * tileSize, MAP_INDENT + (y - 1 + i/3) * tileSize);
+        for (CrossHair[] cLine : ch) {
+            for (CrossHair c : cLine) {
+                c.setTileXY(x + c.getIndex()[0], y + c.getIndex()[1]);
+                c.setLocation(MAP_INDENT + c.getTileX() * tileSize, MAP_INDENT + c.getTileY() * tileSize);
+            }
         }
     }
 
     private void showCH() {
         moveCH(activeCar.getTileX() + activeCar.getVelX(), activeCar.getTileY() + activeCar.getVelY());
-        for (CrossHair c : ch) {
-            c.setVisible(true);
+        for (CrossHair[] cLine : ch) {
+            for (CrossHair c : cLine) {
+                c.setVisible(true);
+            }
         }
     }
 
     private void hideCH() {
-        for (CrossHair c : ch) {
-            c.setVisible(false);
+        for (CrossHair[] cLine : ch) {
+            for (CrossHair c : cLine) {
+                c.setVisible(false);
+            }
         }
+        showNextAiMove(false);
+    }
+
+    private void showNextAiMove(boolean b) {
+        for (CrossHair[] cLine : ch) {
+            for (CrossHair c : cLine) {
+                if (b) {
+                    if (c.getIndex()[0] == nextAiMove[0] && c.getIndex()[1] == nextAiMove[1]) {
+                        c.setIsNextAiMove(true);
+                    } else {
+                        c.setIsNextAiMove(false);
+                    }
+                } else {
+                    c.setIsNextAiMove(false);
+                }
+            }
+        }
+        repaint();
     }
 
     private boolean allCarsIdle() {
@@ -482,6 +503,14 @@ public class Game extends JPanel implements KeyListener {
         }
     }
 
+    public boolean humanOnTurn() {
+        if (drivers == null || activeCarIndex >= drivers.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void updateTurnCount() {
         turnLabel.setText(String.valueOf(turn));
     }
@@ -492,7 +521,14 @@ public class Game extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_MINUS) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+          if (!humanOnTurn() && aiWaiting) {
+              aiWaiting = false;
+              hideCH();
+              drive(activeCar, nextAiMove);
+              nextTurn();
+          }
+        } else if (e.getKeyCode() == KeyEvent.VK_MINUS) {
             if (tileSize > 4) {
                 tileSize -= 4;
                 updateView();
@@ -512,7 +548,7 @@ public class Game extends JPanel implements KeyListener {
         for (Car car : cars) {
             moveCar(car, car.getTileX(), car.getTileY());
         }
-        moveCH(ch[4].getTileX(), ch[4].getTileY());
+        moveCH(ch[1][1].getTileX(), ch[1][1].getTileY());
         repaint();
         moveGUI();
     }
