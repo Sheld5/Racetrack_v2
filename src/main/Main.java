@@ -1,12 +1,13 @@
 package main;
 
 import main.menu.Menu;
-import resources.ai.DriverAI;
+import org.xml.sax.SAXException;
 import util.Resources;
 import util.StartNotFoundException;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 public class Main {
 
@@ -48,9 +49,7 @@ public class Main {
             menu.setVisible(false);
             game.setVisible(true);
             frame.revalidate();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred. The game could not be initiated.");
-        } catch (StartNotFoundException e) {
+        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException e) {
             System.out.println("An error occurred. The game could not be initiated.");
         }
     }

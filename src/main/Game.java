@@ -1,15 +1,17 @@
 package main;
 
+import org.xml.sax.SAXException;
 import resources.ai.DriverAI;
 import model.*;
 import util.MapReader;
 import util.StartNotFoundException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -36,7 +38,7 @@ public class Game extends JPanel implements KeyListener {
     private boolean stop;
     private int turn;
 
-    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws FileNotFoundException, StartNotFoundException {
+    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
         System.out.println();
 
         init(width, height);
@@ -95,7 +97,7 @@ public class Game extends JPanel implements KeyListener {
         add(back);
     }
 
-    private void initMap(String mapName) throws FileNotFoundException {
+    private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, StartNotFoundException {
         MapReader mr = new MapReader();
         map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), mr.getTileSet("RacetrackTileSet.tsx"), this);
         map.setLocation(MAP_INDENT, MAP_INDENT);
@@ -175,11 +177,11 @@ public class Game extends JPanel implements KeyListener {
 
     }
 
-    private void moveCarsToStart() throws StartNotFoundException {
+    private void moveCarsToStart() {
         for (Car car : cars) {
-            moveCar(car, map.getStartX(), map.getStartY());
+            moveCar(car, map.getStart()[0], map.getStart()[1]);
         }
-        moveCH(map.getStartX(), map.getStartY());
+        moveCH(map.getStart()[0], map.getStart()[1]);
     }
 
 

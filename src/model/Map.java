@@ -12,10 +12,11 @@ public class Map extends JPanel {
 
     private Game game;
     private int width, height;
+    private int[] start;
     private Tile[][] mapTile;
     private Tile[][] mapCopy;
 
-    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) {
+    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) throws StartNotFoundException {
         this.game = game;
         width = widthInTiles;
         height = heightInTiles;
@@ -24,17 +25,32 @@ public class Map extends JPanel {
         initMapTile(mapInt, tileSet);
     }
 
-    private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) {
+    private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) throws StartNotFoundException {
+        boolean startFound = false;
         mapTile = new Tile[mapInt.length][mapInt[0].length];
         for (int y = 0; y < mapInt.length; y++) {
             for (int x = 0; x < mapInt[0].length; x++) {
                 for (Integer i : tileSet.keySet()) {
                     if (i == mapInt[y][x]) {
                         mapTile[y][x] = tileSet.get(i);
+                        if (tileSet.get(i) == Tile.START) {
+                            if (!startFound) {
+                                start[0] = x;
+                                start[1] = y;
+                                startFound = true;
+                            } else {
+                                System.out.println("More than one start found on the map");
+                                throw new StartNotFoundException();
+                            }
+                        }
                         break;
                     }
                 }
             }
+        }
+        if (!startFound) {
+            System.out.println("No start found on the map");
+            throw new StartNotFoundException();
         }
     }
 
@@ -116,30 +132,8 @@ public class Map extends JPanel {
         return mapCopy;
     }
 
-    @SuppressWarnings("Duplicates")
-    public int getStartX() throws StartNotFoundException {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (getTile(x, y) == model.Tile.START) {
-                    return x;
-                }
-            }
-        }
-        System.out.println("Error: start not found on the map");
-        throw new StartNotFoundException();
-    }
-
-    @SuppressWarnings("Duplicates")
-    public int getStartY() throws StartNotFoundException {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (getTile(x, y) == model.Tile.START) {
-                    return y;
-                }
-            }
-        }
-        System.out.println("Error: start not found on the map");
-        throw new StartNotFoundException();
+    public int[] getStart() {
+        return start;
     }
 
 }

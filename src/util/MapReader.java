@@ -3,16 +3,18 @@ package util;
 import model.Tile;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.FileNotFoundException;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
 public class MapReader {
 
-    private Document createDocFromFile(String fileName) throws FileNotFoundException {
+    private Document createDocFromFile(String fileName) throws IOException, SAXException, ParserConfigurationException, IllegalArgumentException {
         try {
             InputStream in = getClass().getResourceAsStream("/resources/maps/" + fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -21,14 +23,14 @@ public class MapReader {
             doc.getDocumentElement().normalize();
             return doc;
         } catch (Exception e) {
-            System.out.println("File " + "/resources/maps/" + fileName + " not found");
-            throw new FileNotFoundException();
+            System.out.println("Error while loading " + "/resources/maps/" + fileName);
+            throw e;
         }
     }
 
     private int[][] data;
 
-    public int[][] getData(String mapFile) throws FileNotFoundException {
+    public int[][] getData(String mapFile) throws IOException, ParserConfigurationException, SAXException {
         String[] dataRows = createDocFromFile(mapFile).getElementsByTagName("data").item(0).getTextContent().split("\n");
         String[] row;
         data = new int[dataRows.length - 1][dataRows[1].split(",").length];
@@ -41,7 +43,7 @@ public class MapReader {
         return data;
     }
 
-    public HashMap<Integer, Tile> getTileSet(String fileName) throws FileNotFoundException {
+    public HashMap<Integer, Tile> getTileSet(String fileName) throws IOException, ParserConfigurationException, SAXException {
         HashMap<Integer, Tile> tileSet = new HashMap<>();
         Document doc = createDocFromFile(fileName);
         NodeList nList = doc.getElementsByTagName("tile");

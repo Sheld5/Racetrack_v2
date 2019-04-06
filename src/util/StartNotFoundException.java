@@ -1,4 +1,3 @@
 package util;
 
-public class StartNotFoundException extends Exception {
-}
+public class StartNotFoundException extends Exception {}
