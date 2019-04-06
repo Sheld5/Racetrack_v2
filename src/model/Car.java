@@ -31,6 +31,7 @@ public class Car extends JPanel {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
         g.drawImage(Resources.car.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+        // ToDo
         if (crashed) {
             switch (crashCountdown) {
                 case 1:
