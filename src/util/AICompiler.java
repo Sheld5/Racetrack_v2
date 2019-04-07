@@ -15,6 +15,9 @@ public class AICompiler {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();
+            if (!line.equals("package model;")) {
+                builder.append("package model;\n\n");
+            }
             while (line != null) {
                 builder.append(line).append("\n");
                 line = reader.readLine();
