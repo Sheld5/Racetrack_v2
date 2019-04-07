@@ -12,12 +12,12 @@ import java.awt.image.BufferedImage;
 public class CrossHair extends JPanel implements MouseListener {
 
     private Game game;
-    private int index[];
+    private int[] index;
     private int x, y;
     private boolean mouseOver;
     private boolean isNextAiMove;
 
-    public CrossHair(int index[], Game game) {
+    public CrossHair(int[] index, Game game) {
         this.game = game;
         this.index = index;
         x = 0;

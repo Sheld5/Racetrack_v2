@@ -11,9 +11,7 @@ public class Checkpoint {
         coordinates[0][1] = y;
 
         carsPassed = new boolean[numberOfCars];
-        for (boolean b : carsPassed) {
-            b = false;
-        }
+        for (boolean b : carsPassed) b = false;
     }
 
     public void addTile(int x, int y) {

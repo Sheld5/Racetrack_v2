@@ -23,7 +23,6 @@ public class Game extends JPanel implements KeyListener {
 
     private int tileSize;
 
-    private Font fontBig, fontSmall;
     private JLabel turnLabel;
     private JButton back;
 
@@ -76,8 +75,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void initGUI() {
-        fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
-        fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
+        Font fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
+        Font fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         int guiX = map.getX() + map.getWidth() + MAP_INDENT;
 
         turnLabel = new JLabel(String.valueOf(turn));
@@ -160,9 +159,7 @@ public class Game extends JPanel implements KeyListener {
 
                     if (!foundCheckpoint) {
                         Checkpoint[] checkTemp = new Checkpoint[checkpoints.length + 1];
-                        for (int i = 0; i < checkpoints.length; i++) {
-                            checkTemp[i] = checkpoints[i];
-                        }
+                        System.arraycopy(checkpoints, 0, checkTemp, 0, checkpoints.length);
                         Checkpoint ch = new Checkpoint(x, y, numberOfCars);
                         checkTemp[checkTemp.length - 1] = ch;
                         checkpoints = checkTemp;
@@ -249,8 +246,8 @@ public class Game extends JPanel implements KeyListener {
         int initY = car.getTileY();
         int targetX = initX + car.getVelX();
         int targetY = initY + car.getVelY();
-        int dirX = initDir(initX, targetX);
-        int dirY = initDir(initY, targetY);
+        int dirX = Integer.compare(targetX, initX);
+        int dirY = Integer.compare(targetY, initY);
 
         if (initX == targetX) {
             for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
@@ -479,16 +476,6 @@ public class Game extends JPanel implements KeyListener {
         }
     }
 
-    private int initDir(int initC, int targetC) {
-        if (targetC - initC > 0) {
-            return 1;
-        } else if (targetC - initC < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-
     private void endRace() {
         System.out.println();
         System.out.println("Race finished");
@@ -504,11 +491,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     public boolean humanOnTurn() {
-        if (drivers == null || activeCarIndex >= drivers.length) {
-            return true;
-        } else {
-            return false;
-        }
+        return drivers == null || activeCarIndex >= drivers.length;
     }
 
     private void updateTurnCount() {

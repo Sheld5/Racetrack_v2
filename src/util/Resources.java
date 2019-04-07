@@ -37,10 +37,10 @@ public class Resources {
             System.out.println("Resources loaded successfully");
         } else if (numberOfErrors == 1) {
             System.out.printf("%d error occurred while loading resources\n", numberOfErrors);
-            System.out.printf("The game might not work properly.\n\n");
+            System.out.println("The game might not work properly.");
         } else {
             System.out.printf("%d errors occurred while loading resources\n", numberOfErrors);
-            System.out.printf("The game might not work properly.\n\n");
+            System.out.println("The game might not work properly.");
         }
     }
 
@@ -49,10 +49,6 @@ public class Resources {
         try {
             image = ImageIO.read(Resources.class.getResourceAsStream("/resources/images/" + fileName));
         } catch (IOException e) {
-            System.out.println("Error while loading " + fileName);
-            e.printStackTrace();
-            numberOfErrors++;
-        } catch (IllegalArgumentException e) {
             System.out.println("Error while loading " + fileName);
             e.printStackTrace();
             numberOfErrors++;

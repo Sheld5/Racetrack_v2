@@ -1,6 +1,6 @@
 package util;
 
-import main.menu.AIPanel;
+import main.AIPanel;
 import model.DriverAI;
 import org.joor.Reflect;
 

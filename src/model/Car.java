@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Car extends JPanel {
-
     private static int TURNS_SKIPPED_ON_CRASH = 3;
 
     private Game game;

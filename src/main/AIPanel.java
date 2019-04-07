@@ -1,4 +1,4 @@
-package main.menu;
+package main;
 
 import javax.swing.*;
 
@@ -14,7 +14,7 @@ public class AIPanel extends JPanel {
     private JLabel aiName;
     private JButton remove;
 
-    public AIPanel(int id, File aiFile, Menu menu) {
+    AIPanel(int id, File aiFile, Menu menu) {
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.ipadx = 12;

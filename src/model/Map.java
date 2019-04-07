@@ -14,7 +14,6 @@ public class Map extends JPanel {
     private int width, height;
     private int[] start;
     private Tile[][] mapTile;
-    private Tile[][] mapCopy;
 
     public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) throws StartNotFoundException {
         this.game = game;
@@ -108,11 +107,7 @@ public class Map extends JPanel {
     }
 
     public boolean isTileRideable(int x, int y) {
-        if (getTile(x, y) == model.Tile.WALL) {
-            return false;
-        } else {
-            return true;
-        }
+        return getTile(x, y) != Tile.WALL;
     }
 
     public int getWidthInTiles() {
@@ -123,8 +118,9 @@ public class Map extends JPanel {
         return height;
     }
 
+    // Creates a deep copy of the map, so the AI cannot alter the real map.
     public Tile[][] getMapCopy() {
-        mapCopy = new Tile[mapTile.length][mapTile[0].length];
+        Tile[][] mapCopy = new Tile[mapTile.length][mapTile[0].length];
         for (int x = 0; x < mapTile.length; x++) {
             for (int y = 0; y < mapTile[0].length; y++) {
                 mapCopy[x][y] = mapTile[x][y];

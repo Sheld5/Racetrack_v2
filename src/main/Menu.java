@@ -1,6 +1,5 @@
-package main.menu;
+package main;
 
-import main.Main;
 import model.DriverAI;
 import util.AICompiler;
 import util.Resources;
@@ -10,13 +9,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-public class Menu extends JPanel {
+class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
 
     private Font fontBig, fontSmall;
@@ -37,7 +34,7 @@ public class Menu extends JPanel {
     private JPanel aiButtonPanel;
     private JButton aiAdd, aiBack;
 
-    public Menu(int width, int height) {
+    Menu(int width, int height) {
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
         fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         initMenu(width, height);
@@ -194,7 +191,6 @@ public class Menu extends JPanel {
     @SuppressWarnings("Duplicates")
     private void initAISettings() {
         GridBagConstraints c = new GridBagConstraints();
-        c.weighty = 1;
         c.ipadx = DEFAULT_IPAD;
         c.ipady = DEFAULT_IPAD;
 
@@ -329,7 +325,7 @@ public class Menu extends JPanel {
         repaint();
     }
 
-    public void removeAI(int id) {
+    void removeAI(int id) {
         aiMainPanel.remove(getAIPanelById(id));
         aiPanels.remove(getAIPanelById(id));
         revalidate();
@@ -345,15 +341,15 @@ public class Menu extends JPanel {
         return null;
     }
 
-    public int getNumberOfCars() {
+    int getNumberOfCars() {
         return Integer.parseInt(cars.getText());
     }
 
-    public String getMapName() {
+    String getMapName() {
         return map.getText();
     }
 
-    public DriverAI[] getAI() throws IOException {
+    DriverAI[] getAI() throws IOException {
         DriverAI[] drivers = new DriverAI[aiPanels.size()];
         AICompiler aiCompiler = new AICompiler();
         for (int i = 0; i < aiPanels.size(); i++) {

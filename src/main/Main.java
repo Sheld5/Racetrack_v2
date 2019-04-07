@@ -1,7 +1,5 @@
 package main;
 
-import main.menu.Menu;
-import model.DriverAI;
 import org.xml.sax.SAXException;
 import util.Resources;
 import util.StartNotFoundException;
@@ -30,7 +28,7 @@ public class Main {
         frame.revalidate();
     }
 
-    public static void goToMenu() {
+    static void goToMenu() {
         game.setVisible(false);
         menu.setVisible(true);
     }
