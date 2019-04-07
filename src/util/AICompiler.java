@@ -2,7 +2,7 @@ package util;
 
 import main.menu.AIPanel;
 import model.DriverAI;
-import util.jOOR.src.main.java.org.joor.Reflect;
+import org.joor.Reflect;
 
 import java.io.*;
 
