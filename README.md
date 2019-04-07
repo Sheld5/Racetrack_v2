@@ -28,6 +28,8 @@ Follow these steps to implement your own AI to the game:
 
 1\) Create your own AI class that implements the model.DriverAI interface.
 
-2\) Add your AI to the game in the AI settings by choosing the .java file in the file explorer.
+*Optional: Copy your AI into the resource/ai folder. 
 
-3\) Start the game and all added AIs will control their own cars as long as there are enough cars for them.
+2\) Start the game and add your AI to the game in the AI settings by choosing the .java file in the file explorer. (You can add the same AI more than once.)
+
+3\) All added AIs will control their own cars as long as there are enough cars for them. The rest of the cars will be human-controlled.
