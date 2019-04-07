@@ -2,26 +2,31 @@ package util;
 
 import main.menu.AIPanel;
 import model.DriverAI;
+import util.jOOR.src.main.java.org.joor.Reflect;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.*;
 
 
 public class AICompiler {
 
-    // ToDo
-    public DriverAI compile(AIPanel aiPanel) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public DriverAI compile(AIPanel aiPanel) throws IOException {
+        try {
+            InputStream in = new FileInputStream(aiPanel.getFile());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder builder = new StringBuilder();
+            String line = reader.readLine();
+            while (line != null) {
+                builder.append(line).append("\n");
+                line = reader.readLine();
+            }
+            String content = builder.toString();
 
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, aiPanel.getFile().getPath());
-        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { aiPanel.getFile().getParentFile().toURI().toURL() });
-        Class<?> cls = Class.forName(aiPanel.getAIName(), true, classLoader);
-        Object obj = cls.newInstance();
-        return (DriverAI)obj;
-
+            return Reflect.compile("model." + aiPanel.getAIName(), content).create().get();
+        } catch (IOException e) {
+             System.out.println("Error while compiling AI " + aiPanel.getAIName());
+             System.out.println("AI file: " + aiPanel.getFile());
+             throw e;
+        }
     }
 
 }

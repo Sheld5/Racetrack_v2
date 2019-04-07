@@ -2,7 +2,6 @@ package main;
 
 import main.menu.Menu;
 import model.DriverAI;
-import model.TestAI;
 import org.xml.sax.SAXException;
 import util.Resources;
 import util.StartNotFoundException;
@@ -46,12 +45,12 @@ public class Main {
 
     public static void startGame() {
         try {
-            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), /*new DriverAI[]{new TestAI()}*/ menu.getAI(), menu.getMapName());
+            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), menu.getAI(), menu.getMapName());
             frame.add(game);
             menu.setVisible(false);
             game.setVisible(true);
             frame.revalidate();
-        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException e) {
             System.out.println("An error occurred. The game could not be initiated.");
             e.printStackTrace();
         }

@@ -353,13 +353,11 @@ public class Menu extends JPanel {
         return map.getText();
     }
 
-    public DriverAI[] getAI() throws ClassNotFoundException, MalformedURLException, InstantiationException, IllegalAccessException {
+    public DriverAI[] getAI() throws IOException {
         DriverAI[] drivers = new DriverAI[aiPanels.size()];
         AICompiler aiCompiler = new AICompiler();
-        int i = 0;
-        for (AIPanel aiPanel : aiPanels) {
-            drivers[i] = aiCompiler.compile(aiPanel);
-            i++;
+        for (int i = 0; i < aiPanels.size(); i++) {
+            drivers[i] = aiCompiler.compile(aiPanels.get(i));
         }
         return drivers;
     }
