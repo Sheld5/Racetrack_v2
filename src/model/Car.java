@@ -9,21 +9,26 @@ import java.awt.image.BufferedImage;
 
 public class Car extends JPanel {
     private static int TURNS_SKIPPED_ON_CRASH = 3;
+    public enum Color {
+        RED, YELLOW, BLUE, GREEN
+    }
 
     private Game game;
+    private Color color;
     private int[] coordinates, velocity;
     private boolean crashed, sunk, finished;
     private int crashCountdown;
     private int turnOfFinish;
 
-    public Car(Game game) {
+    public Car(Game game, Color color) {
         this.game = game;
+        this.color = color;
         coordinates = new int[]{0,0};
         velocity = new int[]{0,0};
         crashCountdown = 0;
         finished = false;
         setSize(game.getTileSize(), game.getTileSize());
-        setBackground(new Color(0, 0, 0, 0));
+        setBackground(new java.awt.Color(0, 0, 0, 0));
     }
 
     @Override
@@ -31,13 +36,28 @@ public class Car extends JPanel {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
         BufferedImage image;
+        /*
         if (sunk) {
             image = Resources.carSunk;
-        } else {
-            image = Resources.car;
+        }
+        */
+        switch (color) {
+            case RED:
+                image = Resources.carRed;
+                break;
+            case YELLOW:
+                image = Resources.carYellow;
+                break;
+            case BLUE:
+                image = Resources.carBlue;
+                break;
+            case GREEN:
+                image = Resources.carGreen;
+                break;
+            default:
+                image = Resources.carRed;
         }
         g.drawImage(image.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
-        // ToDo: numbers are drawn over each other for some reason
         if (crashed) {
             switch (crashCountdown) {
                 case 1:

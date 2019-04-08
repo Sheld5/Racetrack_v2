@@ -8,7 +8,7 @@ public class Resources {
 
     public static BufferedImage windowIcon, fileManagerIcon;
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
-    public static BufferedImage car, carSunk, crosshair, crosshairRed, one, two, three;
+    public static BufferedImage carRed, carYellow, carBlue, carGreen, carSunk, crosshair, crosshairRed, one, two, three;
 
     private static int numberOfErrors = 0;
 
@@ -26,7 +26,10 @@ public class Resources {
         tileSand = loadImage("tileSand.png");
         tileIce = loadImage("tileIce.png");
 
-        car = loadImage("car.png");
+        carRed = loadImage("carRed.png");
+        carYellow = loadImage("carYellow.png");
+        carBlue = loadImage("carBlue.png");
+        carGreen = loadImage("carGreen.png");
         carSunk = loadImage("carSunk.png");
         crosshair = loadImage("crosshair.png");
         crosshairRed = loadImage("crosshairRed.png");

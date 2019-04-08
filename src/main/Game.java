@@ -65,7 +65,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void init() {
-        setBackground(Color.BLACK);
+        setBackground(java.awt.Color.BLACK);
         setLayout(null);
         setFocusable(true);
         requestFocusInWindow();
@@ -82,7 +82,7 @@ public class Game extends JPanel implements KeyListener {
         turnLabel.setVisible(true);
         turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
         turnLabel.setFont(fontBig);
-        turnLabel.setForeground(Color.orange);
+        turnLabel.setForeground(java.awt.Color.orange);
         add(turnLabel);
 
         back = new JButton("Back");
@@ -90,7 +90,7 @@ public class Game extends JPanel implements KeyListener {
         back.addActionListener(e -> Main.goToMenu());
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         back.setFont(fontSmall);
-        back.setForeground(Color.black);
+        back.setForeground(java.awt.Color.black);
         add(back);
     }
 
@@ -106,8 +106,25 @@ public class Game extends JPanel implements KeyListener {
 
     private void initCars(int n) {
         cars = new Car[n];
+        Car.Color color;
         for (int i = 0; i < cars.length; i++) {
-            cars[i] = new Car(this);
+            switch (i % 4) {
+                case 0:
+                    color = Car.Color.RED;
+                    break;
+                case 1:
+                    color = Car.Color.YELLOW;
+                    break;
+                case 2:
+                    color = Car.Color.BLUE;
+                    break;
+                case 3:
+                    color = Car.Color.GREEN;
+                    break;
+                default:
+                    color = Car.Color.RED;
+            }
+            cars[i] = new Car(this, color);
             cars[i].setVisible(true);
             add(cars[i]);
         }
