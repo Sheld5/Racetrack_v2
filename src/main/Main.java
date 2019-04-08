@@ -22,15 +22,7 @@ public class Main {
         Resources.load();
         frame = new JFrame(GAME_TITLE);
         initFrame(frame);
-        menu = new Menu(GAME_WIDTH, GAME_HEIGHT);
-        menu.setVisible(true);
-        frame.add(menu);
-        frame.revalidate();
-    }
-
-    static void goToMenu() {
-        game.setVisible(false);
-        menu.setVisible(true);
+        initMenu();
     }
 
     private static void initFrame(JFrame frame) {
@@ -41,17 +33,31 @@ public class Main {
         frame.setVisible(true);
     }
 
-    public static void startGame() {
+    private static void initMenu() {
+        menu = new Menu();
+        menu.setVisible(true);
+        frame.add(menu);
+        frame.revalidate();
+    }
+
+    static void startGame() {
         try {
-            game = new Game(GAME_WIDTH, GAME_HEIGHT, menu.getNumberOfCars(), menu.getAI(), menu.getMapName());
+            game = new Game(menu.getNumberOfCars(), menu.getAI(), menu.getMapName());
+            game.setVisible(true);
             frame.add(game);
             menu.setVisible(false);
-            game.setVisible(true);
             frame.revalidate();
         } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException e) {
             System.out.println("An error occurred. The game could not be initiated.");
             e.printStackTrace();
         }
+    }
+
+    static void goToMenu() {
+        frame.remove(menu);
+        frame.add(menu);
+        menu.setVisible(true);
+        frame.remove(game);
     }
 
 }

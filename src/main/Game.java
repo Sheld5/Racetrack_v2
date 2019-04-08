@@ -39,8 +39,8 @@ public class Game extends JPanel implements KeyListener {
     private int[] nextAiMove;
     private boolean aiWaiting;
 
-    Game(int width, int height, int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
-        init(width, height);
+    Game(int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
+        init();
         initCrossHair();
         initCars(numberOfCars);
         initMap(mapName);
@@ -64,8 +64,7 @@ public class Game extends JPanel implements KeyListener {
         initRace();
     }
 
-    private void init(int width, int height) {
-        setSize(width, height);
+    private void init() {
         setBackground(Color.BLACK);
         setLayout(null);
         setFocusable(true);
@@ -88,7 +87,7 @@ public class Game extends JPanel implements KeyListener {
 
         back = new JButton("Back");
         back.setVisible(true);
-        back.addActionListener(e -> leaveToMenu());
+        back.addActionListener(e -> Main.goToMenu());
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         back.setFont(fontSmall);
         back.setForeground(Color.black);
@@ -540,10 +539,6 @@ public class Game extends JPanel implements KeyListener {
         int guiX = MAP_INDENT + map.getWidthInTiles() * tileSize + MAP_INDENT;
         turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
-    }
-
-    private void leaveToMenu() {
-        Main.goToMenu();
     }
 
     public int getTileSize() {

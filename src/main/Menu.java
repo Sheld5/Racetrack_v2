@@ -34,21 +34,16 @@ class Menu extends JPanel {
     private JPanel aiButtonPanel;
     private JButton aiAdd, aiBack;
 
-    Menu(int width, int height) {
+    Menu() {
+        setBackground(Color.BLACK);
+        setLayout(new GridBagLayout());
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
         fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
-        initMenu(width, height);
         initMenuSelection();
         initGameModeSelection();
         initAISettings();
 
         System.out.println("Menu initialized");
-    }
-
-    private void initMenu(int width, int height) {
-        setSize(width, height);
-        setBackground(Color.BLACK);
-        setLayout(new GridBagLayout());
     }
 
     @SuppressWarnings("Duplicates")
