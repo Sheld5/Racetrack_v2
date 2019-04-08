@@ -5,6 +5,7 @@ import util.Resources;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Car extends JPanel {
     private static int TURNS_SKIPPED_ON_CRASH = 3;
@@ -29,18 +30,28 @@ public class Car extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
-        g.drawImage(Resources.car.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
-        // ToDo
+        BufferedImage image;
+        if (sunk) {
+            image = Resources.carSunk;
+        } else {
+            image = Resources.car;
+        }
+        g.drawImage(image.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+        // ToDo: numbers are drawn over each other for some reason
         if (crashed) {
             switch (crashCountdown) {
                 case 1:
-                    g.drawImage(Resources.one.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+                    image = Resources.one;
+                    break;
                 case 2:
-                    g.drawImage(Resources.two.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
+                    image = Resources.two;
+                    break;
                 case 3:
-                    g.drawImage(Resources.three.getScaledInstance(game.getTileSize(), game.getTileSize(), Image.SCALE_SMOOTH), 0, 0, null);
-                default:
-                    // nada
+                    image = Resources.three;
+                    break;
+            }
+            if (0 < crashCountdown && crashCountdown < 4) {
+                g.drawImage(image.getScaledInstance(game.getTileSize() - 6, game.getTileSize() - 6, Image.SCALE_SMOOTH), 3, 3, null);
             }
         }
     }
@@ -116,6 +127,7 @@ public class Car extends JPanel {
 
     public void sunk() {
         sunk = true;
+        game.repaint();
     }
 
     public void finished() {

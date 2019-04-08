@@ -91,7 +91,7 @@ public class Game extends JPanel implements KeyListener {
         back.addActionListener(e -> leaveToMenu());
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         back.setFont(fontSmall);
-        back.setForeground(Color.orange);
+        back.setForeground(Color.black);
         add(back);
     }
 
