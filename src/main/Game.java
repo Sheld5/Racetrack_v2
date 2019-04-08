@@ -1,8 +1,8 @@
 package main;
 
 import org.xml.sax.SAXException;
-import model.DriverAI;
 import model.*;
+import util.AICompiler;
 import util.MapReader;
 import util.StartNotFoundException;
 
@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -29,7 +30,6 @@ public class Game extends JPanel implements KeyListener {
     private Map map;
     private Car[] cars;
     private CrossHair[][] ch;
-    private DriverAI[] drivers;
     private Checkpoint[] checkpoints;
 
     private int activeCarIndex;
@@ -39,16 +39,15 @@ public class Game extends JPanel implements KeyListener {
     private int[] nextAiMove;
     private boolean aiWaiting;
 
-    Game(int numberOfCars, DriverAI[] drivers, String mapName) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
+    Game(Menu menu) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
         init();
         initCrossHair();
-        initCars(numberOfCars);
-        initMap(mapName);
+        initCars(menu.getCarPanels());
+        initMap(menu.getMapName());
         initGUI();
 
         moveCarsToStart();
-        this.drivers = drivers;
-        initCheckpoints(numberOfCars);
+        initCheckpoints(menu.getCarPanels().size());
         activeCarIndex = cars.length - 1;
         stop = false;
         if (cars.length == 1) {
@@ -70,7 +69,7 @@ public class Game extends JPanel implements KeyListener {
         setFocusable(true);
         requestFocusInWindow();
         tileSize = 24;
-        this.addKeyListener(this);
+        addKeyListener(this);
     }
 
     private void initGUI() {
@@ -104,36 +103,20 @@ public class Game extends JPanel implements KeyListener {
         System.out.println("map initialized");
     }
 
-    private void initCars(int n) {
-        cars = new Car[n];
-        Car.Color color;
-        for (int i = 0; i < cars.length; i++) {
-            switch (i % 4) {
-                case 0:
-                    color = Car.Color.RED;
-                    break;
-                case 1:
-                    color = Car.Color.YELLOW;
-                    break;
-                case 2:
-                    color = Car.Color.BLUE;
-                    break;
-                case 3:
-                    color = Car.Color.GREEN;
-                    break;
-                default:
-                    color = Car.Color.RED;
+    private void initCars(ArrayList<CarPanel> carPanels) throws IOException {
+        AICompiler aiCompiler = new AICompiler();
+        cars = new Car[carPanels.size()];
+        int i = 0;
+        for (CarPanel panel : carPanels) {
+            if (panel.getAiFile() == null) {
+                cars[i] = new Car(panel.getCarColor(), null, this);
+            } else {
+                cars[i] = new Car(panel.getCarColor(), aiCompiler.compile(panel), this);
             }
-            cars[i] = new Car(this, color);
-            cars[i].setVisible(true);
             add(cars[i]);
+            i++;
         }
-
-        if (cars.length == 1) {
-            System.out.println("1 car initialized");
-        } else {
-            System.out.println(cars.length + " cars initialized");
-        }
+        System.out.printf("%d cars initiated\n", cars.length);
     }
 
     private void initCrossHair() {
@@ -201,9 +184,9 @@ public class Game extends JPanel implements KeyListener {
 
 
     private void initRace() {
-        if (drivers != null) {
-            for (DriverAI ai : drivers) {
-                ai.init(map.getMapCopy());
+        for (Car car : cars) {
+            if (car.getDriver() != null) {
+                car.getDriver().init(map.getMapCopy());
             }
         }
         nextTurn();
@@ -230,7 +213,7 @@ public class Game extends JPanel implements KeyListener {
             } else {
                 showCH();
                 if (!humanOnTurn()) {
-                    nextAiMove = drivers[activeCarIndex].drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
+                    nextAiMove = activeCar.getDriver().drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
                     showNextAiMove(true);
                     aiWaiting = true;
                 }
@@ -507,7 +490,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     public boolean humanOnTurn() {
-        return drivers == null || activeCarIndex >= drivers.length;
+        return (activeCar.getDriver() == null);
     }
 
     private void updateTurnCount() {

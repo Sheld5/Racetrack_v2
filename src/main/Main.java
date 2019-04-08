@@ -42,7 +42,7 @@ public class Main {
 
     static void startGame() {
         try {
-            game = new Game(menu.getNumberOfCars(), menu.getAI(), menu.getMapName());
+            game = new Game(menu);
             game.setVisible(true);
             frame.add(game);
             menu.setVisible(false);

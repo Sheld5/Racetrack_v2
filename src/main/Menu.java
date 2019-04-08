@@ -6,33 +6,26 @@ import util.Resources;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
 
     private Font fontBig, fontSmall;
-    private JLabel racetrack, gmSelection, aiSettings;
+    private JLabel racetrack, gmSelection;
     private JButton playButton, exitButton;
     private JButton startButton, backButton;
-    private JFormattedTextField cars;
+    private JLabel mapLabel;
+    private JPanel mapPanel;
     private JTextField map;
-    private JLabel carsLabel, mapLabel;
-    private JPanel carsPanel, mapPanel;
-    private JButton minus, plus, mapButton;
-    private JLabel nOfAIs;
-    private JButton aiButton;
-    private JScrollPane aiScrollPane;
-    private JPanel aiMainPanel;
-    private ArrayList<AIPanel> aiPanels;
-    private int aiCount;
-    private JPanel aiButtonPanel;
-    private JButton aiAdd, aiBack;
+    private JButton mapButton;
+    private JScrollPane carScrollPane;
+    private JPanel carMainPanel;
+    private ArrayList<CarPanel> carPanels;
+    private int carCount;
+    private JButton addCar;
 
     Menu() {
         setBackground(Color.BLACK);
@@ -41,7 +34,6 @@ class Menu extends JPanel {
         fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         initMenuSelection();
         initGameModeSelection();
-        initAISettings();
 
         System.out.println("Menu initialized");
     }
@@ -75,14 +67,15 @@ class Menu extends JPanel {
 
     @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
+        Dimension buttonSize = new Dimension(42,21);
         GridBagConstraints c = new GridBagConstraints();
-        c.weighty = 1;
         c.ipadx = DEFAULT_IPAD;
         c.ipady = DEFAULT_IPAD;
+        c.weighty = 1;
 
         c.gridy = 0;
 
-        gmSelection = new JLabel("Game Mode Selection");
+        gmSelection = new JLabel("Game Settings");
         gmSelection.setVisible(false);
         gmSelection.setForeground(Color.orange);
         gmSelection.setFont(fontBig);
@@ -90,58 +83,7 @@ class Menu extends JPanel {
         add(gmSelection, c);
         c.gridwidth = 1;
 
-        c.gridy = 4;
-
-        startButton = new JButton("Start Game");
-        startButton.setVisible(false);
-        startButton.addActionListener(e -> Main.startGame());
-        add(startButton, c);
-
-        backButton = new JButton("Back");
-        backButton.setVisible(false);
-        backButton.addActionListener(e -> goToMainMenu());
-        add(backButton, c);
-
         c.gridy = 1;
-
-        carsLabel = new JLabel("Number of Cars:");
-        carsLabel.setVisible(false);
-        carsLabel.setForeground(Color.cyan);
-        carsLabel.setFont(fontSmall);
-        add(carsLabel, c);
-
-        carsPanel = new JPanel();
-        carsPanel.setVisible(false);
-        carsPanel.setLayout(new FlowLayout());
-        carsPanel.setBackground(Color.black);
-        add(carsPanel, c);
-
-        Dimension buttonSize = new Dimension(42,21);
-
-        minus = new JButton("-");
-        minus.setVisible(true);
-        minus.addActionListener(e -> changeCars(-1));
-        minus.setPreferredSize(buttonSize);
-        carsPanel.add(minus);
-
-        NumberFormatter nf = new NumberFormatter(NumberFormat.getIntegerInstance());
-        nf.setAllowsInvalid(false);
-        cars = new JFormattedTextField(nf);
-        cars.setVisible(true);
-        cars.setValue(1);
-        cars.setPreferredSize(buttonSize);
-        cars.setBackground(Color.black);
-        cars.setForeground(Color.white);
-        cars.setHorizontalAlignment(SwingConstants.CENTER);
-        carsPanel.add(cars);
-
-        plus = new JButton("+");
-        plus.setVisible(true);
-        plus.addActionListener(e -> changeCars(1));
-        plus.setPreferredSize(buttonSize);
-        carsPanel.add(plus);
-
-        c.gridy = 2;
 
         mapLabel = new JLabel("Map:");
         mapLabel.setVisible(false);
@@ -168,98 +110,50 @@ class Menu extends JPanel {
 
         c.gridy = 3;
 
-        nOfAIs = new JLabel("Number of AIs: 0");
-        nOfAIs.setVisible(false);
-        nOfAIs.setBackground(Color.black);
-        nOfAIs.setForeground(Color.cyan);
-        nOfAIs.setFont(fontSmall);
-        add(nOfAIs, c);
+        startButton = new JButton("Start Game");
+        startButton.setVisible(false);
+        startButton.addActionListener(e -> Main.startGame());
+        add(startButton, c);
 
-        aiButton = new JButton("AI settings");
-        aiButton.setVisible(false);
-        aiButton.addActionListener(e -> goToAISettings());
-        c.gridwidth = 2;
-        add(aiButton, c);
-        c.gridwidth = 1;
-    }
-
-    @SuppressWarnings("Duplicates")
-    private void initAISettings() {
-        GridBagConstraints c = new GridBagConstraints();
-        c.ipadx = DEFAULT_IPAD;
-        c.ipady = DEFAULT_IPAD;
-
-        c.gridy = 0;
-        c.weighty = 1;
-
-        aiSettings = new JLabel("AI settings");
-        aiSettings.setVisible(false);
-        aiSettings.setForeground(Color.orange);
-        aiSettings.setFont(fontBig);
-        add(aiSettings, c);
+        backButton = new JButton("Back");
+        backButton.setVisible(false);
+        backButton.addActionListener(e -> goToMainMenu());
+        add(backButton, c);
 
         c.gridy = 2;
-        c.weighty = 1;
-
-        aiButtonPanel = new JPanel();
-        aiButtonPanel.setVisible(false);
-        aiButtonPanel.setLayout(new GridBagLayout());
-        GridBagConstraints d = new GridBagConstraints();
-        d.ipadx = 35;
-        d.insets = new Insets(0,17, 0, 17);
-        aiButtonPanel.setBackground(Color.black);
-        aiButtonPanel.setMinimumSize(new Dimension(256, aiButtonPanel.getMinimumSize().height));
-        add(aiButtonPanel, c);
-
-        d.gridx = 0;
-        aiAdd = new JButton("Add AI");
-        aiAdd.setVisible(true);
-        aiAdd.addActionListener(e -> aiFileManager());
-        aiButtonPanel.add(aiAdd, d);
-
-        d.gridx = 1;
-        aiBack = new JButton("Submit");
-        aiBack.setVisible(true);
-        aiBack.addActionListener(e -> goToGameModeSelection());
-        aiButtonPanel.add(aiBack, d);
-
-        c.gridy = 1;
+        c.gridwidth = 2;
         c.weighty = 5;
         c.fill = GridBagConstraints.BOTH;
 
-        aiPanels = new ArrayList<>();
-        aiCount = 0;
+        carPanels = new ArrayList<>();
+        carCount = 0;
 
-        aiMainPanel = new JPanel();
-        aiMainPanel.setLayout(new BoxLayout(aiMainPanel, BoxLayout.Y_AXIS));
-        aiMainPanel.setBackground(Color.gray);
-        aiScrollPane = new JScrollPane(aiMainPanel);
-        aiScrollPane.setVisible(false);
-        aiScrollPane.setBackground(Color.black);
-        aiScrollPane.setMinimumSize(new Dimension(256, aiScrollPane.getMinimumSize().height));
-        aiScrollPane.setPreferredSize(new Dimension(256, aiScrollPane.getPreferredSize().height));
-        add(aiScrollPane, c);
+        carMainPanel = new JPanel();
+        carMainPanel.setLayout(new BoxLayout(carMainPanel, BoxLayout.Y_AXIS));
+        carMainPanel.setBackground(Color.gray);
+        carScrollPane = new JScrollPane(carMainPanel);
+        carScrollPane.setVisible(false);
+        carScrollPane.setBackground(Color.black);
+        carScrollPane.setMinimumSize(new Dimension(256, carScrollPane.getMinimumSize().height));
+        carScrollPane.setPreferredSize(new Dimension(512, carScrollPane.getPreferredSize().height));
+        add(carScrollPane, c);
+
+        addCar = new JButton("Add car");
+        addCar.setVisible(true);
+        addCar.addActionListener(e -> addCar());
+        carMainPanel.add(addCar);
     }
 
 
 
     private void goToGameModeSelection() {
-        nOfAIs.setText("Number of AIs: " + aiPanels.size());
-        setVisibleMainMenu(false);
-        setVisibleAISettings(false);
         setVisibleGameModeSelection(true);
+        setVisibleMainMenu(false);
     }
 
     private void goToMainMenu() {
-        setVisibleGameModeSelection(false);
-        setVisibleAISettings(false);
         setVisibleMainMenu(true);
-    }
-
-    private void goToAISettings() {
-        setVisibleMainMenu(false);
         setVisibleGameModeSelection(false);
-        setVisibleAISettings(true);
     }
 
     private void setVisibleMainMenu(boolean b) {
@@ -270,27 +164,13 @@ class Menu extends JPanel {
 
     private void setVisibleGameModeSelection(boolean b) {
         gmSelection.setVisible(b);
-        carsLabel.setVisible(b);
         mapLabel.setVisible(b);
-        carsPanel.setVisible(b);
         mapPanel.setVisible(b);
-        nOfAIs.setVisible(b);
-        aiButton.setVisible(b);
         startButton.setVisible(b);
         backButton.setVisible(b);
+        carScrollPane.setVisible(b);
     }
 
-    private void setVisibleAISettings(boolean b) {
-        aiSettings.setVisible(b);
-        aiScrollPane.setVisible(b);
-        aiButtonPanel.setVisible(b);
-    }
-
-    private void changeCars(int d) {
-        cars.setValue(Integer.parseInt(cars.getText()) + d);
-    }
-
-    @SuppressWarnings("Duplicates")
     private void mapFileManager() {
         JFileChooser jfc = new JFileChooser("./src/resources/maps");
         FileNameExtensionFilter fnef = new FileNameExtensionFilter(".tmx", "tmx");
@@ -301,56 +181,37 @@ class Menu extends JPanel {
         }
     }
 
-    @SuppressWarnings("Duplicates")
-    private void aiFileManager() {
-        JFileChooser jfc = new JFileChooser("./src/resources/ai");
-        FileNameExtensionFilter fnef = new FileNameExtensionFilter(".java", "java");
-        jfc.setFileFilter(fnef);
-        int returnValue = jfc.showOpenDialog(this);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            addAI(jfc.getSelectedFile());
-        }
-    }
-
-    private void addAI(File aiFile) {
-        aiPanels.add(new AIPanel(aiCount, aiFile, this));
-        aiMainPanel.add(getAIPanelById(aiCount));
-        aiCount++;
+    private void addCar() {
+        carPanels.add(new CarPanel(carCount, this));
+        carMainPanel.add(getCarPanelById(carCount));
+        carCount++;
+        carMainPanel.add(addCar);
         revalidate();
         repaint();
     }
 
-    void removeAI(int id) {
-        aiMainPanel.remove(getAIPanelById(id));
-        aiPanels.remove(getAIPanelById(id));
+    public void removeCar(int id) {
+        carMainPanel.remove(getCarPanelById(id));
+        carPanels.remove(getCarPanelById(id));
         revalidate();
         repaint();
     }
 
-    private AIPanel getAIPanelById(int id) {
-        for (AIPanel ai : aiPanels) {
-            if(ai.getID() == id) {
-                return ai;
+    private CarPanel getCarPanelById(int id) {
+        for (CarPanel car : carPanels) {
+            if(car.getID() == id) {
+                return car;
             }
         }
         return null;
-    }
-
-    int getNumberOfCars() {
-        return Integer.parseInt(cars.getText());
     }
 
     String getMapName() {
         return map.getText();
     }
 
-    DriverAI[] getAI() throws IOException {
-        DriverAI[] drivers = new DriverAI[aiPanels.size()];
-        AICompiler aiCompiler = new AICompiler();
-        for (int i = 0; i < aiPanels.size(); i++) {
-            drivers[i] = aiCompiler.compile(aiPanels.get(i));
-        }
-        return drivers;
+    ArrayList<CarPanel> getCarPanels() {
+        return carPanels;
     }
 
 }

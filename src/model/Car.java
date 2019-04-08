@@ -15,14 +15,16 @@ public class Car extends JPanel {
 
     private Game game;
     private Color color;
+    private DriverAI driver;
     private int[] coordinates, velocity;
     private boolean crashed, sunk, finished;
     private int crashCountdown;
     private int turnOfFinish;
 
-    public Car(Game game, Color color) {
+    public Car(Color color, DriverAI driver, Game game) {
         this.game = game;
         this.color = color;
+        this.driver = driver;
         coordinates = new int[]{0,0};
         velocity = new int[]{0,0};
         crashCountdown = 0;
@@ -36,11 +38,6 @@ public class Car extends JPanel {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
         BufferedImage image;
-        /*
-        if (sunk) {
-            image = Resources.carSunk;
-        }
-        */
         switch (color) {
             case RED:
                 image = Resources.carRed;
@@ -180,6 +177,10 @@ public class Car extends JPanel {
             crashed = false;
         }
         game.repaint();
+    }
+
+    public DriverAI getDriver() {
+        return driver;
     }
 
 }
