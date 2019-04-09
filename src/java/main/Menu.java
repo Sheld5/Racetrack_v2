@@ -5,8 +5,8 @@ import util.Resources;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.Flow;
 
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
@@ -176,7 +176,7 @@ class Menu extends JPanel {
     }
 
     private void mapFileManager() {
-        JFileChooser jfc = new JFileChooser("./src/resources/maps");
+        JFileChooser jfc = new JFileChooser(new File("."));
         FileNameExtensionFilter fnef = new FileNameExtensionFilter(".tmx", "tmx");
         jfc.setFileFilter(fnef);
         int returnValue = jfc.showOpenDialog(this);

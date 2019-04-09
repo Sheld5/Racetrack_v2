@@ -51,7 +51,7 @@ public class Resources {
     private static BufferedImage loadImage(String fileName) {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(Resources.class.getResourceAsStream("/resources/images/" + fileName));
+            image = ImageIO.read(Resources.class.getResourceAsStream("/images/" + fileName));
         } catch (IOException e) {
             System.out.println("Error while loading " + fileName);
             e.printStackTrace();

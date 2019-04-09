@@ -74,7 +74,7 @@ public class CarPanel extends JPanel {
     }
 
     private void aiFileManager() {
-        JFileChooser jfc = new JFileChooser("./src/resources/ai");
+        JFileChooser jfc = new JFileChooser(new File("."));
         FileNameExtensionFilter fnef = new FileNameExtensionFilter(".java", "java");
         jfc.setFileFilter(fnef);
         int returnValue = jfc.showOpenDialog(this);

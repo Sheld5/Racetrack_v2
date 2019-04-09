@@ -16,14 +16,14 @@ public class MapReader {
 
     private Document createDocFromFile(String fileName) throws IOException, SAXException, ParserConfigurationException, IllegalArgumentException {
         try {
-            InputStream in = getClass().getResourceAsStream("/resources/maps/" + fileName);
+            InputStream in = getClass().getResourceAsStream("/maps/" + fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(in);
             doc.getDocumentElement().normalize();
             return doc;
         } catch (Exception e) {
-            System.out.println("Error while loading " + "/resources/maps/" + fileName);
+            System.out.println("Error while loading " + "/maps/" + fileName);
             throw e;
         }
     }

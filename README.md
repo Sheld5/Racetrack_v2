@@ -26,7 +26,7 @@ ICE - if the car finishes the turn on ice, it cannot be controlled next turn and
 
 Follow these steps to implement your own AI to the game:
 
-1\) Create your own AI class that implements the model.DriverAI interface.
+1\) Create your own AI class that implements the java.model.DriverAI interface.
 
 *Optional: Copy your AI into the resource/ai folder. 
 

@@ -385,8 +385,6 @@ public class Game extends JPanel implements KeyListener {
         }
     }
 
-
-
     private void onCarCrash(Car car) {
         car.setVelocity(new int[]{0,0});
         car.crashed();
