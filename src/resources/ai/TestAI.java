@@ -1,3 +1,5 @@
+package resources.ai;
+
 public class TestAI implements DriverAI {
 
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {

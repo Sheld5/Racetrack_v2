@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.io.File;
 
 public class CarPanel extends JPanel {
@@ -83,7 +82,7 @@ public class CarPanel extends JPanel {
         }
         aiName = aiFile.getName().substring(0, aiFile.getName().length() - 5);
         if (aiName.length() > 16) {
-            aiNameLabel.setText(aiName.substring(0, 15) + "...");
+            aiNameLabel.setText(aiName.substring(0, MAX_NAME_LENGTH - 1) + "...");
         } else {
             aiNameLabel.setText(aiName);
         }
@@ -136,6 +135,10 @@ public class CarPanel extends JPanel {
             default:
                 return Car.Color.RED;
         }
+    }
+
+    String getPlayerName() {
+        return playerName.getText();
     }
 
 }

@@ -1,13 +1,10 @@
 package main;
 
-import model.DriverAI;
-import util.AICompiler;
 import util.Resources;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 
 class Menu extends JPanel {
@@ -142,6 +139,8 @@ class Menu extends JPanel {
         addCar.setVisible(true);
         addCar.addActionListener(e -> addCar());
         carMainPanel.add(addCar);
+
+        addCar();
     }
 
 
@@ -190,11 +189,13 @@ class Menu extends JPanel {
         repaint();
     }
 
-    public void removeCar(int id) {
-        carMainPanel.remove(getCarPanelById(id));
-        carPanels.remove(getCarPanelById(id));
-        revalidate();
-        repaint();
+    void removeCar(int id) {
+        if (carPanels.size() > 1) {
+            carMainPanel.remove(getCarPanelById(id));
+            carPanels.remove(getCarPanelById(id));
+            revalidate();
+            repaint();
+        }
     }
 
     private CarPanel getCarPanelById(int id) {

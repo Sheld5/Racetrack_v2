@@ -24,6 +24,8 @@ public class Game extends JPanel implements KeyListener {
 
     private int tileSize;
 
+    private JPanel scoreMainPanel;
+    private JScrollPane scoreScrollPane;
     private JLabel turnLabel;
     private JButton back;
 
@@ -31,7 +33,6 @@ public class Game extends JPanel implements KeyListener {
     private Car[] cars;
     private CrossHair[][] ch;
     private Checkpoint[] checkpoints;
-
     private int activeCarIndex;
     private Car activeCar;
     private boolean stop;
@@ -44,7 +45,9 @@ public class Game extends JPanel implements KeyListener {
         initCrossHair();
         initCars(menu.getCarPanels());
         initMap(menu.getMapName());
+        initScorePanel();
         initGUI();
+        addComponents();
 
         moveCarsToStart();
         initCheckpoints(menu.getCarPanels().size());
@@ -61,10 +64,41 @@ public class Game extends JPanel implements KeyListener {
         System.out.println("Game initialized successfully");
 
         initRace();
+
+        scoreMainPanel.add(new ScorePanel("Player", "INTELLIGENCE", 23));
+        scoreMainPanel.add(new ScorePanel("Player", "INTELLIGENCE", 23));
+        showScore();
+    }
+
+    private void addComponents() {
+        add(scoreScrollPane);
+        addCrossHairs();
+        addCars();
+        add(map);
+        addGUI();
+    }
+
+    private void addCrossHairs() {
+        for (CrossHair[] cLine : ch) {
+            for(CrossHair c : cLine) {
+                add(c);
+            }
+        }
+    }
+
+    private void addCars() {
+        for (Car car : cars) {
+            add(car);
+        }
+    }
+
+    private void addGUI() {
+        add(turnLabel);
+        add(back);
     }
 
     private void init() {
-        setBackground(java.awt.Color.BLACK);
+        setBackground(Color.BLACK);
         setLayout(null);
         setFocusable(true);
         requestFocusInWindow();
@@ -72,25 +106,37 @@ public class Game extends JPanel implements KeyListener {
         addKeyListener(this);
     }
 
+    @SuppressWarnings("Duplicates")
+    private void initScorePanel() {
+        int scoreWidth = 500;
+        int scoreHeight = 500;
+        scoreMainPanel = new JPanel();
+        scoreMainPanel.setLayout(new BoxLayout(scoreMainPanel, BoxLayout.Y_AXIS));
+        scoreMainPanel.setBounds(MAP_INDENT + map.getWidth() / 2 - scoreWidth / 2, MAP_INDENT + map.getHeight() / 2 - scoreHeight / 2, scoreWidth, scoreHeight);
+        scoreMainPanel.setBackground(Color.lightGray);
+        scoreScrollPane = new JScrollPane(scoreMainPanel);
+        scoreScrollPane.setVisible(false);
+        scoreScrollPane.setBackground(Color.black);
+        scoreScrollPane.setBounds(scoreMainPanel.getBounds());
+    }
+
     private void initGUI() {
         Font fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
         Font fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         int guiX = map.getX() + map.getWidth() + MAP_INDENT;
 
-        turnLabel = new JLabel(String.valueOf(turn));
+        turnLabel = new JLabel("Turn: " + turn);
         turnLabel.setVisible(true);
-        turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
+        turnLabel.setBounds(guiX, MAP_INDENT,120, 50);
         turnLabel.setFont(fontBig);
-        turnLabel.setForeground(java.awt.Color.orange);
-        add(turnLabel);
+        turnLabel.setForeground(Color.orange);
 
         back = new JButton("Back");
         back.setVisible(true);
         back.addActionListener(e -> Main.goToMenu());
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         back.setFont(fontSmall);
-        back.setForeground(java.awt.Color.black);
-        add(back);
+        back.setForeground(Color.black);
     }
 
     private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, StartNotFoundException {
@@ -109,9 +155,9 @@ public class Game extends JPanel implements KeyListener {
         int i = 0;
         for (CarPanel panel : carPanels) {
             if (panel.getAiFile() == null) {
-                cars[i] = new Car(panel.getCarColor(), null, this);
+                cars[i] = new Car(panel.getPlayerName(), panel.getAiName(), panel.getCarColor(), null, this);
             } else {
-                cars[i] = new Car(panel.getCarColor(), aiCompiler.compile(panel), this);
+                cars[i] = new Car(panel.getPlayerName(), panel.getAiName(), panel.getCarColor(), aiCompiler.compile(panel), this);
             }
             add(cars[i]);
             i++;
@@ -125,7 +171,6 @@ public class Game extends JPanel implements KeyListener {
             for (int y = 0; y < 3; y++) {
                 ch[x][y] = new CrossHair(new int[]{x - 1,y - 1}, this);
                 ch[x][y].setVisible(false);
-                add(ch[x][y]);
             }
         }
 
@@ -379,7 +424,7 @@ public class Game extends JPanel implements KeyListener {
                 }
             }
             car.finished();
-            car.setTurnOfFinish(turn);
+            scoreMainPanel.add(new ScorePanel(car.getPlayerName(), car.getAiName(), turn));
             System.out.println("Car" + activeCarIndex + " finished the race!");
         }
     }
@@ -476,17 +521,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void endRace() {
-        System.out.println();
+        showScore();
         System.out.println("Race finished");
-        for (int i = 0; i < cars.length; i++) {
-            if (cars[i].isFinished()) {
-                System.out.println("Car" + i + " finished the race in " + cars[i].getTurnOfFinish() + " turns.");
-            } else if (cars[i].isSunk()) {
-                System.out.println("Car" + i + " went swimming and thus could not finish the race.");
-            } else {
-                System.out.println("Car" + i + " was not able to finish the race in " + TURN_MAX + " turns.");
-            }
-        }
     }
 
     public boolean humanOnTurn() {
@@ -494,7 +530,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     private void updateTurnCount() {
-        turnLabel.setText(String.valueOf(turn));
+        turnLabel.setText("Turn: " + turn);
     }
 
 
@@ -543,6 +579,11 @@ public class Game extends JPanel implements KeyListener {
 
     public int getTileSize() {
         return tileSize;
+    }
+
+    private void showScore() {
+        scoreScrollPane.setVisible(true);
+        repaint();
     }
 
 }

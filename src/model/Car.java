@@ -14,14 +14,16 @@ public class Car extends JPanel {
     }
 
     private Game game;
+    private String playerName, aiName;
     private Color color;
     private DriverAI driver;
     private int[] coordinates, velocity;
     private boolean crashed, sunk, finished;
     private int crashCountdown;
-    private int turnOfFinish;
 
-    public Car(Color color, DriverAI driver, Game game) {
+    public Car(String playerName, String aiName, Color color, DriverAI driver, Game game) {
+        this.playerName = playerName;
+        this.aiName = aiName;
         this.game = game;
         this.color = color;
         this.driver = driver;
@@ -163,14 +165,6 @@ public class Car extends JPanel {
         return finished;
     }
 
-    public void setTurnOfFinish(int t) {
-        turnOfFinish = t;
-    }
-
-    public int getTurnOfFinish() {
-        return turnOfFinish;
-    }
-
     public void countdown() {
         crashCountdown--;
         if (crashCountdown == 0) {
@@ -181,6 +175,14 @@ public class Car extends JPanel {
 
     public DriverAI getDriver() {
         return driver;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public String getAiName() {
+        return aiName;
     }
 
 }
