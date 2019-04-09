@@ -36,7 +36,7 @@ public class Game extends JPanel implements KeyListener {
     private int activeCarIndex;
     private Car activeCar;
     private boolean stop;
-    private int turn;
+    private int turn, carsFinished;
     private int[] nextAiMove;
     private boolean aiWaiting;
 
@@ -58,16 +58,13 @@ public class Game extends JPanel implements KeyListener {
         } else {
             turn = 0;
         }
+        carsFinished = 0;
         nextAiMove = new int[]{0,0};
         aiWaiting = false;
 
         System.out.println("Game initialized successfully");
 
         initRace();
-
-        scoreMainPanel.add(new ScorePanel("Player", "INTELLIGENCE", 23));
-        scoreMainPanel.add(new ScorePanel("Player", "INTELLIGENCE", 23));
-        showScore();
     }
 
     private void addComponents() {
@@ -247,6 +244,7 @@ public class Game extends JPanel implements KeyListener {
             endRace();
         } else if (turn > TURN_MAX) {
             System.out.println("Turn limit reached!");
+            endRace();
         } else {
             nextCar();
             if (activeCar.isCrashed()) {
@@ -424,7 +422,8 @@ public class Game extends JPanel implements KeyListener {
                 }
             }
             car.finished();
-            scoreMainPanel.add(new ScorePanel(car.getPlayerName(), car.getAiName(), turn));
+            carsFinished++;
+            scoreMainPanel.add(new ScorePanel(carsFinished, car.getPlayerName(), car.getAiName(), turn));
             System.out.println("Car" + activeCarIndex + " finished the race!");
         }
     }
@@ -509,7 +508,7 @@ public class Game extends JPanel implements KeyListener {
         while (cars[activeCarIndex].isSunk() || cars[activeCarIndex].isFinished()) {
             rotateCar();
         }
-        activeCar = cars[activeCarIndex];
+        moveActiveCarToForeground();
     }
 
     private void rotateCar() {
@@ -518,9 +517,30 @@ public class Game extends JPanel implements KeyListener {
         } else {
             activeCarIndex = 0;
         }
+        activeCar = cars[activeCarIndex];
+    }
+
+    private void moveActiveCarToForeground() {
+        add(scoreScrollPane);
+        addCrossHairs();
+
+        for (int i = activeCarIndex; i >= 0; i--) {
+            add(cars[i]);
+        }
+        for (int i = cars.length - 1; i > activeCarIndex; i--) {
+            add(cars[i]);
+        }
+
+        add(map);
+        addGUI();
     }
 
     private void endRace() {
+        for (Car car : cars) {
+            if (!car.isFinished()) {
+                scoreMainPanel.add(new ScorePanel(-1, car.getPlayerName(), car.getAiName(), turn));
+            }
+        }
         showScore();
         System.out.println("Race finished");
     }

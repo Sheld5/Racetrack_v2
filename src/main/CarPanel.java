@@ -21,6 +21,7 @@ public class CarPanel extends JPanel {
     CarPanel(int id, Menu menu) {
         this.id = id;
         aiFile = null;
+        aiName = null;
 
         setMinimumSize(new Dimension(512, 50));
         setPreferredSize(new Dimension(this.getPreferredSize().width, 50));
@@ -86,7 +87,7 @@ public class CarPanel extends JPanel {
         } else {
             aiNameLabel.setText(aiName);
         }
-        aiNameLabel.setForeground(Color.green);
+        aiNameLabel.setForeground(Color.orange);
     }
 
     private void changeColor() {

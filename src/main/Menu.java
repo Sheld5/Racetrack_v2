@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Flow;
 
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
@@ -13,9 +14,11 @@ class Menu extends JPanel {
     private Font fontBig, fontSmall;
     private JLabel racetrack, gmSelection;
     private JButton playButton, exitButton;
+    private JPanel startBackPanel;
     private JButton startButton, backButton;
-    private JLabel mapLabel;
     private JPanel mapPanel;
+    private JLabel mapLabel;
+    private JPanel mapFilePanel;
     private JTextField map;
     private JButton mapButton;
     private JScrollPane carScrollPane;
@@ -76,17 +79,9 @@ class Menu extends JPanel {
         gmSelection.setVisible(false);
         gmSelection.setForeground(Color.orange);
         gmSelection.setFont(fontBig);
-        c.gridwidth = 2;
         add(gmSelection, c);
-        c.gridwidth = 1;
 
         c.gridy = 1;
-
-        mapLabel = new JLabel("Map:");
-        mapLabel.setVisible(false);
-        mapLabel.setForeground(Color.cyan);
-        mapLabel.setFont(fontSmall);
-        add(mapLabel, c);
 
         mapPanel = new JPanel();
         mapPanel.setVisible(false);
@@ -94,31 +89,42 @@ class Menu extends JPanel {
         mapPanel.setBackground(Color.black);
         add(mapPanel, c);
 
+        mapLabel = new JLabel("Map:");
+        mapLabel.setForeground(Color.cyan);
+        mapLabel.setFont(fontSmall);
+        mapPanel.add(mapLabel);
+
+        mapFilePanel = new JPanel();
+        mapFilePanel.setLayout(new FlowLayout());
+        mapFilePanel.setBackground(Color.black);
+        mapPanel.add(mapFilePanel);
+
         map = new JTextField("Map01.tmx");
-        map.setVisible(true);
         map.setPreferredSize(new Dimension(128, 21));
-        mapPanel.add(map);
+        mapFilePanel.add(map);
 
         mapButton = new JButton(new ImageIcon(Resources.fileManagerIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        mapButton.setVisible(true);
         mapButton.addActionListener(e -> mapFileManager());
         mapButton.setPreferredSize(buttonSize);
-        mapPanel.add(mapButton);
+        mapFilePanel.add(mapButton);
 
         c.gridy = 3;
 
+        startBackPanel = new JPanel();
+        startBackPanel.setVisible(false);
+        startBackPanel.setLayout(new FlowLayout());
+        startBackPanel.setBackground(Color.black);
+        add(startBackPanel, c);
+
         startButton = new JButton("Start Game");
-        startButton.setVisible(false);
         startButton.addActionListener(e -> Main.startGame());
-        add(startButton, c);
+        startBackPanel.add(startButton);
 
         backButton = new JButton("Back");
-        backButton.setVisible(false);
         backButton.addActionListener(e -> goToMainMenu());
-        add(backButton, c);
+        startBackPanel.add(backButton);
 
         c.gridy = 2;
-        c.gridwidth = 2;
         c.weighty = 5;
         c.fill = GridBagConstraints.BOTH;
 
@@ -138,6 +144,7 @@ class Menu extends JPanel {
         addCar = new JButton("Add car");
         addCar.setVisible(true);
         addCar.addActionListener(e -> addCar());
+        addCar.setBorder(BorderFactory.createLineBorder(Color.gray));
         carMainPanel.add(addCar);
 
         addCar();
@@ -163,10 +170,8 @@ class Menu extends JPanel {
 
     private void setVisibleGameModeSelection(boolean b) {
         gmSelection.setVisible(b);
-        mapLabel.setVisible(b);
         mapPanel.setVisible(b);
-        startButton.setVisible(b);
-        backButton.setVisible(b);
+        startBackPanel.setVisible(b);
         carScrollPane.setVisible(b);
     }
 
