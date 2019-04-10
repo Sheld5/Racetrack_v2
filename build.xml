@@ -22,6 +22,9 @@
             </classpath>
             <exclude name="**/resources/ai/*"/>
         </javac>
+        <copy todir="out/production/Racetrack_v2" >
+            <fileset dir="src/com/github/sheld5/resources" includes="**"/>
+        </copy>
     </target>
 
     <target name="jar"
@@ -29,7 +32,7 @@
             description="Build application JAR.">
         <mkdir dir="out/artifacts/Racetrack_v2_jar" />
         <jar destfile="out/artifacts/Racetrack_v2_jar/Racetrack_v2.jar">
-            <fileset dir="out/production/Racetrack_v2" includes="**/*.class" />
+            <fileset dir="out/production/Racetrack_v2" includes="**" />
             <manifest>
                 <attribute name="Main-Class" value="com.github.sheld5.java.main.Main" />
             </manifest>
