@@ -20,12 +20,13 @@ public class Main {
 
     public static void main(String[] args) {
         Resources.load();
-        frame = new JFrame(GAME_TITLE);
-        initFrame(frame);
+        initFrame();
         initMenu();
     }
 
-    private static void initFrame(JFrame frame) {
+    // initializes JFrame for the application
+    private static void initFrame() {
+        frame = new JFrame(GAME_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -33,6 +34,7 @@ public class Main {
         frame.setVisible(true);
     }
 
+    // initializes menu
     private static void initMenu() {
         menu = new Menu();
         menu.setVisible(true);
@@ -40,6 +42,7 @@ public class Main {
         frame.revalidate();
     }
 
+    // initializes game and hides menu
     static void startGame() {
         try {
             game = new Game(menu);
@@ -53,6 +56,7 @@ public class Main {
         }
     }
 
+    // hides game and shows menu
     static void goToMenu() {
         frame.remove(menu);
         frame.add(menu);

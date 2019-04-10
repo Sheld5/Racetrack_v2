@@ -73,6 +73,7 @@ public class CarPanel extends JPanel {
 
     }
 
+    // initializes FileChooser and sets aiFile and aiName to correspond with the java file of the ai chosen by the user
     private void aiFileManager() {
         File targetDirectory = new File("./out/production/Racetrack_v2/ai");
         if (!targetDirectory.exists()) {
@@ -94,6 +95,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    // cycles between color options for the car and sets the appearance of the color button to match currently selected color
     private void changeColor() {
         switch (carColor.getText()) {
             case "R":
@@ -115,18 +117,22 @@ public class CarPanel extends JPanel {
         }
     }
 
+    // returns the id
     int getID() {
         return id;
     }
 
+    // returns the name of the file of the chosen AI
     public String getAiName() {
         return aiName;
     }
 
+    // returns the file of the chosen AI
     public File getAiFile() {
         return aiFile;
     }
 
+    // returns the chosen color for the car
     Car.Color getCarColor() {
         switch(carColor.getText()) {
             case "R":
@@ -142,6 +148,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    // returns the chosen player name
     String getPlayerName() {
         return playerName.getText();
     }

@@ -6,7 +6,7 @@ import java.awt.*;
 public class ScorePanel extends JPanel {
 
     private JLabel place, playerName, aiName, turnCount;
-
+    
     ScorePanel(int place, String playerName, String aiName, int turnCount) {
         setMinimumSize(new Dimension(480, 50));
         setPreferredSize(new Dimension(480, 50));

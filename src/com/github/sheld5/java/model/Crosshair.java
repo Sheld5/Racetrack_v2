@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-public class CrossHair extends JPanel implements MouseListener {
+public class Crosshair extends JPanel implements MouseListener {
 
     private Game game;
     private int[] index;
@@ -17,7 +17,7 @@ public class CrossHair extends JPanel implements MouseListener {
     private boolean mouseOver;
     private boolean isNextAiMove;
 
-    public CrossHair(int[] index, Game game) {
+    public Crosshair(int[] index, Game game) {
         this.game = game;
         this.index = index;
         x = 0;
