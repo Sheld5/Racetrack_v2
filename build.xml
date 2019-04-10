@@ -17,6 +17,10 @@
                 includeantruntime="false">
             <src path="src" />
             <compilerarg value="-Xlint:all"/>
+            <classpath>
+                <pathelement path="lib/joor-0.9.11.jar"/>
+            </classpath>
+            <exclude name="**/resources/ai/*"/>
         </javac>
     </target>
 
