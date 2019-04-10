@@ -15,8 +15,8 @@ public class AICompiler {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();
-            if (!line.equals("package java.model;")) {
-                builder.append("package java.model;\n\n");
+            if (!line.equals("package model;")) {
+                builder.append("package model;\n\n");
             }
             while (line != null) {
                 builder.append(line).append("\n");
@@ -24,7 +24,7 @@ public class AICompiler {
             }
             String content = builder.toString();
 
-            return Reflect.compile("java.model." + carPanel.getAiName(), content).create().get();
+            return Reflect.compile("model." + carPanel.getAiName(), content).create().get();
         } catch (IOException e) {
              System.out.println("Error while compiling AI " + carPanel.getAiName());
              System.out.println("AI file: " + carPanel.getAiFile());

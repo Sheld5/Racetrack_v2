@@ -95,7 +95,12 @@ public class Map extends JPanel {
     }
 
     public Tile getTile(int x, int y) {
-        return mapTile[y][x];
+        try {
+            return mapTile[y][x];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
+
     }
 
     public Tile getTile(int[] coordinates) {
@@ -107,7 +112,7 @@ public class Map extends JPanel {
     }
 
     public boolean isTileRideable(int x, int y) {
-        return getTile(x, y) != Tile.WALL;
+        return (getTile(x, y) != Tile.WALL) && (getTile(x, y) != null);
     }
 
     public int getWidthInTiles() {
