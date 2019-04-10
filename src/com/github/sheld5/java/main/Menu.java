@@ -176,7 +176,11 @@ class Menu extends JPanel {
     }
 
     private void mapFileManager() {
-        JFileChooser jfc = new JFileChooser(new File("."));
+        File targetDirectory = new File("./out/production/Racetrack_v2/maps");
+        if (!targetDirectory.exists()) {
+            targetDirectory = new File(".");
+        }
+        JFileChooser jfc = new JFileChooser(targetDirectory);
         FileNameExtensionFilter fnef = new FileNameExtensionFilter(".tmx", "tmx");
         jfc.setFileFilter(fnef);
         int returnValue = jfc.showOpenDialog(this);

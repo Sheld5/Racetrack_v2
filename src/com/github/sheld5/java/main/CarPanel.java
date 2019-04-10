@@ -74,20 +74,24 @@ public class CarPanel extends JPanel {
     }
 
     private void aiFileManager() {
-        JFileChooser jfc = new JFileChooser(new File("."));
+        File targetDirectory = new File("./out/production/Racetrack_v2/ai");
+        if (!targetDirectory.exists()) {
+            targetDirectory = new File(".");
+        }
+        JFileChooser jfc = new JFileChooser(targetDirectory);
         FileNameExtensionFilter fnef = new FileNameExtensionFilter(".java", "java");
         jfc.setFileFilter(fnef);
         int returnValue = jfc.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             aiFile = (jfc.getSelectedFile());
+            aiName = aiFile.getName().substring(0, aiFile.getName().length() - 5);
+            if (aiName.length() > 16) {
+                aiNameLabel.setText(aiName.substring(0, MAX_NAME_LENGTH - 1) + "...");
+            } else {
+                aiNameLabel.setText(aiName);
+            }
+            aiNameLabel.setForeground(Color.orange);
         }
-        aiName = aiFile.getName().substring(0, aiFile.getName().length() - 5);
-        if (aiName.length() > 16) {
-            aiNameLabel.setText(aiName.substring(0, MAX_NAME_LENGTH - 1) + "...");
-        } else {
-            aiNameLabel.setText(aiName);
-        }
-        aiNameLabel.setForeground(Color.orange);
     }
 
     private void changeColor() {
