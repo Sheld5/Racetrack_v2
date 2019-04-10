@@ -12,10 +12,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-// reads the map files
+/**
+ * reads the map files
+ */
 public class MapReader {
 
-    // creates Document from the given file
+    /**
+     * creates Document from the given file
+     * @param fileName
+     * @return
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws IllegalArgumentException
+     */
     private Document createDocFromFile(String fileName) throws IOException, SAXException, ParserConfigurationException, IllegalArgumentException {
         try {
             InputStream in = getClass().getResourceAsStream("/maps/" + fileName);
@@ -32,7 +42,14 @@ public class MapReader {
 
     private int[][] data;
 
-    // returns a 2d array of ints extracted from the map file
+    /**
+     * returns a 2d array of ints extracted from the map file
+     * @param mapFile
+     * @return
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public int[][] getData(String mapFile) throws IOException, ParserConfigurationException, SAXException {
         String[] dataRows = createDocFromFile(mapFile).getElementsByTagName("data").item(0).getTextContent().split("\n");
         String[] row;
@@ -46,7 +63,14 @@ public class MapReader {
         return data;
     }
 
-    // returns HashMap<Integer, Tile> extracted from the tile-set file
+    /**
+     * returns HashMap&lt;Integer, Tile&gt; extracted from the tile-set file
+     * @param fileName
+     * @return
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public HashMap<Integer, Tile> getTileSet(String fileName) throws IOException, ParserConfigurationException, SAXException {
         HashMap<Integer, Tile> tileSet = new HashMap<>();
         Document doc = createDocFromFile(fileName);
@@ -77,12 +101,18 @@ public class MapReader {
         return tileSet;
     }
 
-    // returns the height of the map  which has been read the last
+    /**
+     * returns the height of the map  which has been read the last
+     * @return
+     */
     public int getMapHeight() {
         return data.length;
     }
 
-    // returns the width of the map  which has been read the last
+    /**
+     * returns the width of the map  which has been read the last
+     * @return
+     */
     public int getMapWidth() {
         return data[0].length;
     }

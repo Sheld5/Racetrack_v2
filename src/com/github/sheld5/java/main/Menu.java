@@ -8,7 +8,9 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
-// manages the menu
+/**
+ * manages the menu
+ */
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
 
@@ -39,7 +41,9 @@ class Menu extends JPanel {
         System.out.println("Menu initialized");
     }
 
-    // initializes components of the main menu
+    /**
+     * initializes components of the main menu
+     */
     @SuppressWarnings("Duplicates")
     private void initMenuSelection() {
         GridBagConstraints c = new GridBagConstraints();
@@ -67,7 +71,9 @@ class Menu extends JPanel {
         add(exitButton, c);
     }
 
-    // initializes components of the game settings menu
+    /**
+     * initializes components of the game settings menu
+     */
     @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
         Dimension buttonSize = new Dimension(42,21);
@@ -154,27 +160,36 @@ class Menu extends JPanel {
     }
 
 
-
-    // hides the main menu and show the game settings menu
+    /**
+     * hides the main menu and show the game settings menu
+     */
     private void goToGameModeSelection() {
         setVisibleGameModeSelection(true);
         setVisibleMainMenu(false);
     }
 
-    // hides the game settings menu and shows the main menu
+    /**
+     * hides the game settings menu and shows the main menu
+     */
     private void goToMainMenu() {
         setVisibleMainMenu(true);
         setVisibleGameModeSelection(false);
     }
 
-    // sets the visibility of the main menu
+    /**
+     * sets the visibility of the main menu
+     * @param b
+     */
     private void setVisibleMainMenu(boolean b) {
         racetrack.setVisible(b);
         playButton.setVisible(b);
         exitButton.setVisible(b);
     }
 
-    // sets the visibility of the game settings menu
+    /**
+     * sets the visibility of the game settings menu
+     * @param b
+     */
     private void setVisibleGameModeSelection(boolean b) {
         gmSelection.setVisible(b);
         mapPanel.setVisible(b);
@@ -182,7 +197,9 @@ class Menu extends JPanel {
         carScrollPane.setVisible(b);
     }
 
-    // initializes FileChooser and sets the text of the map selection TextField to the name of the file chosen by the user
+    /**
+     * initializes FileChooser and sets the text of the map selection TextField to the name of the file chosen by the user
+     */
     private void mapFileManager() {
         File targetDirectory = new File("./out/production/Racetrack_v2/maps");
         if (!targetDirectory.exists()) {
@@ -197,7 +214,9 @@ class Menu extends JPanel {
         }
     }
 
-    // adds a new instance of CarPanel to the main car panel
+    /**
+     * adds a new instance of CarPanel to the main car panel
+     */
     private void addCar() {
         carPanels.add(new CarPanel(carCount, this));
         carMainPanel.add(getCarPanelById(carCount));
@@ -207,7 +226,10 @@ class Menu extends JPanel {
         repaint();
     }
 
-    // removes the CarPanel with the correct id from the main car panel
+    /**
+     * removes the CarPanel with the correct id from the main car panel
+     * @param id
+     */
     void removeCar(int id) {
         if (carPanels.size() > 1) {
             carMainPanel.remove(getCarPanelById(id));
@@ -217,7 +239,11 @@ class Menu extends JPanel {
         }
     }
 
-    // returns the CarPanel with the correct id
+    /**
+     * returns the CarPanel with the correct id
+     * @param id
+     * @return
+     */
     private CarPanel getCarPanelById(int id) {
         for (CarPanel car : carPanels) {
             if(car.getID() == id) {
@@ -227,12 +253,18 @@ class Menu extends JPanel {
         return null;
     }
 
-    //returns the name of the map file previously chosen by the user
+    /**
+     * returns the name of the map file previously chosen by the user
+     * @return
+     */
     String getMapName() {
         return map.getText();
     }
 
-    // returns and array containing all CarPanel instances
+    /**
+     * returns and array containing all CarPanel instances
+     * @return
+     */
     ArrayList<CarPanel> getCarPanels() {
         return carPanels;
     }

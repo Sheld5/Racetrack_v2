@@ -8,7 +8,9 @@ import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-// initializes the application, switches between menu and game
+/**
+ * initializes the application, switches between menu and game
+ */
 public class Main {
 
     private static final String GAME_TITLE = "Racetrack";
@@ -25,7 +27,9 @@ public class Main {
         initMenu();
     }
 
-    // initializes JFrame for the application
+    /**
+     * initializes JFrame for the application
+     */
     private static void initFrame() {
         frame = new JFrame(GAME_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +39,9 @@ public class Main {
         frame.setVisible(true);
     }
 
-    // initializes menu
+    /**
+     * initializes menu
+     */
     private static void initMenu() {
         menu = new Menu();
         menu.setVisible(true);
@@ -43,7 +49,9 @@ public class Main {
         frame.revalidate();
     }
 
-    // initializes game and hides menu
+    /**
+     * initializes game and hides menu
+     */
     static void startGame() {
         try {
             game = new Game(menu);
@@ -57,7 +65,9 @@ public class Main {
         }
     }
 
-    // hides game and shows menu
+    /**
+     * hides game and shows menu
+     */
     static void goToMenu() {
         frame.remove(menu);
         frame.add(menu);

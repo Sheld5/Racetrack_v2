@@ -8,7 +8,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
-// the panel which contains all settings for one car
+/**
+ * the panel which contains all settings for one car
+ */
 public class CarPanel extends JPanel {
     private static int MAX_NAME_LENGTH = 16;
 
@@ -74,7 +76,9 @@ public class CarPanel extends JPanel {
 
     }
 
-    // initializes FileChooser and sets aiFile and aiName to correspond with the java file of the ai chosen by the user
+    /**
+     * initializes FileChooser and sets aiFile and aiName to correspond with the java file of the ai chosen by the user
+     */
     private void aiFileManager() {
         File targetDirectory = new File("./out/production/Racetrack_v2/ai");
         if (!targetDirectory.exists()) {
@@ -96,7 +100,9 @@ public class CarPanel extends JPanel {
         }
     }
 
-    // cycles between color options for the car and sets the appearance of the color button to match currently selected color
+    /**
+     * cycles between color options for the car and sets the button to match the currently selected color
+     */
     private void changeColor() {
         switch (carColor.getText()) {
             case "R":
@@ -118,22 +124,34 @@ public class CarPanel extends JPanel {
         }
     }
 
-    // returns the id
+    /**
+     * returns the id
+     * @return
+     */
     int getID() {
         return id;
     }
 
-    // returns the name of the file of the chosen AI
+    /**
+     * returns the name of the file of the chosen AI
+     * @return
+     */
     public String getAiName() {
         return aiName;
     }
 
-    // returns the file of the chosen AI
+    /**
+     * returns the file of the chosen AI
+     * @return
+     */
     public File getAiFile() {
         return aiFile;
     }
 
-    // returns the chosen color for the car
+    /**
+     * returns the chosen color for the car
+     * @return
+     */
     Car.Color getCarColor() {
         switch(carColor.getText()) {
             case "R":
@@ -149,7 +167,10 @@ public class CarPanel extends JPanel {
         }
     }
 
-    // returns the chosen player name
+    /**
+     * returns the chosen player name
+     * @return
+     */
     String getPlayerName() {
         return playerName.getText();
     }

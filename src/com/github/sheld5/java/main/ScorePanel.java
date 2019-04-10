@@ -3,7 +3,9 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 
-// contains post-game info about one car and how has it placed in the race
+/**
+ * contains post-game info about one car and how has it placed in the race
+ */
 public class ScorePanel extends JPanel {
 
     private JLabel place, playerName, aiName, turnCount;
