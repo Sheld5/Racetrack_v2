@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+// initializes the application, switches between menu and game
 public class Main {
 
     private static final String GAME_TITLE = "Racetrack";

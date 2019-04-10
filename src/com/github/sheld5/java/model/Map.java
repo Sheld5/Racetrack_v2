@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+// represents the map in the game
 public class Map extends JPanel {
 
     private Game game;
@@ -24,6 +25,7 @@ public class Map extends JPanel {
         initMapTile(mapInt, tileSet);
     }
 
+    // initializes the 2d array of Tiles representing the map and finds the start
     private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) throws StartNotFoundException {
         start = new int[2];
         boolean startFound = false;
@@ -54,6 +56,7 @@ public class Map extends JPanel {
         }
     }
 
+    // paints each tile of the map with the corresponding texture
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -94,6 +97,7 @@ public class Map extends JPanel {
         }
     }
 
+    // returns the type of the tile with given coordinates
     public Tile getTile(int x, int y) {
         try {
             return mapTile[y][x];
@@ -103,6 +107,7 @@ public class Map extends JPanel {
 
     }
 
+    // returns the type of the tile with given coordinates
     public Tile getTile(int[] coordinates) {
         if (coordinates.length != 2) {
             throw new IllegalArgumentException("method getTile only accepts two ints or an int array with the length of 2 as argument");
@@ -111,6 +116,7 @@ public class Map extends JPanel {
         }
     }
 
+    // returns true if the tile with given coordinates is rideable (anything but WALL) and is not outside the map
     public boolean isTileRideable(int x, int y) {
         return (getTile(x, y) != Tile.WALL) && (getTile(x, y) != null);
     }
@@ -123,7 +129,7 @@ public class Map extends JPanel {
         return height;
     }
 
-    // Creates a deep copy of the map, so the AI cannot alter the real map.
+    // returns a deep copy of the 2d Tile array representing the map
     public Tile[][] getMapCopy() {
         Tile[][] mapCopy = new Tile[mapTile.length][mapTile[0].length];
         for (int x = 0; x < mapTile.length; x++) {
@@ -134,6 +140,7 @@ public class Map extends JPanel {
         return mapCopy;
     }
 
+    // returns the coordinates of the start
     public int[] getStart() {
         return start;
     }

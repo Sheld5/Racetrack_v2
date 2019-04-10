@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 
+// manages the menu
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
 

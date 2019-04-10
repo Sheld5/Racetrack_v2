@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
+// manages the game
 public class Game extends JPanel implements KeyListener {
 
     private final static int MAP_INDENT = 16;
@@ -147,7 +148,7 @@ public class Game extends JPanel implements KeyListener {
     // initializes the map
     private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, StartNotFoundException {
         MapReader mr = new MapReader();
-        map = new Map(mr.getData(mapName), mr.getMapSizeX(), mr.getMapSizeY(), mr.getTileSet("RacetrackTileSet.tsx"), this);
+        map = new Map(mr.getData(mapName), mr.getMapWidth(), mr.getMapHeight(), mr.getTileSet("RacetrackTileSet.tsx"), this);
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);
         add(map);

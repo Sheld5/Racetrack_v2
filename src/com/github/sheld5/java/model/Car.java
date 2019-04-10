@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+// represents a car in the game
 public class Car extends JPanel {
     private static int TURNS_SKIPPED_ON_CRASH = 3;
     public enum Color {
@@ -35,6 +36,7 @@ public class Car extends JPanel {
         setBackground(new java.awt.Color(0, 0, 0, 0));
     }
 
+    // determines which texture should the car use and paints the car
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -75,11 +77,13 @@ public class Car extends JPanel {
         }
     }
 
+    // sets the coordinates of the car to the given values
     public void setCoordinates(int x, int y) {
         coordinates[0] = x;
         coordinates[1] = y;
     }
 
+    // sets the coordinates of the car to the given values
     public void setCoordinates(int[] coordinates) {
         if (coordinates.length != 2) {
             throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
@@ -88,6 +92,7 @@ public class Car extends JPanel {
         }
     }
 
+    // changes the velocity vector of the car accordignly by adding the given acceleration vector to it
     public void accelerate(int[] a) {
         if (a.length != 2) {
             throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
@@ -99,6 +104,7 @@ public class Car extends JPanel {
         }
     }
 
+    // sets the velocity vector of the car to the given values
     public void setVelocity(int[] velocity) {
         if (velocity.length != 2) {
             throw new IllegalArgumentException("method setVelocity only accepts an int array with the length of 2 as its argument");
@@ -108,6 +114,7 @@ public class Car extends JPanel {
         }
     }
 
+    // returns a deep copy of the coordinates of the car
     public int[] getCoordinates() {
         int[] coordinatesCopy = new int[2];
         coordinatesCopy[0] = coordinates[0];
@@ -115,14 +122,17 @@ public class Car extends JPanel {
         return coordinatesCopy;
     }
 
+    // returns the X coordinate of the car
     public int getTileX() {
         return coordinates[0];
     }
 
+    // returns the Y coordinate of the car
     public int getTileY() {
         return coordinates[1];
     }
 
+    // returns a deep copy of the velocity vector of the car
     public int[] getVelocity() {
         int[] velocityCopy = new int[2];
         velocityCopy[0] = velocity[0];
@@ -130,41 +140,50 @@ public class Car extends JPanel {
         return velocityCopy;
     }
 
+    // returns the X coordinate of the velocity vector of the car
     public int getVelX() {
         return velocity[0];
     }
 
+    // returns the Y coordinate of the velocity vector of the car
     public int getVelY() {
         return velocity[1];
     }
 
+    // sets the car to "crashed" and start the crash-countdown
     public void crashed() {
         crashed = true;
         crashCountdown = TURNS_SKIPPED_ON_CRASH;
         game.repaint();
     }
 
+    // sets the car to "sunk"
     public void sunk() {
         sunk = true;
         game.repaint();
     }
 
+    // sets the car to "finished"
     public void finished() {
         finished = true;
     }
 
+    // returns true if the car is crashed
     public boolean isCrashed() {
         return crashed;
     }
 
+    // returns true if the car is sunk
     public boolean isSunk() {
         return sunk;
     }
 
+    // returns true if the car is finished
     public boolean isFinished() {
         return finished;
     }
 
+    // decreases crashCountdown by one and sets the car to "not crashed" if the countdown is finished
     public void countdown() {
         crashCountdown--;
         if (crashCountdown == 0) {
@@ -173,14 +192,17 @@ public class Car extends JPanel {
         game.repaint();
     }
 
+    // returns the AI assigned to this car
     public DriverAI getDriver() {
         return driver;
     }
 
+    // returns the name of the player this car was assigned to
     public String getPlayerName() {
         return playerName;
     }
 
+    // returns the name of the AI assigned to this car
     public String getAiName() {
         return aiName;
     }

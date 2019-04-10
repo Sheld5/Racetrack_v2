@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 
+// the panel which contains all settings for one car
 public class CarPanel extends JPanel {
     private static int MAX_NAME_LENGTH = 16;
 

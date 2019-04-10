@@ -1,5 +1,6 @@
 package model;
 
+// interface for writing your own AI for this game
 public interface DriverAI {
 
     // Should return vector of acceleration of the car with two coordinates with values -1 or 0 or 1.
