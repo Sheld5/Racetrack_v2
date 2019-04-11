@@ -174,10 +174,10 @@ public class Map extends JPanel {
      * @return a deep copy of the 2d Tile array representing the map.
      */
     public Tile[][] getMapCopy() {
-        Tile[][] mapCopy = new Tile[mapTile.length][mapTile[0].length];
-        for (int x = 0; x < mapTile.length; x++) {
-            for (int y = 0; y < mapTile[0].length; y++) {
-                mapCopy[x][y] = mapTile[x][y];
+        Tile[][] mapCopy = new Tile[mapTile[0].length][mapTile.length];
+        for (int x = 0; x < mapTile[0].length; x++) {
+            for (int y = 0; y < mapTile.length; y++) {
+                mapCopy[x][y] = mapTile[y][x];
             }
         }
         return mapCopy;
