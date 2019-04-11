@@ -323,6 +323,7 @@ public class Game extends JPanel implements KeyListener {
      * Increases the turn count by one every time the game cycles through all cars.
      * Determines whether a human or an AI is on turn.
      * If an AI is on turn, calls its drive() method to determine its next move,
+     * checks if the move made by AI is valid,
      * shows it by highlighting the corresponding crosshair tile
      * and waits for the user to press ENTER (keyPressed() is called),
      * which is going to call nextTurn() again.
@@ -332,6 +333,7 @@ public class Game extends JPanel implements KeyListener {
      * Calls the endRace() method to end the race when all cars are finished or sunk or the turn-max is reached.
      * @see Game#updateTurnCount()
      * @see Game#nextCar()
+     * @see Game#nextAiMoveValid()
      * @see Game#keyPressed(KeyEvent)
      * @see Game#onCHClick(int[])
      * @see Game#endRace()
@@ -359,12 +361,31 @@ public class Game extends JPanel implements KeyListener {
                 showCH();
                 if (!humanOnTurn()) {
                     nextAiMove = activeCar.getDriver().drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
+                    if (!nextAiMoveValid()) {
+                        nextAiMove = new int[]{0,0};
+                    }
                     showNextAiMove(true);
                     aiWaiting = true;
                 }
                 // in case a human player is on turn, wait for their input from CrosshairTile ( onCHClick() has to be called )
                 // in case an AI player is on turn, show the decision the AI made and wait for ENTER to be pressed ( keyPressed(VK_ENTER) has to be called )
             }
+        }
+    }
+
+    /**
+     * Determines whether the move AI made when its drive() method was called is valid.
+     * @return true if nextAiMove is a valid move.
+     * @see DriverAI#drive(int[], int[], Tile[][])
+     */
+    private boolean nextAiMoveValid() {
+        if (nextAiMove.length != 2) {
+            return false;
+        } else if ( (nextAiMove[0] == -1 || nextAiMove[0] == 0 || nextAiMove[0] == 1)
+                 && (nextAiMove[1] == -1 || nextAiMove[1] == 0 || nextAiMove[1] == 1 ) ) {
+            return true;
+        } else {
+            return false;
         }
     }
 
