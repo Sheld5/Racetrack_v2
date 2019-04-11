@@ -8,14 +8,17 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Reads the map files and the tile-set file.
+ * Reads the map files, the tile-set file and the file lists.
  */
-public class MapReader {
+public class DataReader {
 
     /**
      * Creates Document from the given file in the /maps directory.
@@ -48,7 +51,7 @@ public class MapReader {
      * @throws IOException
      * @throws ParserConfigurationException
      * @throws SAXException
-     * @see MapReader#createDocFromFile(String)
+     * @see DataReader#createDocFromFile(String)
      */
     private int[][] getIntData(String mapFile) throws IOException, ParserConfigurationException, SAXException {
         String[] dataRows = createDocFromFile(mapFile).getElementsByTagName("data").item(0).getTextContent().split("\n");
@@ -72,7 +75,7 @@ public class MapReader {
      * @throws IOException
      * @throws ParserConfigurationException
      * @throws SAXException
-     * @see MapReader#createDocFromFile(String)
+     * @see DataReader#createDocFromFile(String)
      */
     private HashMap<Integer, Tile> getTileSet(String fileName) throws IOException, ParserConfigurationException, SAXException {
         HashMap<Integer, Tile> tileSet = new HashMap<>();
@@ -114,8 +117,8 @@ public class MapReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @see MapReader#getIntData(String)
-     * @see MapReader#getTileSet(String)
+     * @see DataReader#getIntData(String)
+     * @see DataReader#getTileSet(String)
      * @see Tile
      */
     public Tile[][] getMapData(String mapFileName, String tileSetFileName) throws ParserConfigurationException, SAXException, IOException {
@@ -133,6 +136,28 @@ public class MapReader {
             }
         }
         return mapTile;
+    }
+
+    public String[] getListOfFiles(String fileList) {
+        try {
+            ArrayList<String> array = new ArrayList<>();
+            InputStream in = getClass().getResourceAsStream(fileList);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = reader.readLine();
+            while (line != null) {
+                array.add(line);
+                line = reader.readLine();
+            }
+            String[] list = new String[array.size()];
+            for (int i = 0; i < list.length; i++) {
+                list[i] = array.get(i);
+            }
+            return list;
+        } catch (IOException e) {
+            System.out.println("Error while reading " + fileList);
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

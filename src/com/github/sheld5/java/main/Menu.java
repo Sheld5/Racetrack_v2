@@ -1,8 +1,9 @@
 package main;
 
+import util.DataReader;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -73,6 +74,8 @@ class Menu extends JPanel {
 
     /**
      * Initializes components of the game settings menu.
+     * Uses the getListOfFiles() method of the DataReader to get the list of map files.
+     * @see DataReader#getListOfFiles(String)
      */
     @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
@@ -102,7 +105,8 @@ class Menu extends JPanel {
         mapLabel.setFont(fontSmall);
         mapPanel.add(mapLabel);
 
-        mapSelector = new JComboBox(getMapList());
+        DataReader dr = new DataReader();
+        mapSelector = new JComboBox(dr.getListOfFiles("/META-INF/maps.txt"));
         mapSelector.setPreferredSize(new Dimension(150, 25));
         mapPanel.add(mapSelector);
 
@@ -147,33 +151,6 @@ class Menu extends JPanel {
 
         addCar();
     }
-
-    /**
-     * Returns the list of maps from the /META-INF/maps.txt file as String[] array.
-     * @return the list of maps as String[] array.
-     */
-    private String[] getMapList() {
-        try {
-            ArrayList<String> array = new ArrayList<>();
-            InputStream in = getClass().getResourceAsStream("/META-INF/maps.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = reader.readLine();
-            while (line != null) {
-                array.add(line);
-                line = reader.readLine();
-            }
-            String[] list = new String[array.size()];
-            for (int i = 0; i < list.length; i++) {
-                list[i] = array.get(i);
-            }
-            return list;
-        } catch (IOException e) {
-            System.out.println("Error while reading the maps.txt file");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
     /**
      * Hides the main menu and shows the game settings menu.

@@ -2,7 +2,7 @@ package model;
 
 import main.Game;
 import org.xml.sax.SAXException;
-import util.MapReader;
+import util.DataReader;
 import util.Resources;
 import util.StartNotFoundException;
 
@@ -22,7 +22,7 @@ public class Map extends JPanel {
     private Tile[][] mapTile;
 
     /**
-     * The Map class constructor. Uses the MapReader class to get the required data from the map file.
+     * The Map class constructor. Uses the DataReader class to get the required data from the map file.
      * @param mapFileName the name of the map file from which the data for initialization of this map are to be gathered.
      * @param tileSetFileName the name of the tile-set file which is to be used to 'translate'
      *                        the data in numbers from the map file to the enum Tile format.
@@ -31,12 +31,12 @@ public class Map extends JPanel {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @see MapReader
+     * @see DataReader#getMapData(String, String)
      */
     public Map(String mapFileName, String tileSetFileName, Game game) throws StartNotFoundException, ParserConfigurationException, SAXException, IOException {
         this.game = game;
-        MapReader mr = new MapReader();
-        mapTile = mr.getMapData(mapFileName, tileSetFileName);
+        DataReader dr = new DataReader();
+        mapTile = dr.getMapData(mapFileName, tileSetFileName);
         width = mapTile[0].length;
         height = mapTile.length;
         setSize(width * game.getTileSize(), height * game.getTileSize());

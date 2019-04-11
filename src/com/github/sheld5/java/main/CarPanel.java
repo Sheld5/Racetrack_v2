@@ -1,25 +1,22 @@
 package main;
 
 import model.Car;
+import util.DataReader;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
-import java.io.File;
 
 /**
  *  JPanel extension which contains all settings for a car and GUI to change them.
  */
 public class CarPanel extends JPanel {
-    private static int MAX_NAME_LENGTH = 16;
 
     private int id;
     private JTextField playerName;
     private JLabel aiNameLabel;
-    private JButton carColor, remove, addAI;
-    private String aiName;
-    private File aiFile;
+    private JButton carColor, remove;
+    private JComboBox aiSelector;
 
     /**
      * CarPanel constructor.
@@ -29,8 +26,6 @@ public class CarPanel extends JPanel {
      */
     CarPanel(int id, Menu menu) {
         this.id = id;
-        aiFile = null;
-        aiName = null;
 
         setMinimumSize(new Dimension(512, 50));
         setPreferredSize(new Dimension(this.getPreferredSize().width, 50));
@@ -64,12 +59,11 @@ public class CarPanel extends JPanel {
         c.weightx = 5;
         add(aiNameLabel, c);
 
-        addAI = new JButton("Add AI");
-        addAI.setPreferredSize(new Dimension(100, 50));
-        addAI.addActionListener(e -> aiFileManager());
+        aiSelector = new JComboBox(getAiSelection());
+        aiSelector.setPreferredSize(new Dimension(100, 50));
         c.gridx = 3;
         c.weightx = 2;
-        add(addAI, c);
+        add(aiSelector, c);
 
         remove = new JButton("x");
         remove.setForeground(Color.red);
@@ -83,28 +77,19 @@ public class CarPanel extends JPanel {
     }
 
     /**
-     * Initializes FileChooser and sets File aiFile and String aiName
-     * to correspond with the file chosen by the user.
+     * Creates selection of AI files for the AI-selection JComboBox using the getListOfFiles() method of the DataReader.
+     * @return the String[] array of AI files.
+     * @see DataReader#getListOfFiles(String)
      */
-    private void aiFileManager() {
-        File targetDirectory = new File("./out/production/Racetrack_v2/ai");
-        if (!targetDirectory.exists()) {
-            targetDirectory = new File(".");
+    private String[] getAiSelection() {
+        DataReader dr = new DataReader();
+        String[] aiFiles = dr.getListOfFiles("/META-INF/ai.txt");
+        String[] selection = new String[aiFiles.length + 1];
+        selection[0] = "HUMAN";
+        for (int i = 0; i < aiFiles.length; i++) {
+            selection[i + 1] = aiFiles[i];
         }
-        JFileChooser jfc = new JFileChooser(targetDirectory);
-        FileNameExtensionFilter fnef = new FileNameExtensionFilter(".java", "java");
-        jfc.setFileFilter(fnef);
-        int returnValue = jfc.showOpenDialog(this);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            aiFile = (jfc.getSelectedFile());
-            aiName = aiFile.getName().substring(0, aiFile.getName().length() - 5);
-            if (aiName.length() > 16) {
-                aiNameLabel.setText(aiName.substring(0, MAX_NAME_LENGTH - 1) + "...");
-            } else {
-                aiNameLabel.setText(aiName);
-            }
-            aiNameLabel.setForeground(Color.orange);
-        }
+        return selection;
     }
 
     /**
@@ -140,19 +125,20 @@ public class CarPanel extends JPanel {
     }
 
     /**
-     * Returns the name of the file of the chosen AI.
-     * @return the name of the file of the chosen AI.
+     * Returns the name of the chosen AI.
+     * @return the name of the chosen AI.
      */
     public String getAiName() {
-        return aiName;
+        String fileName =  (String)aiSelector.getSelectedItem();
+        return fileName.substring(0, fileName.length() - 5);
     }
 
     /**
      * Returns the file of the chosen AI.
      * @return the file of the chosen AI.
      */
-    public File getAiFile() {
-        return aiFile;
+    public String getAiFile() {
+        return (String)aiSelector.getSelectedItem();
     }
 
     /**
