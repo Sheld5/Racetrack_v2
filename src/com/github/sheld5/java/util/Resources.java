@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- * loads all image resources for the game and saves them as BufferedImage instances
+ * Loads all image resources for the game and saves them as BufferedImage instances.
  */
 public class Resources {
 
@@ -16,7 +16,7 @@ public class Resources {
     private static int numberOfErrors = 0;
 
     /**
-     * calls loadImage() method for each image
+     * Calls loadImage() method for each image.
      */
     public static void load() {
         windowIcon = loadImage("carIcon.png");
@@ -55,7 +55,7 @@ public class Resources {
     }
 
     /**
-     * creates BufferedImage from ResourceStream from image file
+     * Creates BufferedImage from ResourceStream from image file.
      * @param fileName
      * @return
      */

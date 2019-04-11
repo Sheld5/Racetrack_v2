@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * manages the menu
+ * Manages the menu.
  */
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
@@ -30,6 +30,9 @@ class Menu extends JPanel {
     private int carCount;
     private JButton addCar;
 
+    /**
+     * Menu constructor.
+     */
     Menu() {
         setBackground(Color.BLACK);
         setLayout(new GridBagLayout());
@@ -42,7 +45,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * initializes components of the main menu
+     * Initializes components of the main menu.
      */
     @SuppressWarnings("Duplicates")
     private void initMenuSelection() {
@@ -72,7 +75,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * initializes components of the game settings menu
+     * Initializes components of the game settings menu.
      */
     @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
@@ -161,7 +164,7 @@ class Menu extends JPanel {
 
 
     /**
-     * hides the main menu and show the game settings menu
+     * Hides the main menu and show the game settings menu.
      */
     private void goToGameModeSelection() {
         setVisibleGameModeSelection(true);
@@ -169,7 +172,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * hides the game settings menu and shows the main menu
+     * Hides the game settings menu and shows the main menu.
      */
     private void goToMainMenu() {
         setVisibleMainMenu(true);
@@ -177,7 +180,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * sets the visibility of the main menu
+     * Sets the visibility of the main menu.
      * @param b
      */
     private void setVisibleMainMenu(boolean b) {
@@ -187,7 +190,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * sets the visibility of the game settings menu
+     * Sets the visibility of the game settings menu.
      * @param b
      */
     private void setVisibleGameModeSelection(boolean b) {
@@ -198,7 +201,8 @@ class Menu extends JPanel {
     }
 
     /**
-     * initializes FileChooser and sets the text of the map selection TextField to the name of the file chosen by the user
+     * Initializes FileChooser
+     * and sets the text of the map selection TextField to the name of the file chosen by the user.
      */
     private void mapFileManager() {
         File targetDirectory = new File("./out/production/Racetrack_v2/maps");
@@ -215,7 +219,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * adds a new instance of CarPanel to the main car panel
+     * Adds a new instance of CarPanel to the main car panel.
      */
     private void addCar() {
         carPanels.add(new CarPanel(carCount, this));
@@ -227,7 +231,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * removes the CarPanel with the correct id from the main car panel
+     * Removes the CarPanel with the correct id from the main car panel.
      * @param id
      */
     void removeCar(int id) {
@@ -240,7 +244,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * returns the CarPanel with the correct id
+     * Returns the CarPanel with the correct id.
      * @param id
      * @return
      */
@@ -254,7 +258,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * returns the name of the map file previously chosen by the user
+     * Returns the name of the map file previously chosen by the user.
      * @return
      */
     String getMapName() {
@@ -262,7 +266,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * returns and array containing all CarPanel instances
+     * Returns and array containing all CarPanel instances.
      * @return
      */
     ArrayList<CarPanel> getCarPanels() {

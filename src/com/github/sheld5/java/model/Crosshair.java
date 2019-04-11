@@ -10,7 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 /**
- * represents one tile of the crosshair
+ * Represents one tile of the crosshair.
  */
 public class Crosshair extends JPanel implements MouseListener {
 
@@ -33,7 +33,8 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * determines which texture this tile of crosshair should use depending on wheter it should be highlighted as next AI move and paints it
+     * Determines which texture this tile of crosshair should use
+     * depending on wheter it should be highlighted as next AI move and paints it.
      * @param g
      */
     @Override
@@ -58,7 +59,7 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * returns the index of this crosshair tile
+     * Returns the index of this crosshair tile.
      * @return
      */
     public int[] getIndex() {
@@ -66,7 +67,7 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * sets the coordinates of this crosshair tile
+     * Sets the coordinates of this crosshair tile.
      * @param x
      * @param y
      */
@@ -76,7 +77,7 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * returns the X coordinate of this crosshair tile
+     * Returns the X coordinate of this crosshair tile.
      * @return
      */
     public int getTileX() {
@@ -84,7 +85,7 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * returns the Y coordinate of this crosshair tile
+     * Returns the Y coordinate of this crosshair tile.
      * @return
      */
     public int getTileY() {
@@ -92,7 +93,8 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * calls the game.onCHClick() method when this crosshair tile is clicked by the user and passes the index of this crosshair tile to it
+     * Calls the game.onCHClick() method when this crosshair tile is clicked by the user
+     * and passes the index of this crosshair tile to it.
      * @param e
      */
     @Override
@@ -111,7 +113,8 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * changes the value of the mouseOver to true when the mouse enters this crosshair tile and updates its texture accordingly
+     * Changes the value of the mouseOver to true when the mouse enters this crosshair tile
+     * and calls game.repaint() to update its texure.
      * @param e
      */
     @Override
@@ -121,7 +124,8 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * changes the value of the mouseOver to false when the mouse leaves this crosshair tile and updates its texture accordingly
+     * Changes the value of the mouseOver to false when the mouse leaves this crosshair tile
+     * and calls game.repaint() to update its texture.
      * @param e
      */
     @Override
@@ -131,7 +135,7 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * sets wheter this crosshair tile is the next move of the AI on turn
+     * Sets wheter this crosshair tile is the next move of the AI on turn.
      * @param b
      */
     public void setIsNextAiMove(boolean b) {

@@ -1,7 +1,7 @@
 package model;
 
 /**
- * represents a checkpoint in the game
+ * Represents a checkpoint in the game.
  */
 public class Checkpoint {
 
@@ -18,7 +18,7 @@ public class Checkpoint {
     }
 
     /**
-     * adds another CHECKPOINT tile to this checkpoint
+     * Adds another CHECKPOINT tile to this checkpoint.
      * @param x
      * @param y
      */
@@ -37,7 +37,7 @@ public class Checkpoint {
     }
 
     /**
-     * returns number of tiles this checkpoint contains
+     * Returns number of tiles this checkpoint contains.
      * @return
      */
     public int getNoOfTiles() {
@@ -45,7 +45,7 @@ public class Checkpoint {
     }
 
     /**
-     * returns the X coordinate of the given tile
+     * Returns the X coordinate of the given tile.
      * @param tileIndex
      * @return
      */
@@ -54,7 +54,7 @@ public class Checkpoint {
     }
 
     /**
-     * returns the Y coordinate of the given tile
+     * Returns the Y coordinate of the given tile.
      * @param tileIndex
      * @return
      */
@@ -63,7 +63,7 @@ public class Checkpoint {
     }
 
     /**
-     * return true if the tile with given coordinates belongs to this checkpoint
+     * Return true if the tile with given coordinates belongs to this checkpoint.
      * @param x
      * @param y
      * @return
@@ -78,7 +78,7 @@ public class Checkpoint {
     }
 
     /**
-     * saves that the given car has passed this checkpoint
+     * Saves that the given car has passed this checkpoint.
      * @param car
      */
     public void carPassed(int car) {
@@ -86,7 +86,7 @@ public class Checkpoint {
     }
 
     /**
-     * returns true if the given car has passed this checkpoint
+     * Returns true if the given car has passed this checkpoint.
      * @param car
      * @return
      */

@@ -7,13 +7,13 @@ import org.joor.Reflect;
 import java.io.*;
 
 /**
- * compiles external AI code
+ * Compiles external AI code.
  */
 public class AICompiler {
 
     /**
-     * compiles the AI of the given CarPanel if it has not been compiled yet and returns an instance of it
-     * uses the jOOR library
+     * Compiles the AI of the given CarPanel if it has not been compiled yet and returns an instance of it.
+     * Uses the jOOR library.
      * @param carPanel
      * @return
      * @throws IOException

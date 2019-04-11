@@ -1,7 +1,7 @@
 package model;
 
 /**
- * interface for writing your own AI for this game
+ * Interface for writing your own AI for this game.
  */
 public interface DriverAI {
 

@@ -13,12 +13,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 /**
- * reads the map files
+ * Reads the map files.
  */
 public class MapReader {
 
     /**
-     * creates Document from the given file
+     * Creates Document from the given file.
      * @param fileName
      * @return
      * @throws IOException
@@ -43,7 +43,7 @@ public class MapReader {
     private int[][] data;
 
     /**
-     * returns a 2d array of ints extracted from the map file
+     * Returns a 2d array of ints extracted from the map file.
      * @param mapFile
      * @return
      * @throws IOException
@@ -64,7 +64,7 @@ public class MapReader {
     }
 
     /**
-     * returns HashMap&lt;Integer, Tile&gt; extracted from the tile-set file
+     * Returns HashMap&lt;Integer, Tile&gt; extracted from the tile-set file.
      * @param fileName
      * @return
      * @throws IOException
@@ -102,7 +102,7 @@ public class MapReader {
     }
 
     /**
-     * returns the height of the map  which has been read the last
+     * Returns the height of the map  which has been read the last.
      * @return
      */
     public int getMapHeight() {
@@ -110,7 +110,7 @@ public class MapReader {
     }
 
     /**
-     * returns the width of the map  which has been read the last
+     * Returns the width of the map  which has been read the last.
      * @return
      */
     public int getMapWidth() {

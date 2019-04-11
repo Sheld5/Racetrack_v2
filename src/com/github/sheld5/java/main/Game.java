@@ -18,7 +18,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 /**
- * manages the game
+ * Manages the game.
  */
 public class Game extends JPanel implements KeyListener {
 
@@ -44,7 +44,7 @@ public class Game extends JPanel implements KeyListener {
     private boolean aiWaiting;
 
     /**
-     * initializes the game with information gathered from menu using its get-methods
+     * Initializes the game with information gathered from menu using its get-methods.
      * @param menu
      * @throws IOException
      * @throws StartNotFoundException
@@ -79,7 +79,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * adds all components in correct order
+     * Adds all components in correct order.
      */
     private void addComponents() {
         add(scoreScrollPane);
@@ -90,7 +90,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * adds the crosshair (used to get input from human players)
+     * Adds the crosshair (used to get input from human players).
      */
     private void addCrosshair() {
         for (Crosshair[] cLine : ch) {
@@ -101,7 +101,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * adds all cars
+     * Adds all cars.
      */
     private void addCars() {
         for (Car car : cars) {
@@ -110,7 +110,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * adds the turn count and the back button
+     * Adds the turn count and the back button.
      */
     private void addGUI() {
         add(turnLabel);
@@ -118,7 +118,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes the JPanel attributes of Game
+     * Initializes the JPanel attributes of Game.
      */
     private void init() {
         setBackground(Color.BLACK);
@@ -130,7 +130,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes the post-game score panel
+     * Initializes the post-game score panel.
      */
     @SuppressWarnings("Duplicates")
     private void initScorePanel() {
@@ -147,7 +147,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes the turn count and the back button
+     * Initializes the turn count and the back button.
      */
     private void initGUI() {
         Font fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
@@ -169,7 +169,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes the map
+     * Initializes the map.
      * @param mapName
      * @throws ParserConfigurationException
      * @throws SAXException
@@ -187,7 +187,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes all cars and uses AICompiler to compile and get instances of all AI players
+     * Initializes all cars and uses AICompiler to compile and get instances of all AI players.
      * @param carPanels
      * @throws IOException
      */
@@ -208,7 +208,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes crosshair
+     * Initializes crosshair.
      */
     private void initCrosshair() {
         ch = new Crosshair[3][3];
@@ -223,7 +223,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * initializes checkpoints; treats more CHECKPOINT tiles next to each other as one checkpoint
+     * Initializes checkpoints; treats more CHECKPOINT tiles next to each other as one checkpoint.
      * @param numberOfCars
      */
     private void initCheckpoints(int numberOfCars) {
@@ -269,7 +269,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * relocates all cars to the start
+     * Relocates all cars to the start.
      */
     private void moveCarsToStart() {
         for (Car car : cars) {
@@ -280,7 +280,7 @@ public class Game extends JPanel implements KeyListener {
 
 
     /**
-     * calls the init() method of each AI in the game and then calls the nextTurn() method to start the first turn
+     * Calls the init() method of each AI in the game and then calls the nextTurn() method to start the first turn.
      */
     private void initRace() {
         for (Car car : cars) {
@@ -292,11 +292,11 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * is called when new turn is to begin (turn is treated as one move of one car)
-     * increases the turn count by one every time the game cycles through all cars
-     * determines whether a human or an AI is on turn and obtains their next move accordingly
-     * calls itself recursively to maintain the turn cycle
-     * calls the endRace() method to end the race when all cars are finished or sunk or the turn-max is reached
+     * Is called when new turn is to begin (turn is treated as one move of one car).
+     * Increases the turn count by one every time the game cycles through all cars.
+     * Determines whether a human or an AI is on turn and obtains their next move accordingly.
+     * Calls itself recursively to maintain the turn cycle.
+     * Calls the endRace() method to end the race when all cars are finished or sunk or the turn-max is reached.
      */
     private void nextTurn() {
         if (activeCarIndex == 0) {
@@ -330,7 +330,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * is called when crosshair is clicked; passes the move made by the player to the drive() method
+     * Is called when crosshair is clicked; passes the move made by the player to the drive() method.
      * @param index
      */
     public void onCHClick(int[] index) {
@@ -342,7 +342,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * changes the velocities of the car according to the move made by the player and calls the goThroughPath() method
+     * Changes the velocities of the car according to the move made by the player and calls the goThroughPath() method.
      * @param car
      * @param a
      */
@@ -352,10 +352,11 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * finds the straightest and shortest path from the current location of the car to the target location (target location = current location + car velocity vector)
-     * cars can move to any adjacent tile including diagonal ones
-     * goes through all tiles in the path of the car and calls the checkTile() method for each
-     * stops going through tiles if the car crashed
+     * Finds the straightest and shortest path from the current location of the car to the target location
+     * (target location = current location + car velocity vector).
+     * Cars can move to any adjacent tile including diagonal ones.
+     * Goes through all tiles in the path of the car and calls the checkTile() method for each.
+     * Stops going through tiles if the car crashed.
      * @param car
      */
     @SuppressWarnings("Duplicates")
@@ -440,8 +441,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * checks whether the tile is rideable and moves the car there or calls the onCarCrash() method accordingly
-     * call the checkForSpecialTiles() method
+     * Checks whether the tile is rideable and moves the car there or calls the onCarCrash() method accordingly.
+     * Call the checkForSpecialTiles() method.
      * @param car
      * @param x
      * @param y
@@ -456,9 +457,9 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * sets the velocity vector of the car to (0;0)
-     * calls the car.crashed() method
-     * sets stop to true to stop the goThroughPath() method from going through further
+     * Sets the velocity vector of the car to (0;0).
+     * Calls the car.crashed() method.
+     * Sets stop to true to stop the goThroughPath() method from going through further.
      * @param car
      */
     private void onCarCrash(Car car) {
@@ -468,7 +469,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * calls all methods which check for special tiles
+     * Calls all methods which check for special tiles.
      * @param car
      * @param x
      * @param y
@@ -481,7 +482,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * checks whether the tile is checkpoint and saves that the car has passed this checkpoint if so
+     * Checks whether the tile is checkpoint and saves that the car has passed this checkpoint if so.
      * @param x
      * @param y
      */
@@ -500,8 +501,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * checks whether the tile is finish and if the car has passed all checkpoints
-     * if so, calls the car.finished() method and creates new instance of CarPanel for the finished car
+     * Checks whether the tile is finish and if the car has passed all checkpoints.
+     * If so, calls the car.finished() method and creates new instance of CarPanel for the finished car.
      * @param car
      * @param x
      * @param y
@@ -521,7 +522,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * checks whether the tile is sand and sets the car velocity vector to (0;0) if so
+     * Checks whether the tile is sand and sets the car velocity vector to (0;0) if so.
      * @param car
      * @param x
      * @param y
@@ -534,8 +535,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * checks whether the tile is water and sets the car as "sunk" if so
-     * (sunk car cannot continue the race and is DQed)
+     * Checks whether the tile is water and sets the car as "sunk" if so.
+     * (Sunk car cannot continue the race and is DQed.)
      * @param car
      * @param x
      * @param y
@@ -550,7 +551,7 @@ public class Game extends JPanel implements KeyListener {
 
 
     /**
-     * moves the given car to the given coordinates
+     * Moves the given car to the given coordinates.
      * @param car
      * @param x
      * @param y
@@ -561,7 +562,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * moves the crosshair to the given coordinates
+     * Moves the crosshair to the given coordinates.
      * @param x
      * @param y
      */
@@ -575,7 +576,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * shows the crosshair
+     * Shows the crosshair.
      */
     private void showCH() {
         moveCH(activeCar.getTileX() + activeCar.getVelX(), activeCar.getTileY() + activeCar.getVelY());
@@ -587,7 +588,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * hides the crosshair
+     * Hides the crosshair.
      */
     private void hideCH() {
         for (Crosshair[] cLine : ch) {
@@ -599,7 +600,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * shows or hides the red next AI move highlight on the crosshair
+     * Shows or hides the red next AI move highlight on the crosshair.
      * @param b
      */
     private void showNextAiMove(boolean b) {
@@ -620,7 +621,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * returns true if all cars are finished or sunk
+     * Returns true if all cars are finished or sunk.
      * @return
      */
     private boolean allCarsIdle() {
@@ -633,7 +634,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * calls the rotateCar() method until the activeCar is a car which has not finished or sunk yet
+     * Calls the rotateCar() method until the activeCar is a car which has not finished or sunk yet.
      */
     private void nextCar() {
         rotateCar();
@@ -644,7 +645,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * rotates activeCarIndex and activeCar to the next car
+     * Rotates activeCarIndex and activeCar to the next car.
      */
     private void rotateCar() {
         if (activeCarIndex < cars.length - 1) {
@@ -656,7 +657,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * moves the activeCar to the foreground
+     * Moves the activeCar to the foreground.
      */
     private void moveActiveCarToForeground() {
         add(scoreScrollPane);
@@ -674,9 +675,9 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * is called when the race is finished
-     * adds score panels for all cars which have not been able to finish the race
-     * shows the post-game score board
+     * Is called when the race is finished.
+     * Adds score panels for all cars which have not been able to finish the race.
+     * Shows the post-game score board.
      */
     private void endRace() {
         for (Car car : cars) {
@@ -689,7 +690,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * returns true if human player is on turn
+     * Returns true if human player is on turn.
      * @return
      */
     public boolean humanOnTurn() {
@@ -697,7 +698,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * updates turnLabel to the correct value
+     * Updates turnLabel to the correct value.
      */
     private void updateTurnCount() {
         turnLabel.setText("Turn: " + turn);
@@ -709,8 +710,8 @@ public class Game extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     /**
-     * is called when a key on the keyboard is pressed
-     * acts accordingly to the key pressed
+     * Is called when a key on the keyboard is pressed.
+     * Acts accordingly to the key pressed.
      * @param e
      */
     @Override
@@ -742,7 +743,7 @@ public class Game extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {}
 
     /**
-     * repaint components with correct sizes and positions
+     * Repaint components with correct sizes and positions.
      */
     private void updateView() {
         for (Car car : cars) {
@@ -754,7 +755,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     *  move the turn count and back button to the correct position
+     *  Move the turn count and back button to the correct position.
      */
     private void moveGUI() {
         int guiX = MAP_INDENT + map.getWidthInTiles() * tileSize + MAP_INDENT;
@@ -763,7 +764,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * returns the size of one tile of the map in pixels
+     * Returns the size of one tile of the map in pixels.
      * @return
      */
     public int getTileSize() {
@@ -771,7 +772,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * shows the post-game score board
+     * Shows the post-game score board.
      */
     private void showScore() {
         scoreScrollPane.setVisible(true);

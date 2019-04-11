@@ -9,7 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 /**
- * initializes the application, switches between menu and game
+ * Initializes the application, switches between menu and game.
  */
 public class Main {
 
@@ -21,6 +21,10 @@ public class Main {
     private static Menu menu;
     private static Game game;
 
+    /**
+     * The main method of the application.
+     * @param args
+     */
     public static void main(String[] args) {
         Resources.load();
         initFrame();
@@ -28,7 +32,7 @@ public class Main {
     }
 
     /**
-     * initializes JFrame for the application
+     * Initializes JFrame for the application.
      */
     private static void initFrame() {
         frame = new JFrame(GAME_TITLE);
@@ -40,7 +44,7 @@ public class Main {
     }
 
     /**
-     * initializes menu
+     * Initializes menu.
      */
     private static void initMenu() {
         menu = new Menu();
@@ -50,7 +54,7 @@ public class Main {
     }
 
     /**
-     * initializes game and hides menu
+     * Initializes game and hides menu.
      */
     static void startGame() {
         try {
@@ -66,7 +70,7 @@ public class Main {
     }
 
     /**
-     * hides game and shows menu
+     * Hides game and shows menu.
      */
     static void goToMenu() {
         frame.remove(menu);

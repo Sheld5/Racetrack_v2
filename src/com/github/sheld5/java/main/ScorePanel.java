@@ -4,12 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * contains post-game info about one car and how has it placed in the race
+ * Contains post-game info about one car and how has it placed in the race.
  */
 public class ScorePanel extends JPanel {
 
     private JLabel place, playerName, aiName, turnCount;
 
+    /**
+     * ScorePanel constructor.
+     * @param place
+     * @param playerName
+     * @param aiName
+     * @param turnCount
+     */
     ScorePanel(int place, String playerName, String aiName, int turnCount) {
         setMinimumSize(new Dimension(480, 50));
         setPreferredSize(new Dimension(480, 50));

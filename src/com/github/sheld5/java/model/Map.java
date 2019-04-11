@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 /**
- * represents the map in the game
+ * Represents the map in the game.
  */
 public class Map extends JPanel {
 
@@ -18,6 +18,15 @@ public class Map extends JPanel {
     private int[] start;
     private Tile[][] mapTile;
 
+    /**
+     * Map constructor.
+     * @param mapInt
+     * @param widthInTiles
+     * @param heightInTiles
+     * @param tileSet
+     * @param game
+     * @throws StartNotFoundException
+     */
     public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) throws StartNotFoundException {
         this.game = game;
         width = widthInTiles;
@@ -28,7 +37,7 @@ public class Map extends JPanel {
     }
 
     /**
-     * initializes the 2d array of Tiles representing the map and finds the start
+     * Initializes the 2d array of Tiles representing the map and finds the start.
      * @param mapInt
      * @param tileSet
      * @throws StartNotFoundException
@@ -64,7 +73,7 @@ public class Map extends JPanel {
     }
 
     /**
-     * paints each tile of the map with the corresponding texture
+     * Paints each tile of the map with the corresponding texture.
      * @param g
      */
     @Override
@@ -108,7 +117,7 @@ public class Map extends JPanel {
     }
 
     /**
-     * returns the type of the tile with given coordinates
+     * Returns the type of the tile with given coordinates.
      * @param x
      * @param y
      * @return
@@ -123,20 +132,20 @@ public class Map extends JPanel {
     }
 
     /**
-     * returns the type of the tile with given coordinates
+     * Returns the type of the tile with given coordinates.
      * @param coordinates
      * @return
      */
     public Tile getTile(int[] coordinates) {
         if (coordinates.length != 2) {
-            throw new IllegalArgumentException("method getTile only accepts two ints or an int array with the length of 2 as argument");
+            throw new IllegalArgumentException("Method getTile only accepts two ints or an int array with the length of 2 as argument.");
         } else {
             return mapTile[coordinates[1]][coordinates[0]];
         }
     }
 
     /**
-     * returns true if the tile with given coordinates is rideable (anything but WALL) and is not outside the map
+     * Returns true if the tile with given coordinates is rideable (anything but WALL) and is not outside the map.
      * @param x
      * @param y
      * @return
@@ -154,7 +163,7 @@ public class Map extends JPanel {
     }
 
     /**
-     * returns a deep copy of the 2d Tile array representing the map
+     * Returns a deep copy of the 2d Tile array representing the map.
      * @return
      */
     public Tile[][] getMapCopy() {
@@ -168,7 +177,7 @@ public class Map extends JPanel {
     }
 
     /**
-     * returns the coordinates of the start
+     * Returns the coordinates of the start.
      * @return
      */
     public int[] getStart() {

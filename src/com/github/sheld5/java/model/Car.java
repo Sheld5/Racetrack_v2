@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * represents a car in the game
+ * Represents a car in the game.
  */
 public class Car extends JPanel {
     private static int TURNS_SKIPPED_ON_CRASH = 3;
@@ -39,7 +39,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * determines which texture should the car use and paints the car
+     * Determines which texture should the car use and paints the car.
      * @param g
      */
     @Override
@@ -83,7 +83,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the coordinates of the car to the given values
+     * Sets the coordinates of the car to the given values.
      * @param x
      * @param y
      */
@@ -93,26 +93,26 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the coordinates of the car to the given values
+     * Sets the coordinates of the car to the given values.
      * @param coordinates
      */
     public void setCoordinates(int[] coordinates) {
         if (coordinates.length != 2) {
-            throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
+            throw new IllegalArgumentException("Coordinates have to be an int array containing two Integers.");
         } else {
             this.coordinates = coordinates;
         }
     }
 
     /**
-     * changes the velocity vector of the car accordignly by adding the given acceleration vector to it
+     * Changes the velocity vector of the car accordignly by adding the given acceleration vector to it.
      * @param a
      */
     public void accelerate(int[] a) {
         if (a.length != 2) {
-            throw new IllegalArgumentException("coordinates have to be an int array containing two Integers");
+            throw new IllegalArgumentException("Coordinates have to be an int array containing two Integers.");
         } else if (a[0] < -1 || a[0] > 1 || a[1] < -1 || a[1] > 1) {
-            throw new IllegalArgumentException("method accelerate only accepts values of {-1;0;1}");
+            throw new IllegalArgumentException("Method accelerate only accepts values of {-1;0;1}.");
         } else {
             velocity[0] += a[0];
             velocity[1] += a[1];
@@ -120,12 +120,12 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the velocity vector of the car to the given values
+     * Sets the velocity vector of the car to the given values.
      * @param velocity
      */
     public void setVelocity(int[] velocity) {
         if (velocity.length != 2) {
-            throw new IllegalArgumentException("method setVelocity only accepts an int array with the length of 2 as its argument");
+            throw new IllegalArgumentException("Method setVelocity only accepts an int array with the length of 2 as its argument.");
         } else {
             this.velocity[0] = velocity[0];
             this.velocity[1] = velocity[1];
@@ -133,7 +133,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns a deep copy of the coordinates of the car
+     * Returns a deep copy of the coordinates of the car.
      * @return
      */
     public int[] getCoordinates() {
@@ -144,7 +144,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the X coordinate of the car
+     * Returns the X coordinate of the car.
      * @return
      */
     public int getTileX() {
@@ -152,7 +152,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the Y coordinate of the car
+     * Returns the Y coordinate of the car.
      * @return
      */
     public int getTileY() {
@@ -160,7 +160,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns a deep copy of the velocity vector of the car
+     * Returns a deep copy of the velocity vector of the car.
      * @return
      */
     public int[] getVelocity() {
@@ -171,7 +171,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the X coordinate of the velocity vector of the car
+     * Returns the X coordinate of the velocity vector of the car.
      * @return
      */
     public int getVelX() {
@@ -179,7 +179,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the Y coordinate of the velocity vector of the car
+     * Returns the Y coordinate of the velocity vector of the car.
      * @return
      */
     public int getVelY() {
@@ -187,7 +187,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the car to "crashed" and start the crash-countdown
+     * Sets the car to "crashed" and start the crash-countdown.
      */
     public void crashed() {
         crashed = true;
@@ -196,7 +196,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the car to "sunk"
+     * Sets the car to "sunk".
      */
     public void sunk() {
         sunk = true;
@@ -204,14 +204,14 @@ public class Car extends JPanel {
     }
 
     /**
-     * sets the car to "finished"
+     * Sets the car to "finished".
      */
     public void finished() {
         finished = true;
     }
 
     /**
-     * returns true if the car is crashed
+     * Returns true if the car is crashed.
      * @return
      */
     public boolean isCrashed() {
@@ -219,7 +219,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns true if the car is sunk
+     * Returns true if the car is sunk.
      * @return
      */
     public boolean isSunk() {
@@ -227,7 +227,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns true if the car is finished
+     * Returns true if the car is finished.
      * @return
      */
     public boolean isFinished() {
@@ -235,7 +235,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * decreases crashCountdown by one and sets the car to "not crashed" if the countdown is finished
+     * Decreases crashCountdown by one and sets the car to "not crashed" if the countdown is finished.
      */
     public void countdown() {
         crashCountdown--;
@@ -246,7 +246,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the AI assigned to this car
+     * Returns the AI assigned to this car.
      * @return
      */
     public DriverAI getDriver() {
@@ -254,7 +254,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the name of the player this car was assigned to
+     * Returns the name of the player this car was assigned to.
      * @return
      */
     public String getPlayerName() {
@@ -262,7 +262,7 @@ public class Car extends JPanel {
     }
 
     /**
-     * returns the name of the AI assigned to this car
+     * Returns the name of the AI assigned to this car.
      * @return
      */
     public String getAiName() {
