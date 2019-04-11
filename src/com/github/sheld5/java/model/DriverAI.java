@@ -2,6 +2,7 @@ package model;
 
 /**
  * Interface for writing your own AI for this game.
+ * Custom implementations of DriverAI have to be added to the /resources/ai directory.
  */
 public interface DriverAI {
 

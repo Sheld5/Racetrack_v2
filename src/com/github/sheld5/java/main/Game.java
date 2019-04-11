@@ -360,8 +360,13 @@ public class Game extends JPanel implements KeyListener {
             } else {
                 showCH();
                 if (!humanOnTurn()) {
-                    nextAiMove = activeCar.getDriver().drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
-                    if (!nextAiMoveValid()) {
+                    try {
+                        nextAiMove = activeCar.getDriver().drive(activeCar.getCoordinates(), activeCar.getVelocity(), map.getMapCopy());
+                        if (!nextAiMoveValid()) {
+                            nextAiMove = new int[]{0,0};
+                        }
+                    } catch (Exception e) {
+                        System.out.println("An error occurred when the drive() method of the " + activeCar.getAiName() + " was called.");
                         nextAiMove = new int[]{0,0};
                     }
                     showNextAiMove(true);
