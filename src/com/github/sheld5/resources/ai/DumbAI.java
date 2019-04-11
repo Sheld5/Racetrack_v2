@@ -13,9 +13,17 @@ public class DumbAI implements DriverAI {
 
     public void init(Tile[][] map) {
         this.map = map;
-        finishProximity = new int[map.length][map[0].length];
+        initFinishProximity();
         findFinishes();
-        System.out.println(finishProximity[5][5]);
+    }
+
+    private void initFinishProximity() {
+        finishProximity = new int[map.length][map[0].length];
+        for (int x = 0; x < finishProximity.length; x++) {
+            for (int y = 0; y < finishProximity[0].length; y++) {
+                finishProximity[x][y] = -1;
+            }
+        }
     }
 
     private void findFinishes() {
