@@ -37,8 +37,8 @@ public class Map extends JPanel {
         this.game = game;
         MapReader mr = new MapReader();
         mapTile = mr.getMapData(mapFileName, tileSetFileName);
-        width = mapTile.length;
-        height = mapTile[0].length;
+        width = mapTile[0].length;
+        height = mapTile.length;
         setSize(width * game.getTileSize(), height * game.getTileSize());
         setBackground(Color.BLACK);
         findStart();

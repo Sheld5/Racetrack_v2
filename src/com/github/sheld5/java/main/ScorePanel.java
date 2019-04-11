@@ -58,9 +58,21 @@ public class ScorePanel extends JPanel {
         this.turnCount = new JLabel(Integer.toString(turnCount));
         this.turnCount.setForeground(Color.white);
         this.turnCount.setHorizontalAlignment(SwingConstants.CENTER);
-        this.turnCount.setMinimumSize(new Dimension(40, 50));
-        this.turnCount.setMaximumSize(new Dimension(40, 50));
+        this.turnCount.setMinimumSize(new Dimension(80, 50));
+        this.turnCount.setMaximumSize(new Dimension(80, 50));
         add(this.turnCount);
+    }
+
+    public void makeIntoHeading() {
+        setBackground(Color.black);
+        place.setText("PLACE");
+        playerName.setText("PLAYER NAME");
+        aiName.setText("AI NAME");
+        turnCount.setText("TURNS");
+        place.setForeground(Color.orange);
+        playerName.setForeground(Color.orange);
+        aiName.setForeground(Color.orange);
+        turnCount.setForeground(Color.orange);
     }
 
 }

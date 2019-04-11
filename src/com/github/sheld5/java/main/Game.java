@@ -118,6 +118,9 @@ public class Game extends JPanel implements KeyListener {
         scoreScrollPane.setVisible(false);
         scoreScrollPane.setBackground(Color.black);
         scoreScrollPane.setBounds(scoreMainPanel.getBounds());
+        ScorePanel heading = new ScorePanel(0, "", "", 0);
+        heading.makeIntoHeading();
+        scoreMainPanel.add(heading);
     }
 
     /**
@@ -128,7 +131,7 @@ public class Game extends JPanel implements KeyListener {
         Font fontSmall = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         int guiX = map.getX() + map.getWidth() + MAP_INDENT;
 
-        turnLabel = new JLabel("Turn: " + turn);
+        turnLabel = new JLabel(Integer.toString(turn));
         turnLabel.setVisible(true);
         turnLabel.setBounds(guiX, MAP_INDENT,120, 50);
         turnLabel.setFont(fontBig);
@@ -824,7 +827,7 @@ public class Game extends JPanel implements KeyListener {
      * Updates the text of JPanel turnLabel to show the correct value.
      */
     private void updateTurnCount() {
-        turnLabel.setText("Turn: " + turn);
+        turnLabel.setText(Integer.toString(turn));
     }
 
 

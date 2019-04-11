@@ -1,11 +1,8 @@
 package main;
 
-import util.Resources;
-
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -21,9 +18,7 @@ class Menu extends JPanel {
     private JButton startButton, backButton;
     private JPanel mapPanel;
     private JLabel mapLabel;
-    private JPanel mapFilePanel;
-    private JTextField map;
-    private JButton mapButton;
+    private JComboBox mapSelector;
     private JScrollPane carScrollPane;
     private JPanel carMainPanel;
     private ArrayList<CarPanel> carPanels;
@@ -81,7 +76,6 @@ class Menu extends JPanel {
      */
     @SuppressWarnings("Duplicates")
     private void initGameModeSelection() {
-        Dimension buttonSize = new Dimension(42,21);
         GridBagConstraints c = new GridBagConstraints();
         c.ipadx = DEFAULT_IPAD;
         c.ipady = DEFAULT_IPAD;
@@ -108,19 +102,9 @@ class Menu extends JPanel {
         mapLabel.setFont(fontSmall);
         mapPanel.add(mapLabel);
 
-        mapFilePanel = new JPanel();
-        mapFilePanel.setLayout(new FlowLayout());
-        mapFilePanel.setBackground(Color.black);
-        mapPanel.add(mapFilePanel);
-
-        map = new JTextField("Map01.tmx");
-        map.setPreferredSize(new Dimension(128, 21));
-        mapFilePanel.add(map);
-
-        mapButton = new JButton(new ImageIcon(Resources.fileManagerIcon.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        mapButton.addActionListener(e -> mapFileManager());
-        mapButton.setPreferredSize(buttonSize);
-        mapFilePanel.add(mapButton);
+        mapSelector = new JComboBox(getMapList());
+        mapSelector.setPreferredSize(new Dimension(150, 25));
+        mapPanel.add(mapSelector);
 
         c.gridy = 3;
 
@@ -164,6 +148,32 @@ class Menu extends JPanel {
         addCar();
     }
 
+    /**
+     * Returns the list of maps from the /META-INF/maps.txt file as String[] array.
+     * @return the list of maps as String[] array.
+     */
+    private String[] getMapList() {
+        try {
+            ArrayList<String> array = new ArrayList<>();
+            InputStream in = getClass().getResourceAsStream("/META-INF/maps.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = reader.readLine();
+            while (line != null) {
+                array.add(line);
+                line = reader.readLine();
+            }
+            String[] list = new String[array.size()];
+            for (int i = 0; i < list.length; i++) {
+                list[i] = array.get(i);
+            }
+            return list;
+        } catch (IOException e) {
+            System.out.println("Error while reading the maps.txt file");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     /**
      * Hides the main menu and shows the game settings menu.
@@ -202,24 +212,6 @@ class Menu extends JPanel {
         mapPanel.setVisible(b);
         startBackPanel.setVisible(b);
         carScrollPane.setVisible(b);
-    }
-
-    /**
-     * Initializes FileChooser
-     * and sets the text of the map selection TextField to the name of the file chosen by the user.
-     */
-    private void mapFileManager() {
-        File targetDirectory = new File("./out/production/Racetrack_v2/maps");
-        if (!targetDirectory.exists()) {
-            targetDirectory = new File(".");
-        }
-        JFileChooser jfc = new JFileChooser(targetDirectory);
-        FileNameExtensionFilter fnef = new FileNameExtensionFilter(".tmx", "tmx");
-        jfc.setFileFilter(fnef);
-        int returnValue = jfc.showOpenDialog(this);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            map.setText(jfc.getSelectedFile().getName());
-        }
     }
 
     /**
@@ -266,7 +258,7 @@ class Menu extends JPanel {
      * @return the name of the map file chosen by the user.
      */
     String getMapName() {
-        return map.getText();
+        return (String)mapSelector.getSelectedItem();
     }
 
     /**
