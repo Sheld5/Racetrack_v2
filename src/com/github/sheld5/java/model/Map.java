@@ -1,15 +1,18 @@
 package model;
 
 import main.Game;
+import org.xml.sax.SAXException;
+import util.MapReader;
 import util.Resources;
 import util.StartNotFoundException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
-import java.util.HashMap;
+import java.io.IOException;
 
 /**
- * Represents the map in the game.
+ * Represents the tiled map in the game.
  */
 public class Map extends JPanel {
 
@@ -19,49 +22,45 @@ public class Map extends JPanel {
     private Tile[][] mapTile;
 
     /**
-     * Map constructor.
-     * @param mapInt
-     * @param widthInTiles
-     * @param heightInTiles
-     * @param tileSet
-     * @param game
+     * The Map class constructor. Uses the MapReader class to get the required data from the map file.
+     * @param mapFileName the name of the map file from which the data for initialization of this map are to be gathered.
+     * @param tileSetFileName the name of the tile-set file which is to be used to 'translate'
+     *                        the data in numbers from the map file to the enum Tile format.
+     * @param game the instance of Game to which this map is going to be added.
      * @throws StartNotFoundException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @see MapReader
      */
-    public Map(int[][] mapInt, int widthInTiles, int heightInTiles, HashMap<Integer, Tile> tileSet, Game game) throws StartNotFoundException {
+    public Map(String mapFileName, String tileSetFileName, Game game) throws StartNotFoundException, ParserConfigurationException, SAXException, IOException {
         this.game = game;
-        width = widthInTiles;
-        height = heightInTiles;
+        MapReader mr = new MapReader();
+        mapTile = mr.getMapData(mapFileName, tileSetFileName);
+        width = mapTile.length;
+        height = mapTile[0].length;
         setSize(width * game.getTileSize(), height * game.getTileSize());
         setBackground(Color.BLACK);
-        initMapTile(mapInt, tileSet);
+        findStart();
     }
 
     /**
-     * Initializes the 2d array of Tiles representing the map and finds the start.
-     * @param mapInt
-     * @param tileSet
+     * Finds the start on the map and saves its coordinates.
      * @throws StartNotFoundException
      */
-    private void initMapTile(int[][] mapInt, HashMap<Integer, Tile> tileSet) throws StartNotFoundException {
+    private void findStart() throws StartNotFoundException {
         start = new int[2];
         boolean startFound = false;
-        mapTile = new Tile[mapInt.length][mapInt[0].length];
-        for (int y = 0; y < mapInt.length; y++) {
-            for (int x = 0; x < mapInt[0].length; x++) {
-                for (Integer i : tileSet.keySet()) {
-                    if (i == mapInt[y][x]) {
-                        mapTile[y][x] = tileSet.get(i);
-                        if (tileSet.get(i) == Tile.START) {
-                            if (!startFound) {
-                                start[0] = x;
-                                start[1] = y;
-                                startFound = true;
-                            } else {
-                                System.out.println("More than one start found on the map");
-                                throw new StartNotFoundException();
-                            }
-                        }
-                        break;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (getTile(x, y) == Tile.START) {
+                    if (!startFound) {
+                        start[0] = x;
+                        start[1] = y;
+                        startFound = true;
+                    } else {
+                        System.out.println("More than one start found on the map");
+                        throw new StartNotFoundException();
                     }
                 }
             }
@@ -118,9 +117,9 @@ public class Map extends JPanel {
 
     /**
      * Returns the type of the tile with given coordinates.
-     * @param x
-     * @param y
-     * @return
+     * @param x the X coordinate of the tile which is to be examined for its type.
+     * @param y the Y coordinate of the tile which is to be examined for its type.
+     * @return the type of the tile given by the coordinates.
      */
     public Tile getTile(int x, int y) {
         try {
@@ -133,8 +132,8 @@ public class Map extends JPanel {
 
     /**
      * Returns the type of the tile with given coordinates.
-     * @param coordinates
-     * @return
+     * @param coordinates the coordinates of the tile which is to be examined for its type.
+     * @return the type of the tile given by the coordinates.
      */
     public Tile getTile(int[] coordinates) {
         if (coordinates.length != 2) {
@@ -146,25 +145,33 @@ public class Map extends JPanel {
 
     /**
      * Returns true if the tile with given coordinates is rideable (anything but WALL) and is not outside the map.
-     * @param x
-     * @param y
-     * @return
+     * @param x the X coordinate of the tile which is to be examined for its rideability.
+     * @param y the Y coordinate of the tile which is to be examined for its rideability.
+     * @return true if the tile with given coordinates id rideable.
      */
     public boolean isTileRideable(int x, int y) {
         return (getTile(x, y) != Tile.WALL) && (getTile(x, y) != null);
     }
 
+    /**
+     * Returns the width of the map in tiles.
+     * @return the width of the map in tiles.
+     */
     public int getWidthInTiles() {
         return width;
     }
 
+    /**
+     * Returns the height of the map in tiles.
+     * @return the height of the map in tiles.
+     */
     public int getHeightInTiles() {
         return height;
     }
 
     /**
      * Returns a deep copy of the 2d Tile array representing the map.
-     * @return
+     * @return a deep copy of the 2d Tile array representing the map.
      */
     public Tile[][] getMapCopy() {
         Tile[][] mapCopy = new Tile[mapTile.length][mapTile[0].length];
@@ -178,7 +185,7 @@ public class Map extends JPanel {
 
     /**
      * Returns the coordinates of the start.
-     * @return
+     * @return the coordinates of the start.
      */
     public int[] getStart() {
         return start;

@@ -17,6 +17,7 @@ public class Resources {
 
     /**
      * Calls loadImage() method for each image.
+     * @see Resources#loadImage(String)
      */
     public static void load() {
         windowIcon = loadImage("carIcon.png");
@@ -55,9 +56,9 @@ public class Resources {
     }
 
     /**
-     * Creates BufferedImage from ResourceStream from image file.
-     * @param fileName
-     * @return
+     * Creates BufferedImage from ResourceStream from the image file.
+     * @param fileName the name of the image file.
+     * @return the BufferedImage created from the image file.
      */
     private static BufferedImage loadImage(String fileName) {
         BufferedImage image = null;

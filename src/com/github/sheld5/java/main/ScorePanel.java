@@ -11,11 +11,11 @@ public class ScorePanel extends JPanel {
     private JLabel place, playerName, aiName, turnCount;
 
     /**
-     * ScorePanel constructor.
-     * @param place
-     * @param playerName
-     * @param aiName
-     * @param turnCount
+     * ScorePanel constructor. Initializes all components of the ScorePanel.
+     * @param place the place on which the car whose information this ScorePanel shows has finished.
+     * @param playerName the player name of the player driving the car whose information this ScorePanel shows.
+     * @param aiName the name of the AI which has been driving the car.
+     * @param turnCount the turn on which has the car finished.
      */
     ScorePanel(int place, String playerName, String aiName, int turnCount) {
         setMinimumSize(new Dimension(480, 50));

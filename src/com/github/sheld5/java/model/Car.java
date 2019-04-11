@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Represents a car in the game.
+ * Represents a car in the game. Manages all information about the car and its driver.
  */
 public class Car extends JPanel {
     private static int TURNS_SKIPPED_ON_CRASH = 3;
@@ -24,6 +24,15 @@ public class Car extends JPanel {
     private boolean crashed, sunk, finished;
     private int crashCountdown;
 
+    /**
+     * The Car class constructor.
+     * @param playerName the name of the player whose this car is.
+     * @param aiName the name of the AI driving this car. (NULL if human is driving the car.)
+     * @param color the color of the car.
+     * @param driver the instance of the compiled AI which will be driving this car.
+     * @param game instance of Game to which the car will be added.
+     * @see DriverAI
+     */
     public Car(String playerName, String aiName, Color color, DriverAI driver, Game game) {
         this.playerName = playerName;
         this.aiName = aiName;
@@ -40,6 +49,7 @@ public class Car extends JPanel {
 
     /**
      * Determines which texture should the car use and paints the car.
+     * Also paints the numbers representing the waiting time (in turns) after the car crashed.
      * @param g
      */
     @Override
@@ -84,8 +94,8 @@ public class Car extends JPanel {
 
     /**
      * Sets the coordinates of the car to the given values.
-     * @param x
-     * @param y
+     * @param x the value to which is the X coordinate of the car to be set.
+     * @param y the value to which is the Y coordinate of the car to be set.
      */
     public void setCoordinates(int x, int y) {
         coordinates[0] = x;
@@ -94,7 +104,7 @@ public class Car extends JPanel {
 
     /**
      * Sets the coordinates of the car to the given values.
-     * @param coordinates
+     * @param coordinates the values to which are the coordinates of the car to be set.
      */
     public void setCoordinates(int[] coordinates) {
         if (coordinates.length != 2) {
@@ -105,8 +115,8 @@ public class Car extends JPanel {
     }
 
     /**
-     * Changes the velocity vector of the car accordignly by adding the given acceleration vector to it.
-     * @param a
+     * Changes the velocity vector of the car by adding the acceleration vector given as parameter to it.
+     * @param a the acceleration vector which is to be added to the velocity vector of the car.
      */
     public void accelerate(int[] a) {
         if (a.length != 2) {
@@ -121,7 +131,7 @@ public class Car extends JPanel {
 
     /**
      * Sets the velocity vector of the car to the given values.
-     * @param velocity
+     * @param velocity the values to which is the velocity vector of the car to be set.
      */
     public void setVelocity(int[] velocity) {
         if (velocity.length != 2) {
@@ -134,7 +144,7 @@ public class Car extends JPanel {
 
     /**
      * Returns a deep copy of the coordinates of the car.
-     * @return
+     * @return a deep copy of the coordinates of the car.
      */
     public int[] getCoordinates() {
         int[] coordinatesCopy = new int[2];
@@ -145,7 +155,7 @@ public class Car extends JPanel {
 
     /**
      * Returns the X coordinate of the car.
-     * @return
+     * @return the X coordinate of the car.
      */
     public int getTileX() {
         return coordinates[0];
@@ -153,7 +163,7 @@ public class Car extends JPanel {
 
     /**
      * Returns the Y coordinate of the car.
-     * @return
+     * @return the Y coordinate of the car.
      */
     public int getTileY() {
         return coordinates[1];
@@ -161,7 +171,7 @@ public class Car extends JPanel {
 
     /**
      * Returns a deep copy of the velocity vector of the car.
-     * @return
+     * @return a deep copy of the velocity vector of the car.
      */
     public int[] getVelocity() {
         int[] velocityCopy = new int[2];
@@ -172,7 +182,7 @@ public class Car extends JPanel {
 
     /**
      * Returns the X coordinate of the velocity vector of the car.
-     * @return
+     * @return the X coordinate of the velocity vector of the car.
      */
     public int getVelX() {
         return velocity[0];
@@ -180,7 +190,7 @@ public class Car extends JPanel {
 
     /**
      * Returns the Y coordinate of the velocity vector of the car.
-     * @return
+     * @return the Y coordinate of the velocity vector of the car.
      */
     public int getVelY() {
         return velocity[1];
@@ -212,7 +222,7 @@ public class Car extends JPanel {
 
     /**
      * Returns true if the car is crashed.
-     * @return
+     * @return true if the car is crashed.
      */
     public boolean isCrashed() {
         return crashed;
@@ -220,7 +230,7 @@ public class Car extends JPanel {
 
     /**
      * Returns true if the car is sunk.
-     * @return
+     * @return true if the car is sunk.
      */
     public boolean isSunk() {
         return sunk;
@@ -228,7 +238,7 @@ public class Car extends JPanel {
 
     /**
      * Returns true if the car is finished.
-     * @return
+     * @return true if the car is finished.
      */
     public boolean isFinished() {
         return finished;
@@ -246,16 +256,16 @@ public class Car extends JPanel {
     }
 
     /**
-     * Returns the AI assigned to this car.
-     * @return
+     * Returns the instance of AI assigned to drive this car.
+     * @return the instance of AI assigned to drive this car.
      */
     public DriverAI getDriver() {
         return driver;
     }
 
     /**
-     * Returns the name of the player this car was assigned to.
-     * @return
+     * Returns the name of the player this car has been assigned to.
+     * @return the name of the player this car has been assigned to.
      */
     public String getPlayerName() {
         return playerName;
@@ -263,7 +273,7 @@ public class Car extends JPanel {
 
     /**
      * Returns the name of the AI assigned to this car.
-     * @return
+     * @return the name of the AI assigned to this car.
      */
     public String getAiName() {
         return aiName;

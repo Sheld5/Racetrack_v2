@@ -23,6 +23,11 @@ public class Main {
 
     /**
      * The main method of the application.
+     * Calls Resources.load() to load resources.
+     * Calls initialization methods.
+     * @see Resources
+     * @see Main#initFrame()
+     * @see Main#initMenu()
      * @param args
      */
     public static void main(String[] args) {
@@ -45,6 +50,7 @@ public class Main {
 
     /**
      * Initializes menu.
+     * @see Menu
      */
     private static void initMenu() {
         menu = new Menu();
@@ -55,6 +61,7 @@ public class Main {
 
     /**
      * Initializes game and hides menu.
+     * @see Game
      */
     static void startGame() {
         try {

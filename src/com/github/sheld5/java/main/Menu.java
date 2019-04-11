@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Manages the menu.
+ * Manages the menu, all its components and all its functions.
  */
 class Menu extends JPanel {
     private final int DEFAULT_IPAD = 5;
@@ -31,7 +31,9 @@ class Menu extends JPanel {
     private JButton addCar;
 
     /**
-     * Menu constructor.
+     * Menu constructor. Calls other init-methods.
+     * @see Menu#initMenuSelection()
+     * @see Menu#initGameModeSelection()
      */
     Menu() {
         setBackground(Color.BLACK);
@@ -164,7 +166,7 @@ class Menu extends JPanel {
 
 
     /**
-     * Hides the main menu and show the game settings menu.
+     * Hides the main menu and shows the game settings menu.
      */
     private void goToGameModeSelection() {
         setVisibleGameModeSelection(true);
@@ -173,6 +175,8 @@ class Menu extends JPanel {
 
     /**
      * Hides the game settings menu and shows the main menu.
+     * @see Menu#setVisibleMainMenu(boolean)
+     * @see Menu#setVisibleGameModeSelection(boolean)
      */
     private void goToMainMenu() {
         setVisibleMainMenu(true);
@@ -180,8 +184,8 @@ class Menu extends JPanel {
     }
 
     /**
-     * Sets the visibility of the main menu.
-     * @param b
+     * Sets the visibility of the main menu to the value of the given parameter.
+     * @param b the parameter to which visibilities of all components of the main menu are to be set.
      */
     private void setVisibleMainMenu(boolean b) {
         racetrack.setVisible(b);
@@ -190,8 +194,8 @@ class Menu extends JPanel {
     }
 
     /**
-     * Sets the visibility of the game settings menu.
-     * @param b
+     * Sets the visibility of the game settings menu to the value of the given parameter.
+     * @param b the parameter to which visibilities of all components of the game settings menu are to be set.
      */
     private void setVisibleGameModeSelection(boolean b) {
         gmSelection.setVisible(b);
@@ -231,8 +235,8 @@ class Menu extends JPanel {
     }
 
     /**
-     * Removes the CarPanel with the correct id from the main car panel.
-     * @param id
+     * Removes the CarPanel with the given id from the JPanel mainCarPanel and from the carPanels array.
+     * @param id the id of the CarPanel which is to be removed.
      */
     void removeCar(int id) {
         if (carPanels.size() > 1) {
@@ -244,9 +248,9 @@ class Menu extends JPanel {
     }
 
     /**
-     * Returns the CarPanel with the correct id.
-     * @param id
-     * @return
+     * Returns the CarPanel with the given id.
+     * @param id the id of the CarPanel which is to be returned.
+     * @return the CarPanel with the id given as the parameter.
      */
     private CarPanel getCarPanelById(int id) {
         for (CarPanel car : carPanels) {
@@ -258,16 +262,16 @@ class Menu extends JPanel {
     }
 
     /**
-     * Returns the name of the map file previously chosen by the user.
-     * @return
+     * Returns the name of the map file chosen by the user.
+     * @return the name of the map file chosen by the user.
      */
     String getMapName() {
         return map.getText();
     }
 
     /**
-     * Returns and array containing all CarPanel instances.
-     * @return
+     * Returns an array containing all CarPanel instances of this menu.
+     * @return the array containing all CarPanel instances of this menu.
      */
     ArrayList<CarPanel> getCarPanels() {
         return carPanels;

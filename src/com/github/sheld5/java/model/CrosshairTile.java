@@ -10,9 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 /**
- * Represents one tile of the crosshair.
+ * Represents one tile of the crosshair used by human players to control their cars.
  */
-public class Crosshair extends JPanel implements MouseListener {
+public class CrosshairTile extends JPanel implements MouseListener {
 
     private Game game;
     private int[] index;
@@ -20,7 +20,12 @@ public class Crosshair extends JPanel implements MouseListener {
     private boolean mouseOver;
     private boolean isNextAiMove;
 
-    public Crosshair(int[] index, Game game) {
+    /**
+     * The CrosshairTile class constructor.
+     * @param index the index of this tile of the crosshair.
+     * @param game the game to which is this crosshair going to be added.
+     */
+    public CrosshairTile(int[] index, Game game) {
         this.game = game;
         this.index = index;
         x = 0;
@@ -60,7 +65,7 @@ public class Crosshair extends JPanel implements MouseListener {
 
     /**
      * Returns the index of this crosshair tile.
-     * @return
+     * @return the index of this crosshair tile.
      */
     public int[] getIndex() {
         return index;
@@ -68,8 +73,8 @@ public class Crosshair extends JPanel implements MouseListener {
 
     /**
      * Sets the coordinates of this crosshair tile.
-     * @param x
-     * @param y
+     * @param x the value to which is the X coordinate to be set.
+     * @param y the value to which is the Y coordinate to be set.
      */
     public void setTileXY(int x, int y) {
         this.x = x;
@@ -78,7 +83,7 @@ public class Crosshair extends JPanel implements MouseListener {
 
     /**
      * Returns the X coordinate of this crosshair tile.
-     * @return
+     * @return the X coordinate of this crosshair tile.
      */
     public int getTileX() {
         return x;
@@ -86,7 +91,7 @@ public class Crosshair extends JPanel implements MouseListener {
 
     /**
      * Returns the Y coordinate of this crosshair tile.
-     * @return
+     * @return the Y coordinate of this crosshair tile.
      */
     public int getTileY() {
         return y;
@@ -95,6 +100,7 @@ public class Crosshair extends JPanel implements MouseListener {
     /**
      * Calls the game.onCHClick() method when this crosshair tile is clicked by the user
      * and passes the index of this crosshair tile to it.
+     * @see Game#onCHClick(int[])
      * @param e
      */
     @Override
@@ -114,7 +120,7 @@ public class Crosshair extends JPanel implements MouseListener {
 
     /**
      * Changes the value of the mouseOver to true when the mouse enters this crosshair tile
-     * and calls game.repaint() to update its texure.
+     * and calls game.repaint() to update its texture.
      * @param e
      */
     @Override
@@ -135,8 +141,8 @@ public class Crosshair extends JPanel implements MouseListener {
     }
 
     /**
-     * Sets wheter this crosshair tile is the next move of the AI on turn.
-     * @param b
+     * Sets whether this crosshair tile is the next move of the AI on turn.
+     * @param b the value to which is the boolean isNextAiMove to be set.
      */
     public void setIsNextAiMove(boolean b) {
         isNextAiMove = b;
