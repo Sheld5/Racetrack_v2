@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+// Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
 public class BFSAI implements DriverAI {
 
     // Goes through the moves to get to the Finish.
@@ -8,12 +9,17 @@ public class BFSAI implements DriverAI {
         return movesToFinish.get(step);
     }
 
+    // Start coordinates.
     private int[] start;
+    // Coordinates of all finishes.
     private ArrayList<int[]> finishes;
+    // List of all currently saved paths.
     private ArrayList<Path> paths;
     private ArrayList<Path> tempPaths;
+    // List of all visited nodes.
     private ArrayList<Node> visitedNodes;
     private boolean finishFound, visited;
+    // Array of moves to which the result is saved.
     private ArrayList<int[]> movesToFinish;
     private int step;
 
