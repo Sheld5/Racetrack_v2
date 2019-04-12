@@ -1,6 +1,13 @@
+package model;
+
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+
 // Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
+// This AI does take into consideration all special tiles and their functions.
+// Does not go through checkpoints for now.
 public class BFSAI implements DriverAI {
 
     // Goes through the moves to get to the Finish.
@@ -9,6 +16,7 @@ public class BFSAI implements DriverAI {
         return movesToFinish.get(step);
     }
 
+    private Tile[][] map;
     // Start coordinates.
     private int[] start;
     // Coordinates of all finishes.
@@ -26,8 +34,9 @@ public class BFSAI implements DriverAI {
     // Initializes fields. Handles the loop to find the shortest path to finish.
     public void init(Tile[][] map) {
         findStartAndFinish(map);
+        this.map = map;
         paths = new ArrayList<>();
-        paths.add(new Path(null, start));
+        paths.add(new Path(start));
         visitedNodes = new ArrayList<>();
         finishFound = false;
         visited = false;
@@ -37,27 +46,26 @@ public class BFSAI implements DriverAI {
             tempPaths = deepCopy(paths);
             paths = new ArrayList<>();
             for (Path path : tempPaths) {
-                for (int dx = -1; dx <= 1; dx++) {
-                    for (int dy = -1; dy <= 1; dy++) {
-                        tryPath = new Path(path, new int[]{dx,dy});
-                        checkForFinish(tryPath);
-                        if (finishFound) {
-                            break;
-                        }
-                        for (Node node : visitedNodes) {
-                            if (compareNodes(tryPath.getLastNode(), node)) {
-                                visited = true;
+                if (path.getLastNode().isWater()) {
+                    // This path will be deleted.
+                } else if (path.getLastNode().isIce()) {
+                    tryPath = new Path(path, new int[]{0,0}, map, this);
+                    checkForVisited(tryPath);
+                } else if (path.getLastNode().getWall() > 0) {
+                    tryPath = new Path(path, new int[]{0,0}, map, this);
+                    checkForVisited(tryPath);
+                } else {
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dy = -1; dy <= 1; dy++) {
+                            tryPath = new Path(path, new int[]{dx,dy}, map, this);
+                            checkForVisited(tryPath);
+                            if (finishFound) {
                                 break;
                             }
                         }
-                        if (!visited) {
-                            visitedNodes.add(tryPath.getLastNode());
-                            paths.add(tryPath);
+                        if (finishFound) {
+                            break;
                         }
-                        visited = false;
-                    }
-                    if (finishFound) {
-                        break;
                     }
                 }
                 if (finishFound) {
@@ -69,15 +77,19 @@ public class BFSAI implements DriverAI {
         step = -1;
     }
 
-    // Checks whether the last Node of the Path is finish. Saves moves to get to the finish if so.
-    private void checkForFinish(Path path) {
-        for (int[] finish : finishes) {
-            if (path.getLastNode().get(0) == finish[0] && path.getLastNode().get(1) == finish[1]) {
-                finishFound = true;
-                movesToFinish = path.getMoves();
+    // Checks if the last node of the new path was visited and adds the new path to paths if not.
+    private void checkForVisited(Path tryPath) {
+        for (Node node : visitedNodes) {
+            if (compareNodes(tryPath.getLastNode(), node)) {
+                visited = true;
                 break;
             }
         }
+        if (!visited) {
+            visitedNodes.add(tryPath.getLastNode());
+            paths.add(tryPath);
+        }
+        visited = false;
     }
 
     // Finds and saves the coordinates of the Start and Finishes.
@@ -113,6 +125,18 @@ public class BFSAI implements DriverAI {
         return true;
     }
 
+    ArrayList<int[]> getFinishes() {
+        return finishes;
+    }
+
+    void finishFound() {
+        finishFound = true;
+    }
+
+    void setMovesToFinish(ArrayList<int[]> moves) {
+        movesToFinish = moves;
+    }
+
 }
 
 
@@ -122,13 +146,42 @@ public class BFSAI implements DriverAI {
 class Node {
 
     private int[] node;
+    private boolean ice, water;
+    private int wall;
 
-    public Node(int x, int y, int vx, int vy) {
+    Node(int x, int y, int vx, int vy) {
         node = new int[]{x,y,vx,vy};
+        ice = false;
+        water = false;
+        wall = 0;
     }
 
-    public int get(int i) {
+    int get(int i) {
         return node[i];
+    }
+
+    void setIceTrue() {
+        ice = true;
+    }
+
+    void setWaterTrue() {
+        water = true;
+    }
+
+    void setWall(int i) {
+        wall = i;
+    }
+
+    boolean isIce() {
+        return ice;
+    }
+
+    boolean isWater() {
+        return water;
+    }
+
+    int getWall() {
+        return wall;
     }
 
 }
@@ -145,44 +198,143 @@ class Path {
     private ArrayList<int[]> moves;
 
     // Constructs new Path with one more Node from the previous Path and int[] nextMove.
-    public Path(Path parentPath, int[] nextMove) {
+    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
-        // if parentPath == null, then nextMove contains Start coordinates, make Start Node
-        if (parentPath == null) {
-            path.add(new Node(nextMove[0], nextMove[1], 0, 0));
-        } else {
-            for (Node node : parentPath.get()) {
-                path.add(node);
-            }
-            for (int[] move : parentPath.getMoves()) {
-                moves.add(move);
-            }
-            path.add(createNewNode(nextMove));
-            moves.add(nextMove);
+
+        for (Node node : parentPath.get()) {
+            path.add(node);
         }
+        for (int[] move : parentPath.getMoves()) {
+            moves.add(move);
+        }
+        path.add(createNewNode(nextMove, map, ai));
+        moves.add(nextMove);
+        ai.setMovesToFinish(moves);
+    }
+
+    // Constructor for the first Path instance with the only node being Start.
+    Path(int[] start) {
+        path = new ArrayList<>();
+        moves = new ArrayList<>();
+        path.add(new Node(start[0], start[1], 0, 0));
     }
 
     // Creates new Node by using X and Y coordinates from the last Node in path
     // and VX and VY coordinates from the argument int[] nextMove.
-    private Node createNewNode(int[] nextMove) {
+    // Checks the whole path of the car for special tiles
+    // and creates nodes with special attributes to correspond with these attributes.
+    @SuppressWarnings("Duplicates")
+    private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
         Node last = path.get(path.size() - 1);
-        int vx = last.get(2) + nextMove[0];
-        int vy = last.get(3) + nextMove[1];
-        int x = last.get(0) + vx;
-        int y = last.get(1) + vy;
-        return new Node(x,y,vx,vy);
+
+        if (last.getWall() > 0) {
+            Node node = new Node(last.get(0), last.get(1), 0, 0);
+            node.setWall(last.getWall() - 1);
+            return node;
+        }
+
+        int initX = last.get(0);
+        int initY = last.get(1);
+        int targetX = initX + last.get(2) + nextMove[0];
+        int targetY = initY + last.get(3) + nextMove[1];
+        int dirX = Integer.compare(targetX, initX);
+        int dirY = Integer.compare(targetY, initY);
+
+        int a = -(targetY - initY);
+        int b = targetX - initX;
+        int c = - a * initX - b * initY;
+        boolean firstTile = true;
+
+        if (abs(initX - targetX) > abs(initY - targetY)) {
+            for (int x = initX; x - dirX != targetX; x += dirX) {
+                for (int y = initY; y - dirY != targetY; y += dirY) {
+                    if (firstTile) {
+                        firstTile = false;
+                    } else if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
+                        if (map[x][y] == null || map[x][y] == Tile.WALL) {
+                            Node node = new Node(x - dirX, y - dirY, 0, 0);
+                            node.setWall(3);
+                            return node;
+                        } else if (map[x][y] == Tile.WATER) {
+                            Node node = new Node(x, y, 0, 0);
+                            node.setWaterTrue();
+                            return node;
+                        } else if (map[x][y] == Tile.SAND) {
+                            return new Node(x, y, 0, 0);
+                        } else {
+                            for (int[] finish : ai.getFinishes()) {
+                                if (x == finish[0] && y == finish[1]) {
+                                    ai.finishFound();
+                                    return new Node(x, y, 0, 0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            for (int y = initY; y - dirY != targetY; y += dirY) {
+                for (int x = initX; x - dirX != targetX; x += dirX) {
+                    if (firstTile) {
+                        firstTile = false;
+                    } else if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
+                        if (map[x][y] == null || map[x][y] == Tile.WALL) {
+                            Node node = new Node(x - dirX, y - dirY, 0, 0);
+                            node.setWall(3);
+                            return node;
+                        } else if (map[x][y] == Tile.WATER) {
+                            Node node = new Node(x, y, 0, 0);
+                            node.setWaterTrue();
+                            return node;
+                        } else if (map[x][y] == Tile.SAND) {
+                            return new Node(x, y, 0, 0);
+                        } else {
+                            for (int[] finish : ai.getFinishes()) {
+                                if (x == finish[0] && y == finish[1]) {
+                                    ai.finishFound();
+                                    return new Node(x, y, 0, 0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (map[targetX][targetY] == null || map[targetX][targetY] == Tile.WALL) {
+            Node node = new Node(targetX - dirX, targetY - dirY, 0, 0);
+            node.setWall(3);
+            return node;
+        } else if (map[targetX][targetY] == Tile.WATER) {
+            Node node = new Node(targetX, targetY, 0, 0);
+            node.setWaterTrue();
+            return node;
+        } else if (map[targetX][targetY] == Tile.SAND) {
+            return new Node(targetX, targetY, 0, 0);
+        } else if (map[targetX][targetY] == Tile.ICE) {
+            Node node = new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
+            node.setIceTrue();
+            return node;
+        } else {
+            for (int[] finish : ai.getFinishes()) {
+                if (targetX == finish[0] && targetY == finish[1]) {
+                    ai.finishFound();
+                    return new Node(targetX, targetY, 0, 0);
+                }
+            }
+        }
+        return new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
     }
 
-    public ArrayList<Node> get() {
+    ArrayList<Node> get() {
         return path;
     }
 
-    public ArrayList<int[]> getMoves() {
+    ArrayList<int[]> getMoves() {
         return moves;
     }
 
-    public Node getLastNode() {
+    Node getLastNode() {
         return path.get(path.size() - 1);
     }
 

@@ -14,7 +14,6 @@ public class CarPanel extends JPanel {
 
     private int id;
     private JTextField playerName;
-    private JLabel aiNameLabel;
     private JButton carColor, remove;
     private JComboBox aiSelector;
 
@@ -51,13 +50,6 @@ public class CarPanel extends JPanel {
         c.weightx = 5;
         c.gridx = 1;
         add(playerName, c);
-
-        aiNameLabel = new JLabel("HUMAN");
-        aiNameLabel.setForeground(Color.white);
-        aiNameLabel.setPreferredSize(new Dimension(150, 50));
-        c.gridx = 2;
-        c.weightx = 5;
-        add(aiNameLabel, c);
 
         aiSelector = new JComboBox(getAiSelection());
         aiSelector.setPreferredSize(new Dimension(100, 50));

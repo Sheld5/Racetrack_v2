@@ -44,7 +44,7 @@ public class ScorePanel extends JPanel {
         this.playerName.setMaximumSize(new Dimension(160, 50));
         add(this.playerName);
 
-        if (aiName == null) {
+        if (aiName == "HUMAN") {
             this.aiName = new JLabel("HUMAN");
         } else {
             this.aiName = new JLabel(aiName);
