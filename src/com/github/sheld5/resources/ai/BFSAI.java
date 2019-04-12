@@ -100,20 +100,6 @@ public class BFSAI implements DriverAI {
                     break;
                 }
             }
-
-            generation++;
-            System.out.printf("\n\n\n\n\n");
-            System.out.println("Generation " + generation + ":");
-            int i = 0;
-            for (Path path : paths) {
-                i++;
-                System.out.println();
-                System.out.println("Path " + i);
-                for (Node node : path.get()) {
-                    System.out.println(node.get(0) + " " + node.get(1) + " " + node.get(2) + " " + node.get(3));
-                    System.out.println("wall:" + node.getWall() + " ice:" + node.isIce() + " water:" + node.isWater());
-                }
-            }
         }
 
         step = -1;
