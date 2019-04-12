@@ -108,11 +108,9 @@ public class Game extends JPanel implements KeyListener {
      */
     @SuppressWarnings("Duplicates")
     private void initScorePanel() {
-        int scoreWidth = 500;
-        int scoreHeight = 500;
         scoreMainPanel = new JPanel();
+        scoreMainPanel.setBounds(2 * MAP_INDENT, 2 * MAP_INDENT, 500, 500);
         scoreMainPanel.setLayout(new BoxLayout(scoreMainPanel, BoxLayout.Y_AXIS));
-        scoreMainPanel.setBounds(MAP_INDENT + map.getWidth() / 2 - scoreWidth / 2, MAP_INDENT + map.getHeight() / 2 - scoreHeight / 2, scoreWidth, scoreHeight);
         scoreMainPanel.setBackground(Color.lightGray);
         scoreScrollPane = new JScrollPane(scoreMainPanel);
         scoreScrollPane.setVisible(false);
@@ -140,7 +138,7 @@ public class Game extends JPanel implements KeyListener {
         back = new JButton("Back");
         back.setVisible(true);
         back.addActionListener(e -> Main.goToMenu(tileSize));
-        back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
+        back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT / 2, 96, 32);
         back.setFont(fontSmall);
         back.setForeground(Color.black);
     }
@@ -892,8 +890,20 @@ public class Game extends JPanel implements KeyListener {
      * Shows the post-game score board.
      */
     private void showScore() {
+        JButton hide = new JButton("Hide Score");
+        hide.setForeground(Color.red);
+        hide.addActionListener(e -> hideScore());
+        scoreMainPanel.add(hide);
+
         scoreScrollPane.setVisible(true);
         repaint();
+    }
+
+    /**
+     * Hides the post-game score board.
+     */
+    private void hideScore() {
+        scoreScrollPane.setVisible(false);
     }
 
 }

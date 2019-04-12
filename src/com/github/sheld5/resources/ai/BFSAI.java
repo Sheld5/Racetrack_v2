@@ -13,6 +13,9 @@ public class BFSAI implements DriverAI {
     // Goes through the moves generated in init() method to get to the Finish.
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {
         step++;
+        while (movesToFinish.get(step) == null) {
+            step++;
+        }
         return movesToFinish.get(step);
     }
 
@@ -20,8 +23,6 @@ public class BFSAI implements DriverAI {
     private Tile[][] map;
     // Start coordinates.
     private int[] start;
-    // Coordinates of all finishes.
-    private ArrayList<int[]> finishes;
     // List of all currently saved paths.
     private ArrayList<Path> paths;
     // ArrayList<> 'paths' is copied to 'tempPaths' at the beginning of the while loop
@@ -42,7 +43,7 @@ public class BFSAI implements DriverAI {
 
     // Initializes fields. Handles the while loop to find the shortest path to finish.
     public void init(Tile[][] map) {
-        findStartAndFinish(map);
+        findStart(map);
         this.map = map;
         paths = new ArrayList<>();
         paths.add(new Path(start));
@@ -70,13 +71,16 @@ public class BFSAI implements DriverAI {
             // If Finish is found, all loops are broken.
             for (Path path : tempPaths) {
                 if (path.getLastNode().isWater()) {
-                    // This path will be deleted.
+                    // This path will be deleted as it ends in water.
                 } else if (path.getLastNode().isIce()) {
-                    tryPath = new Path(path, new int[]{0,0}, map, this);
+                    // 'nextMove' is null to represent that no move will be made this turn as the Car is on ICE.
+                    tryPath = new Path(path, null, map, this);
                     checkForVisited(tryPath);
                 } else if (path.getLastNode().getWall() > 0) {
-                    tryPath = new Path(path, new int[]{0,0}, map, this);
-                    checkForVisited(tryPath);
+                    Node node = new Node(path.getLastNode().get(0), path.getLastNode().get(1), 0, 0);
+                    node.setWall(path.getLastNode().getWall() - 1);
+                    // 'nextMove' is null to represent that no move will be made this turn as the Car is crashed.
+                    paths.add(new Path(path, node, null));
                 } else {
                     for (int dx = -1; dx <= 1; dx++) {
                         for (int dy = -1; dy <= 1; dy++) {
@@ -115,15 +119,12 @@ public class BFSAI implements DriverAI {
         visited = false;
     }
 
-    // Finds and saves the coordinates of the Start and all Finishes.
-    private void findStartAndFinish(Tile[][] map) {
-        finishes = new ArrayList<>();
+    // Finds and saves the coordinates of the Start.
+    private void findStart(Tile[][] map) {
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if (map[x][y] == Tile.START) {
                     start = new int[]{x,y};
-                } else if (map[x][y] == Tile.FINISH) {
-                    finishes.add(new int[]{x,y});
                 }
             }
         }
@@ -146,10 +147,6 @@ public class BFSAI implements DriverAI {
             }
         }
         return true;
-    }
-
-    ArrayList<int[]> getFinishes() {
-        return finishes;
     }
 
     void finishFound() {
@@ -221,28 +218,47 @@ class Path {
     // List of moves to be taken to go through this path.
     private ArrayList<int[]> moves;
 
-    // Constructs new Path with one more Node than the previous Path given to it as parameter.
-    // The new Node is created according to the nextMove given to it as parameter.
-    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
+    // Constructor for the first Path instance with only one Node: the Start.
+    Path(int[] start) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
+        path.add(new Node(start[0], start[1], 0, 0));
+    }
 
+    // Constructor for adding custom Node and Move.
+    // Is used for handling after-crash waiting.
+    Path(Path parentPath, Node nextNode, int[] nextMove) {
+        path = new ArrayList<>();
+        moves = new ArrayList<>();
         for (Node node : parentPath.get()) {
             path.add(node);
         }
         for (int[] move : parentPath.getMoves()) {
             moves.add(move);
         }
-        path.add(createNewNode(nextMove, map, ai));
+        path.add(nextNode);
         moves.add(nextMove);
-        ai.setMovesToFinish(moves);
     }
 
-    // Constructor for the first Path instance with only one Node: the Start.
-    Path(int[] start) {
+    // Constructs new Path with one more Node than the previous Path given to it as parameter.
+    // The new Node is created according to the nextMove given to it as parameter.
+    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
-        path.add(new Node(start[0], start[1], 0, 0));
+        for (Node node : parentPath.get()) {
+            path.add(node);
+        }
+        for (int[] move : parentPath.getMoves()) {
+            moves.add(move);
+        }
+        if (nextMove == null) {
+            moves.add(null);
+            nextMove = new int[]{0,0};
+        } else {
+            moves.add(nextMove);
+        }
+        path.add(createNewNode(nextMove, map, ai));
+        ai.setMovesToFinish(moves);
     }
 
     // Checks the path which would be taken by the car going from the last Node to the new one.
@@ -252,12 +268,6 @@ class Path {
     @SuppressWarnings("Duplicates")
     private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
         Node last = path.get(path.size() - 1);
-
-        if (last.getWall() > 0) {
-            Node node = new Node(last.get(0), last.get(1), 0, 0);
-            node.setWall(last.getWall() - 1);
-            return node;
-        }
 
         int initX = last.get(0);
         int initY = last.get(1);
@@ -280,7 +290,7 @@ class Path {
                         continue;
                     }
                     if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai);
+                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai, false, nextMove);
                         if (tryNode != null) {
                             return tryNode;
                         }
@@ -295,7 +305,7 @@ class Path {
                         continue;
                     }
                     if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai);
+                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai, false, nextMove);
                         if (tryNode != null) {
                             return tryNode;
                         }
@@ -303,7 +313,7 @@ class Path {
                 }
             }
         }
-        tryNode = checkForSpecialTiles(targetX, targetY, dirX, dirY, map, ai);
+        tryNode = checkForSpecialTiles(targetX, targetY, dirX, dirY, map, ai, true, nextMove);
         if (tryNode != null) {
             return tryNode;
         }
@@ -312,7 +322,7 @@ class Path {
 
     // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
     @SuppressWarnings("Duplicates")
-    private Node checkForSpecialTiles(int x, int y, int dirX, int dirY, Tile[][] map, BFSAI ai) {
+    private Node checkForSpecialTiles(int x, int y, int dirX, int dirY, Tile[][] map, BFSAI ai, boolean checkForIce, int[] nextMove) {
         try {
             if (map[x][y] == Tile.GRASS) {}
         }  catch (ArrayIndexOutOfBoundsException e) {
@@ -330,13 +340,13 @@ class Path {
             return node;
         } else if (map[x][y] == Tile.SAND) {
             return new Node(x, y, 0, 0);
-        } else {
-            for (int[] finish : ai.getFinishes()) {
-                if (x == finish[0] && y == finish[1]) {
-                    ai.finishFound();
-                    return new Node(x, y, 0, 0);
-                }
-            }
+        } else if (map[x][y] == Tile.FINISH) {
+            ai.finishFound();
+            return new Node(x, y, 0, 0);
+        } else if (checkForIce && map[x][y] == Tile.ICE) {
+            Node node = new Node(x, y, path.get(path.size() - 1).get(2) + nextMove[0], path.get(path.size() - 1).get(3) + nextMove[1]);
+            node.setIceTrue();
+            return node;
         }
         return null;
     }

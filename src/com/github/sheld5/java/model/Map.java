@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Map extends JPanel {
 
     private Game game;
-    private int width, height;
+    private int tileWidth, tileHeight;
     private int[] start;
     private Tile[][] mapTile;
 
@@ -37,9 +37,9 @@ public class Map extends JPanel {
         this.game = game;
         DataReader dr = new DataReader();
         mapTile = dr.getMapData(mapFileName, tileSetFileName);
-        width = mapTile[0].length;
-        height = mapTile.length;
-        setSize(width * game.getTileSize(), height * game.getTileSize());
+        tileWidth = mapTile[0].length;
+        tileHeight = mapTile.length;
+        setSize(tileWidth * game.getTileSize(), tileHeight * game.getTileSize());
         setBackground(Color.BLACK);
         findStart();
     }
@@ -51,8 +51,8 @@ public class Map extends JPanel {
     private void findStart() throws StartNotFoundException {
         start = new int[2];
         boolean startFound = false;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < tileWidth; x++) {
+            for (int y = 0; y < tileHeight; y++) {
                 if (getTile(x, y) == Tile.START) {
                     if (!startFound) {
                         start[0] = x;
@@ -79,7 +79,7 @@ public class Map extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         int tileSize = game.getTileSize();
-        setSize(width * tileSize, height * tileSize);
+        setSize(tileWidth * tileSize, tileHeight * tileSize);
         for (int y = 0; y < mapTile.length; y++) {
             for (int x = 0; x < mapTile[0].length; x++) {
                 switch(mapTile[y][x]) {
@@ -154,19 +154,19 @@ public class Map extends JPanel {
     }
 
     /**
-     * Returns the width of the map in tiles.
-     * @return the width of the map in tiles.
+     * Returns the tileWidth of the map in tiles.
+     * @return the tileWidth of the map in tiles.
      */
     public int getWidthInTiles() {
-        return width;
+        return tileWidth;
     }
 
     /**
-     * Returns the height of the map in tiles.
-     * @return the height of the map in tiles.
+     * Returns the tileHeight of the map in tiles.
+     * @return the tileHeight of the map in tiles.
      */
     public int getHeightInTiles() {
-        return height;
+        return tileHeight;
     }
 
     /**
