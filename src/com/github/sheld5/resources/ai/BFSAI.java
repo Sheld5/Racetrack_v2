@@ -2,8 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 // Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
 // This AI does take into consideration all special tiles and their functions.
@@ -52,6 +51,7 @@ public class BFSAI implements DriverAI {
         visited = false;
 
         Path tryPath;
+        int generation = 0;
         // Goes deeper in the search tree in every iteration.
         // In every iteration, considers each next possible move from each Path from previous iteration. (BFS AI)
         // Throws away new Paths which lead to a Node already visited as these would only be longer.
@@ -80,7 +80,8 @@ public class BFSAI implements DriverAI {
                     Node node = new Node(path.getLastNode().get(0), path.getLastNode().get(1), 0, 0);
                     node.setWall(path.getLastNode().getWall() - 1);
                     // 'nextMove' is null to represent that no move will be made this turn as the Car is crashed.
-                    paths.add(new Path(path, node, null));
+                    tryPath = new Path(path, node, null);
+                    paths.add(tryPath);
                 } else {
                     for (int dx = -1; dx <= 1; dx++) {
                         for (int dy = -1; dy <= 1; dy++) {
@@ -97,6 +98,20 @@ public class BFSAI implements DriverAI {
                 }
                 if (finishFound) {
                     break;
+                }
+            }
+
+            generation++;
+            System.out.printf("\n\n\n\n\n");
+            System.out.println("Generation " + generation + ":");
+            int i = 0;
+            for (Path path : paths) {
+                i++;
+                System.out.println();
+                System.out.println("Path " + i);
+                for (Node node : path.get()) {
+                    System.out.println(node.get(0) + " " + node.get(1) + " " + node.get(2) + " " + node.get(3));
+                    System.out.println("wall:" + node.getWall() + " ice:" + node.isIce() + " water:" + node.isWater());
                 }
             }
         }
@@ -225,7 +240,7 @@ class Path {
         path.add(new Node(start[0], start[1], 0, 0));
     }
 
-    // Constructor for adding custom Node and Move.
+    // Constructor for adding custom Node and Move without calling createNewNode().
     // Is used for handling after-crash waiting.
     Path(Path parentPath, Node nextNode, int[] nextMove) {
         path = new ArrayList<>();
@@ -279,21 +294,73 @@ class Path {
         int a = -(targetY - initY);
         int b = targetX - initX;
         int c = - a * initX - b * initY;
+        double d = sqrt(a * a + b * b);
         boolean firstTile = true;
 
+        int lastX = initX;
+        int lastY = initY;
         Node tryNode;
-        if (abs(initX - targetX) > abs(initY - targetY)) {
+
+        if (initX == targetX) {
+            lastX = initX;
+            for (int y = initY + dirY; y - dirY != targetY; y += dirY) {
+                if (y == targetY) {
+                    tryNode = checkForSpecialTiles(targetX, targetY, lastX, lastY, map, ai, true, nextMove);
+                } else {
+                    tryNode = checkForSpecialTiles(initX, y, lastX, lastY, map, ai, false, nextMove);
+                }
+                if (tryNode != null) {
+                    return tryNode;
+                }
+                lastY = y;
+            }
+        } else if (initY == targetY) {
+            lastY = initY;
+            for (int x = initX + dirX; x - dirX != targetX; x += dirX) {
+                if (x == targetX) {
+                    tryNode = checkForSpecialTiles(targetX, targetY, lastX, lastY, map, ai, true, nextMove);
+                } else {
+                    tryNode = checkForSpecialTiles(x, initY, lastX, lastY, map, ai, false, nextMove);
+                }
+                if (tryNode != null) {
+                    return tryNode;
+                }
+                lastX = x;
+            }
+        } else if (abs(initX - targetX) == abs(initY - targetY)) {
+            int x, y;
+            for (int i = 1; i <= abs(initX - targetX); i++) {
+                x = initX + dirX * i;
+                y = initY + dirY * i;
+                if (x == targetX && y == targetY) {
+                    tryNode = checkForSpecialTiles(targetX, targetY, lastX, lastY, map, ai, true, nextMove);
+                } else {
+                    tryNode = checkForSpecialTiles(x, y, lastX, lastY, map, ai, false, nextMove);
+                }
+                if (tryNode != null) {
+                    return tryNode;
+                }
+                lastX = x;
+                lastY = y;
+            }
+        } else if (abs(initX - targetX) > abs(initY - targetY)) {
             for (int x = initX; x - dirX != targetX; x += dirX) {
                 for (int y = initY; y - dirY != targetY; y += dirY) {
                     if (firstTile) {
                         firstTile = false;
                         continue;
                     }
-                    if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai, false, nextMove);
+                    if (abs(a * x + b * y + c) / d <= 0.5) {
+                        if (x == targetX && y == targetY) {
+                            tryNode = checkForSpecialTiles(targetX, targetY, lastX, lastY, map, ai, true, nextMove);
+                        } else {
+                            tryNode = checkForSpecialTiles(x, y, lastX, lastY, map, ai, false, nextMove);
+                        }
                         if (tryNode != null) {
                             return tryNode;
                         }
+                        lastX = x;
+                        lastY = y;
                     }
                 }
             }
@@ -304,34 +371,37 @@ class Path {
                         firstTile = false;
                         continue;
                     }
-                    if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai, false, nextMove);
+                    if (abs(a * x + b * y + c) / d <= 0.5) {
+                        if (x == targetX && y == targetY) {
+                            tryNode = checkForSpecialTiles(targetX, targetY, lastX, lastY, map, ai, true, nextMove);
+                        } else {
+                            tryNode = checkForSpecialTiles(x, y, lastX, lastY, map, ai, false, nextMove);
+                        }
                         if (tryNode != null) {
                             return tryNode;
                         }
+                        lastX = x;
+                        lastY = y;
                     }
                 }
             }
         }
-        tryNode = checkForSpecialTiles(targetX, targetY, dirX, dirY, map, ai, true, nextMove);
-        if (tryNode != null) {
-            return tryNode;
-        }
+
         return new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
     }
 
     // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
     @SuppressWarnings("Duplicates")
-    private Node checkForSpecialTiles(int x, int y, int dirX, int dirY, Tile[][] map, BFSAI ai, boolean checkForIce, int[] nextMove) {
+    private Node checkForSpecialTiles(int x, int y, int lastX, int lastY, Tile[][] map, BFSAI ai, boolean checkForIce, int[] nextMove) {
         try {
             if (map[x][y] == Tile.GRASS) {}
         }  catch (ArrayIndexOutOfBoundsException e) {
-            Node node = new Node(x - dirX, y - dirY, 0, 0);
+            Node node = new Node(lastX, lastY, 0, 0);
             node.setWall(3);
             return node;
         }
         if (map[x][y] == Tile.WALL) {
-            Node node = new Node(x - dirX, y - dirY, 0, 0);
+            Node node = new Node(lastX, lastY, 0, 0);
             node.setWall(3);
             return node;
         } else if (map[x][y] == Tile.WATER) {
