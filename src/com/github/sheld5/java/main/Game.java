@@ -78,11 +78,7 @@ public class Game extends JPanel implements KeyListener {
         initCheckpoints(menu.getCarPanels().size());
         activeCarIndex = cars.length - 1;
         stop = false;
-        if (cars.length == 1) {
-            turn = -1;
-        } else {
-            turn = 0;
-        }
+        turn = 0;
         carsFinished = 0;
         nextAiMove = new int[]{0,0};
         aiWaiting = false;
@@ -351,17 +347,17 @@ public class Game extends JPanel implements KeyListener {
      * @see DriverAI#drive(int[], int[], Tile[][])
      */
     private void nextTurn() {
-        if (activeCarIndex == 0) {
-            turn++;
-            updateTurnCount();
-        }
         if (allCarsIdle()) {
             endRace();
-        } else if (turn > TURN_MAX) {
+        } else if (turn >= TURN_MAX) {
             System.out.println("Turn limit reached!");
             endRace();
         } else {
             nextCar();
+            if (activeCarIndex == 0) {
+                turn++;
+                updateTurnCount();
+            }
             if (activeCar.isCrashed()) {
                 activeCar.countdown();
                 nextTurn();

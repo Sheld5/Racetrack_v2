@@ -53,6 +53,9 @@ public class BFSAI implements DriverAI {
         finishFound = false;
         visited = false;
 
+        System.out.println("Start: " + start[0] + " " + start[1]);
+        System.out.println("Checkpoints: " + checkpoints.size());
+
         int i = 0;
         Path tryPath;
         // Goes deeper in the search tree in every iteration.
@@ -117,13 +120,15 @@ public class BFSAI implements DriverAI {
     // Checks if the last node of the new path was visited and adds the new Path to 'paths' if not.
     private void checkForVisited(Path tryPath) {
         for (Node node : visitedNodes) {
-            if (compareNodes(tryPath.getLastNode(), node)) {
+            if (compareNodes(tryPath.getLastNode(), node) && compareCheckpoints(tryPath, node)) {
                 visited = true;
                 break;
             }
         }
         if (!visited) {
-            visitedNodes.add(tryPath.getLastNode());
+            Node newNode = tryPath.getLastNode();
+            newNode.setCheckpointsPassed(tryPath.getCheckpointsPassed());
+            visitedNodes.add(newNode);
             paths.add(tryPath);
         }
         visited = false;
@@ -193,6 +198,16 @@ public class BFSAI implements DriverAI {
         return true;
     }
 
+    // Compares checkpoints passed by a Path and checkpoints passed saved in a Node.
+    private boolean compareCheckpoints(Path path, Node node) {
+        for (int i = 0; i < checkpoints.size(); i++) {
+            if (path.getCheckpointsPassed()[i] != node.getCheckpointsPassed()[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     void finishFound() {
         finishFound = true;
     }
@@ -217,12 +232,22 @@ class Node {
     private int[] node;
     private boolean ice, water;
     private int wall;
+    // Used only for saving visited Nodes, not for Nodes in Paths. (Paths have their checkpointsPassed[] lists.)
+    private boolean[] checkpointsPassed;
 
     Node(int x, int y, int vx, int vy) {
         node = new int[]{x,y,vx,vy};
         ice = false;
         water = false;
         wall = 0;
+    }
+
+    void setCheckpointsPassed(boolean[] checkpointsPassed) {
+        this.checkpointsPassed = checkpointsPassed;
+    }
+
+    boolean[] getCheckpointsPassed() {
+        return checkpointsPassed;
     }
 
     int get(int i) {

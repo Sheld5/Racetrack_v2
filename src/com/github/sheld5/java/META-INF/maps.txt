@@ -8,3 +8,5 @@ IcyTest.tmx
 Watery.tmx
 EasyTest.tmx
 CheckpointTest.tmx
+CrashTest.tmx
+HugeWoCheckpoints.tmx
