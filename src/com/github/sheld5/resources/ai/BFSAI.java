@@ -86,8 +86,7 @@ public class BFSAI implements DriverAI {
                     Node node = new Node(path.getLastNode().get(0), path.getLastNode().get(1), 0, 0);
                     node.setWall(path.getLastNode().getWall() - 1);
                     // 'nextMove' is null to represent that no move will be made this turn as the Car is crashed.
-                    tryPath = new Path(path, node, null);
-                    paths.add(tryPath);
+                    checkForVisited(tryPath = new Path(path, node, null));
                 } else {
                     for (int dx = -1; dx <= 1; dx++) {
                         for (int dy = -1; dy <= 1; dy++) {
@@ -120,7 +119,7 @@ public class BFSAI implements DriverAI {
     // Checks if the last node of the new path was visited and adds the new Path to 'paths' if not.
     private void checkForVisited(Path tryPath) {
         for (Node node : visitedNodes) {
-            if (compareNodes(tryPath.getLastNode(), node) && compareCheckpoints(tryPath, node)) {
+            if (compareNodes(tryPath.getLastNode(), node) && compareCheckpoints(tryPath, node) && tryPath.getLastNode().getWall() == node.getWall()) {
                 visited = true;
                 break;
             }
