@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 // Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
 // This AI does take into consideration all special tiles and their functions.
 // Does not go through checkpoints for now.
-public class BFSAI implements DriverAI {
+public class BFSAIwoCheckpoints implements DriverAI {
 
     // Goes through the moves generated in init() method to get to the Finish.
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {
@@ -22,8 +22,6 @@ public class BFSAI implements DriverAI {
     private Tile[][] map;
     // Start coordinates.
     private int[] start;
-    // List of all Checkpoints and coordinates of each tile of each Checkpoint.
-    private ArrayList<ArrayList<int[]>> checkpoints;
     // List of all currently saved paths.
     private ArrayList<Path> paths;
     // ArrayList<> 'paths' is copied to 'tempPaths' at the beginning of the while loop
@@ -44,17 +42,16 @@ public class BFSAI implements DriverAI {
 
     // Initializes fields. Handles the while loop to find the shortest path to finish.
     public void init(Tile[][] map) {
+        findStart(map);
         this.map = map;
-        findStart();
-        findCheckpoints();
         paths = new ArrayList<>();
-        paths.add(new Path(start, this));
+        paths.add(new Path(start));
         visitedNodes = new ArrayList<>();
         finishFound = false;
         visited = false;
 
-        int i = 0;
         Path tryPath;
+        int generation = 0;
         // Goes deeper in the search tree in every iteration.
         // In every iteration, considers each next possible move from each Path from previous iteration. (BFS AI)
         // Throws away new Paths which lead to a Node already visited as these would only be longer.
@@ -103,12 +100,6 @@ public class BFSAI implements DriverAI {
                     break;
                 }
             }
-            i++;
-            if (finishFound) {
-                System.out.println("Generation " + i + ": Finish found!");
-            } else {
-                System.out.println("Generation " + i + ": " + paths.size() + " paths");
-            }
         }
 
         step = -1;
@@ -130,45 +121,11 @@ public class BFSAI implements DriverAI {
     }
 
     // Finds and saves the coordinates of the Start.
-    private void findStart() {
+    private void findStart(Tile[][] map) {
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if (map[x][y] == Tile.START) {
                     start = new int[]{x,y};
-                }
-            }
-        }
-    }
-
-    // Finds and saves coordinates of each tile of each Checkpoint.
-    // Each Checkpoint is saved as 2d int array, where the first number selects a tile of the Checkpoint
-    // and the second number selects a coordinate of the tile.
-    private void findCheckpoints() {
-        checkpoints = new ArrayList<>();
-        boolean tileAssigned = false;
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[0].length; y++) {
-                if (map[x][y] == Tile.CHECKPOINT) {
-                    for (ArrayList<int[]> checkpoint : checkpoints) {
-                        for (int[] tile : checkpoint) {
-                            if ((tile[0] - x == 0 || abs(tile[0] - x) == 1) && (tile[1] - y == 0 || abs(tile[1] - y) == 1)) {
-                                tileAssigned = true;
-                                checkpoint.add(new int[]{x,y});
-                            }
-                            if (tileAssigned) {
-                                break;
-                            }
-                        }
-                        if (tileAssigned) {
-                            break;
-                        }
-                    }
-                    if (!tileAssigned) {
-                        ArrayList<int[]> newCheckpoint = new ArrayList<>();
-                        newCheckpoint.add(new int[]{x,y});
-                        checkpoints.add(newCheckpoint);
-                    }
-                    tileAssigned = false;
                 }
             }
         }
@@ -199,10 +156,6 @@ public class BFSAI implements DriverAI {
 
     void setMovesToFinish(ArrayList<int[]> moves) {
         movesToFinish = moves;
-    }
-
-    ArrayList<ArrayList<int[]>> getCheckpoints() {
-        return checkpoints;
     }
 
 }
@@ -265,18 +218,12 @@ class Path {
     private ArrayList<Node> path;
     // List of moves to be taken to go through this path.
     private ArrayList<int[]> moves;
-    // Used to store information about which checkpoints has this Path crossed.
-    private boolean[] checkpointsPassed;
 
     // Constructor for the first Path instance with only one Node: the Start.
-    Path(int[] start, BFSAI ai) {
+    Path(int[] start) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
         path.add(new Node(start[0], start[1], 0, 0));
-        checkpointsPassed = new boolean[ai.getCheckpoints().size()];
-        for (boolean b : checkpointsPassed) {
-            b = false;
-        }
     }
 
     // Constructor for adding custom Node and Move without calling createNewNode().
@@ -284,15 +231,11 @@ class Path {
     Path(Path parentPath, Node nextNode, int[] nextMove) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
-        checkpointsPassed = new boolean[parentPath.getCheckpointsPassed().length];
         for (Node node : parentPath.get()) {
             path.add(node);
         }
         for (int[] move : parentPath.getMoves()) {
             moves.add(move);
-        }
-        for (int i = 0; i < checkpointsPassed.length; i++) {
-            checkpointsPassed[i] = parentPath.getCheckpointsPassed()[i];
         }
         path.add(nextNode);
         moves.add(nextMove);
@@ -300,18 +243,14 @@ class Path {
 
     // Constructs new Path with one more Node than the previous Path given to it as parameter.
     // The new Node is created according to the nextMove given to it as parameter.
-    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
+    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAIwoCheckpoints ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
-        checkpointsPassed = new boolean[parentPath.getCheckpointsPassed().length];
         for (Node node : parentPath.get()) {
             path.add(node);
         }
         for (int[] move : parentPath.getMoves()) {
             moves.add(move);
-        }
-        for (int i = 0; i < checkpointsPassed.length; i++) {
-            checkpointsPassed[i] = parentPath.getCheckpointsPassed()[i];
         }
         if (nextMove == null) {
             moves.add(null);
@@ -328,7 +267,7 @@ class Path {
     // and return new "special" Node if a special tile is encountered.
     // If no special tile is encountered, creates "normal" Node at the end.
     @SuppressWarnings("Duplicates")
-    private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
+    private Node createNewNode(int[] nextMove, Tile[][] map, BFSAIwoCheckpoints ai) {
         Node last = path.get(path.size() - 1);
 
         int initX = last.get(0);
@@ -439,7 +378,7 @@ class Path {
 
     // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
     @SuppressWarnings("Duplicates")
-    private Node checkForSpecialTiles(int x, int y, int lastX, int lastY, Tile[][] map, BFSAI ai, boolean checkForIce, int[] nextMove) {
+    private Node checkForSpecialTiles(int x, int y, int lastX, int lastY, Tile[][] map, BFSAIwoCheckpoints ai, boolean checkForIce, int[] nextMove) {
         try {
             if (map[x][y] == Tile.GRASS) {}
         }  catch (ArrayIndexOutOfBoundsException e) {
@@ -458,35 +397,12 @@ class Path {
         } else if (map[x][y] == Tile.SAND) {
             return new Node(x, y, 0, 0);
         } else if (map[x][y] == Tile.FINISH) {
-            boolean passedAllCheckpoints = true;
-            for (boolean b : checkpointsPassed) {
-                if (!b) {
-                    passedAllCheckpoints = false;
-                    break;
-                }
-            }
-            if (passedAllCheckpoints) {
-                ai.finishFound();
-                return new Node(x, y, 0, 0);
-            }
+            ai.finishFound();
+            return new Node(x, y, 0, 0);
         } else if (checkForIce && map[x][y] == Tile.ICE) {
             Node node = new Node(x, y, path.get(path.size() - 1).get(2) + nextMove[0], path.get(path.size() - 1).get(3) + nextMove[1]);
             node.setIceTrue();
             return node;
-        } else if (map[x][y] == Tile.CHECKPOINT) {
-            boolean checkpointFound = false;
-            for (int i = 0; i < ai.getCheckpoints().size(); i++) {
-                for (int[] tile : ai.getCheckpoints().get(i)) {
-                    if (x == tile[0] && y == tile[1]) {
-                        checkpointsPassed[i] = true;
-                        checkpointFound = true;
-                        break;
-                    }
-                }
-                if (checkpointFound) {
-                    break;
-                }
-            }
         }
         return null;
     }
@@ -501,10 +417,6 @@ class Path {
 
     Node getLastNode() {
         return path.get(path.size() - 1);
-    }
-
-    boolean[] getCheckpointsPassed() {
-        return checkpointsPassed;
     }
 
 }

@@ -6,3 +6,5 @@ Map03.tmx
 Labyrint.tmx
 IcyTest.tmx
 Watery.tmx
+EasyTest.tmx
+CheckpointTest.tmx

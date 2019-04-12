@@ -96,7 +96,7 @@ public class Game extends JPanel implements KeyListener {
      * Initializes the JPanel attributes of Game.
      */
     private void init() {
-        setBackground(Color.BLACK);
+        setBackground(Color.darkGray);
         setLayout(null);
         setFocusable(true);
         requestFocusInWindow();
