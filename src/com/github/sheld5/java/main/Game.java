@@ -31,7 +31,7 @@ public class Game extends JPanel implements KeyListener {
     private JPanel scoreMainPanel;
     private JScrollPane scoreScrollPane;
     private JLabel turnLabel;
-    private JButton back;
+    private JButton back, showScore, hideScore;
 
     private Map map;
     private Car[] cars;
@@ -109,7 +109,7 @@ public class Game extends JPanel implements KeyListener {
     @SuppressWarnings("Duplicates")
     private void initScorePanel() {
         scoreMainPanel = new JPanel();
-        scoreMainPanel.setBounds(2 * MAP_INDENT, 2 * MAP_INDENT, 500, 500);
+        scoreMainPanel.setBounds(MAP_INDENT, MAP_INDENT, 500, 500);
         scoreMainPanel.setLayout(new BoxLayout(scoreMainPanel, BoxLayout.Y_AXIS));
         scoreMainPanel.setBackground(Color.lightGray);
         scoreScrollPane = new JScrollPane(scoreMainPanel);
@@ -119,6 +119,11 @@ public class Game extends JPanel implements KeyListener {
         ScorePanel heading = new ScorePanel(0, "", "", 0);
         heading.makeIntoHeading();
         scoreMainPanel.add(heading);
+
+        hideScore = new JButton("Hide Score");
+        hideScore.addActionListener(e -> hideScore());
+        hideScore.setForeground(Color.red);
+        scoreMainPanel.add(hideScore);
     }
 
     /**
@@ -141,6 +146,13 @@ public class Game extends JPanel implements KeyListener {
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT / 2, 96, 32);
         back.setFont(fontSmall);
         back.setForeground(Color.black);
+
+        showScore = new JButton("Score");
+        showScore.setVisible(false);
+        showScore.addActionListener(e -> showScore());
+        showScore.setBounds(guiX, back.getY() + back.getHeight() + MAP_INDENT / 2, 96, 32);
+        showScore.setFont(fontSmall);
+        showScore.setForeground(Color.black);
     }
 
     /**
@@ -287,6 +299,7 @@ public class Game extends JPanel implements KeyListener {
     private void addGUI() {
         add(turnLabel);
         add(back);
+        add(showScore);
     }
 
     /**
@@ -876,6 +889,7 @@ public class Game extends JPanel implements KeyListener {
         int guiX = MAP_INDENT + map.getWidthInTiles() * tileSize + MAP_INDENT;
         turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
+        showScore.setBounds(guiX, back.getY() + back.getHeight() + MAP_INDENT / 2, 96, 32);
     }
 
     /**
@@ -890,11 +904,8 @@ public class Game extends JPanel implements KeyListener {
      * Shows the post-game score board.
      */
     private void showScore() {
-        JButton hide = new JButton("Hide Score");
-        hide.setForeground(Color.red);
-        hide.addActionListener(e -> hideScore());
-        scoreMainPanel.add(hide);
-
+        showScore.setVisible(true);
+        scoreMainPanel.add(hideScore);
         scoreScrollPane.setVisible(true);
         repaint();
     }

@@ -5,3 +5,4 @@ Map02.tmx
 Map03.tmx
 Labyrint.tmx
 IcyTest.tmx
+Watery.tmx
