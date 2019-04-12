@@ -10,12 +10,13 @@ import static java.lang.Math.sqrt;
 // Does not go through checkpoints for now.
 public class BFSAI implements DriverAI {
 
-    // Goes through the moves to get to the Finish.
+    // Goes through the moves generated in init() method to get to the Finish.
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {
         step++;
         return movesToFinish.get(step);
     }
 
+    // Saved copy of the map.
     private Tile[][] map;
     // Start coordinates.
     private int[] start;
@@ -23,15 +24,23 @@ public class BFSAI implements DriverAI {
     private ArrayList<int[]> finishes;
     // List of all currently saved paths.
     private ArrayList<Path> paths;
+    // ArrayList<> 'paths' is copied to 'tempPaths' at the beginning of the while loop
+    // to allow for new Paths to be saved in 'paths'.
     private ArrayList<Path> tempPaths;
-    // List of all visited nodes.
+    // List of all visited Nodes.
     private ArrayList<Node> visitedNodes;
-    private boolean finishFound, visited;
-    // Array of moves to which the result is saved.
+    // Is set to true if a Path which ends in a Finish node has been found.
+    // Used to break loops.
+    private boolean finishFound;
+    // Is set to true if the Node in which the new Path ends has been visited before.
+    // Path which ends in a Node visited before will not be saved.
+    private boolean visited;
+    // The result of the while loop. Contains moves to be returned in drive() method.
     private ArrayList<int[]> movesToFinish;
+    // Used to go through 'movesToFinish' step by step in each call of the drive() method.
     private int step;
 
-    // Initializes fields. Handles the loop to find the shortest path to finish.
+    // Initializes fields. Handles the while loop to find the shortest path to finish.
     public void init(Tile[][] map) {
         findStartAndFinish(map);
         this.map = map;
@@ -42,9 +51,23 @@ public class BFSAI implements DriverAI {
         visited = false;
 
         Path tryPath;
+        // Goes deeper in the search tree in every iteration.
+        // In every iteration, considers each next possible move from each Path from previous iteration. (BFS AI)
+        // Throws away new Paths which lead to a Node already visited as these would only be longer.
         while(!finishFound) {
+            // Save Paths from the previous iteration into 'tempPaths' and clear 'paths'.
             tempPaths = deepCopy(paths);
             paths = new ArrayList<>();
+            /*
+                FOR each Path from previous iteration:
+                    IF the last Node is a special tile:
+                        -> make a new Path according to the special tile.
+                    ELSE:
+                        -> go through all nine possible next moves and create new Paths for them.
+            */
+            // Whenever a new Path is created, checks whether the last Node has already been visited
+            // and the new Path is not saved if it has.
+            // If Finish is found, all loops are broken.
             for (Path path : tempPaths) {
                 if (path.getLastNode().isWater()) {
                     // This path will be deleted.
@@ -77,7 +100,7 @@ public class BFSAI implements DriverAI {
         step = -1;
     }
 
-    // Checks if the last node of the new path was visited and adds the new path to paths if not.
+    // Checks if the last node of the new path was visited and adds the new Path to 'paths' if not.
     private void checkForVisited(Path tryPath) {
         for (Node node : visitedNodes) {
             if (compareNodes(tryPath.getLastNode(), node)) {
@@ -92,7 +115,7 @@ public class BFSAI implements DriverAI {
         visited = false;
     }
 
-    // Finds and saves the coordinates of the Start and Finishes.
+    // Finds and saves the coordinates of the Start and all Finishes.
     private void findStartAndFinish(Tile[][] map) {
         finishes = new ArrayList<>();
         for (int x = 0; x < map.length; x++) {
@@ -115,7 +138,7 @@ public class BFSAI implements DriverAI {
         return copy;
     }
 
-    // Compares two nodes. Returns true if all attributes have the same value.
+    // Compares two nodes. Returns true if all attributes have the same values.
     private boolean compareNodes(Node nodeA, Node nodeB) {
         for (int i = 0; i < 4; i++) {
             if (nodeA.get(i) != nodeB.get(i)) {
@@ -143,6 +166,7 @@ public class BFSAI implements DriverAI {
 
 
 // Contains X and Y coordinates of a tile and VX and VY coordinates of current velocity vector.
+// Contains additional settings for special tiles.
 class Node {
 
     private int[] node;
@@ -189,15 +213,16 @@ class Node {
 
 
 
-// Contains list of Nodes (the path) and list of moves to go through the path.
+// Contains list of Nodes (forming the path) and list of moves to go through the path.
 class Path {
 
     // List of Nodes -> the path.
     private ArrayList<Node> path;
-    // List of moves to get to the last Node of this path.
+    // List of moves to be taken to go through this path.
     private ArrayList<int[]> moves;
 
-    // Constructs new Path with one more Node from the previous Path and int[] nextMove.
+    // Constructs new Path with one more Node than the previous Path given to it as parameter.
+    // The new Node is created according to the nextMove given to it as parameter.
     Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
@@ -213,17 +238,17 @@ class Path {
         ai.setMovesToFinish(moves);
     }
 
-    // Constructor for the first Path instance with the only node being Start.
+    // Constructor for the first Path instance with only one Node: the Start.
     Path(int[] start) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
         path.add(new Node(start[0], start[1], 0, 0));
     }
 
-    // Creates new Node by using X and Y coordinates from the last Node in path
-    // and VX and VY coordinates from the argument int[] nextMove.
-    // Checks the whole path of the car for special tiles
-    // and creates nodes with special attributes to correspond with these attributes.
+    // Checks the path which would be taken by the car going from the last Node to the new one.
+    // Checks for special tiles in the path using the checkForSpecialTiles() method
+    // and return new "special" Node if a special tile is encountered.
+    // If no special tile is encountered, creates "normal" Node at the end.
     @SuppressWarnings("Duplicates")
     private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
         Node last = path.get(path.size() - 1);
@@ -246,29 +271,18 @@ class Path {
         int c = - a * initX - b * initY;
         boolean firstTile = true;
 
+        Node tryNode;
         if (abs(initX - targetX) > abs(initY - targetY)) {
             for (int x = initX; x - dirX != targetX; x += dirX) {
                 for (int y = initY; y - dirY != targetY; y += dirY) {
                     if (firstTile) {
                         firstTile = false;
-                    } else if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        if (map[x][y] == null || map[x][y] == Tile.WALL) {
-                            Node node = new Node(x - dirX, y - dirY, 0, 0);
-                            node.setWall(3);
-                            return node;
-                        } else if (map[x][y] == Tile.WATER) {
-                            Node node = new Node(x, y, 0, 0);
-                            node.setWaterTrue();
-                            return node;
-                        } else if (map[x][y] == Tile.SAND) {
-                            return new Node(x, y, 0, 0);
-                        } else {
-                            for (int[] finish : ai.getFinishes()) {
-                                if (x == finish[0] && y == finish[1]) {
-                                    ai.finishFound();
-                                    return new Node(x, y, 0, 0);
-                                }
-                            }
+                        continue;
+                    }
+                    if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
+                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai);
+                        if (tryNode != null) {
+                            return tryNode;
                         }
                     }
                 }
@@ -278,52 +292,46 @@ class Path {
                 for (int x = initX; x - dirX != targetX; x += dirX) {
                     if (firstTile) {
                         firstTile = false;
-                    } else if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
-                        if (map[x][y] == null || map[x][y] == Tile.WALL) {
-                            Node node = new Node(x - dirX, y - dirY, 0, 0);
-                            node.setWall(3);
-                            return node;
-                        } else if (map[x][y] == Tile.WATER) {
-                            Node node = new Node(x, y, 0, 0);
-                            node.setWaterTrue();
-                            return node;
-                        } else if (map[x][y] == Tile.SAND) {
-                            return new Node(x, y, 0, 0);
-                        } else {
-                            for (int[] finish : ai.getFinishes()) {
-                                if (x == finish[0] && y == finish[1]) {
-                                    ai.finishFound();
-                                    return new Node(x, y, 0, 0);
-                                }
-                            }
+                        continue;
+                    }
+                    if (abs(a * x + b * y + c) / (sqrt(a * a + b * b)) <= 0.5) {
+                        tryNode = checkForSpecialTiles(x, y, dirX, dirY, map, ai);
+                        if (tryNode != null) {
+                            return tryNode;
                         }
                     }
                 }
             }
         }
-        if (map[targetX][targetY] == null || map[targetX][targetY] == Tile.WALL) {
-            Node node = new Node(targetX - dirX, targetY - dirY, 0, 0);
+        tryNode = checkForSpecialTiles(targetX, targetY, dirX, dirY, map, ai);
+        if (tryNode != null) {
+            return tryNode;
+        }
+        return new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
+    }
+
+    // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
+    @SuppressWarnings("Duplicates")
+    private Node checkForSpecialTiles(int x, int y, int dirX, int dirY, Tile[][] map, BFSAI ai) {
+        if (map[x][y] == null || map[x][y] == Tile.WALL) {
+            Node node = new Node(x - dirX, y - dirY, 0, 0);
             node.setWall(3);
             return node;
-        } else if (map[targetX][targetY] == Tile.WATER) {
-            Node node = new Node(targetX, targetY, 0, 0);
+        } else if (map[x][y] == Tile.WATER) {
+            Node node = new Node(x, y, 0, 0);
             node.setWaterTrue();
             return node;
-        } else if (map[targetX][targetY] == Tile.SAND) {
-            return new Node(targetX, targetY, 0, 0);
-        } else if (map[targetX][targetY] == Tile.ICE) {
-            Node node = new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
-            node.setIceTrue();
-            return node;
+        } else if (map[x][y] == Tile.SAND) {
+            return new Node(x, y, 0, 0);
         } else {
             for (int[] finish : ai.getFinishes()) {
-                if (targetX == finish[0] && targetY == finish[1]) {
+                if (x == finish[0] && y == finish[1]) {
                     ai.finishFound();
-                    return new Node(targetX, targetY, 0, 0);
+                    return new Node(x, y, 0, 0);
                 }
             }
         }
-        return new Node(targetX, targetY, last.get(2) + nextMove[0], last.get(3) + nextMove[1]);
+        return null;
     }
 
     ArrayList<Node> get() {

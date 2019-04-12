@@ -45,7 +45,7 @@ public class Game extends JPanel implements KeyListener {
     private boolean aiWaiting;
 
     /**
-     * Initializes the game with information using get-methods of the menu instance given to it as parameter.
+     * Initializes the game with information gathered with get-methods of the menu instance given to it as parameter.
      * Calls other init-methods to initialize different parts of the class.
      * @param menu the instance of Menu from which the game should gather information to initialize the game.
      * @throws IOException
