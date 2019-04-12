@@ -25,6 +25,7 @@ class Menu extends JPanel {
     private ArrayList<CarPanel> carPanels;
     private int carCount;
     private JButton addCar;
+    private int lastGameTileSize;
 
     /**
      * Menu constructor. Calls other init-methods.
@@ -32,6 +33,7 @@ class Menu extends JPanel {
      * @see Menu#initGameModeSelection()
      */
     Menu() {
+        lastGameTileSize = 24;
         setBackground(Color.BLACK);
         setLayout(new GridBagLayout());
         fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
@@ -244,6 +246,22 @@ class Menu extends JPanel {
      */
     ArrayList<CarPanel> getCarPanels() {
         return carPanels;
+    }
+
+    /**
+     * Saves the tile-size (corresponds to the zoom-level) last used in the game before leaving back to the menu.
+     * @param lastTileSize the tile-size to be saved as the last tile-size used in the game.
+     */
+    void setLastGameTileSize(int lastTileSize) {
+        lastGameTileSize = lastTileSize;
+    }
+
+    /**
+     * Returns the tile-size last used in the previous game before leaving.
+     * @return the tile-size last used in the previous game before leaving.
+     */
+    int getLastGameTileSize() {
+        return lastGameTileSize;
     }
 
 }

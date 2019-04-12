@@ -313,7 +313,14 @@ class Path {
     // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
     @SuppressWarnings("Duplicates")
     private Node checkForSpecialTiles(int x, int y, int dirX, int dirY, Tile[][] map, BFSAI ai) {
-        if (map[x][y] == null || map[x][y] == Tile.WALL) {
+        try {
+            if (map[x][y] == Tile.GRASS) {}
+        }  catch (ArrayIndexOutOfBoundsException e) {
+            Node node = new Node(x - dirX, y - dirY, 0, 0);
+            node.setWall(3);
+            return node;
+        }
+        if (map[x][y] == Tile.WALL) {
             Node node = new Node(x - dirX, y - dirY, 0, 0);
             node.setWall(3);
             return node;

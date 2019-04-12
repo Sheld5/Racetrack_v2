@@ -3,3 +3,4 @@ Map01wIce.tmx
 Map01woStart.tmx
 Map02.tmx
 Map03.tmx
+TestMap01.tmx

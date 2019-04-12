@@ -78,8 +78,10 @@ public class Main {
 
     /**
      * Hides game and shows menu.
+     * Gives the last tile-size (corresponds to the zoom-level) used in the game before leaving to menu to save it.
      */
-    static void goToMenu() {
+    static void goToMenu(int lastTileSize) {
+        menu.setLastGameTileSize(lastTileSize);
         frame.remove(menu);
         frame.add(menu);
         menu.setVisible(true);

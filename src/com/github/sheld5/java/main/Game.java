@@ -65,7 +65,7 @@ public class Game extends JPanel implements KeyListener {
      * @see Game#initRace()
      */
     Game(Menu menu) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
-        tileSize = 24;
+        tileSize = menu.getLastGameTileSize();
         init();
         initCrosshair();
         initCars(menu.getCarPanels());
@@ -139,7 +139,7 @@ public class Game extends JPanel implements KeyListener {
 
         back = new JButton("Back");
         back.setVisible(true);
-        back.addActionListener(e -> Main.goToMenu());
+        back.addActionListener(e -> Main.goToMenu(tileSize));
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         back.setFont(fontSmall);
         back.setForeground(Color.black);
