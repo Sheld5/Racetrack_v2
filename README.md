@@ -2,6 +2,19 @@
 
 PC version of the classic "racetrack" game (usually played with pen and paper) with AI interface.
 
+## Installation
+
+To run the game follow these steps:
+
+- Download the project from the github page.
+
+- Run Ant in the main directory.
+
+    - Ant will create compiled code in the /out/production directory
+      and runnable jar file in the /out/artifacts directory.
+      
+- Run the jar file.
+
 ## Basic rules
 
  - The goal of the game is to get to the finish in the least turns.
@@ -29,7 +42,7 @@ ICE - if the car finishes the turn on ice, it cannot be controlled next turn and
 
 ## AI implementation
 
-Follow these steps to implement your own AI into the game:
+To implement your own AI to the game follow these steps:
 
 - Add the .java file of your AI (implementing DriverAI.java) to the /ai directory.
 
