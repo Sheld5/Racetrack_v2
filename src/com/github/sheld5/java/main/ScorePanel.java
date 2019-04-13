@@ -70,7 +70,11 @@ public class ScorePanel extends JPanel {
         this.aiName.setMaximumSize(new Dimension(160, 50));
         add(this.aiName);
 
-        this.turnCount = new JLabel(Integer.toString(turnCount));
+        if (place == -1) {
+            this.turnCount = new JLabel("DQ");
+        } else {
+            this.turnCount = new JLabel(Integer.toString(turnCount));
+        }
         this.turnCount.setForeground(Color.white);
         this.turnCount.setHorizontalAlignment(SwingConstants.CENTER);
         this.turnCount.setMinimumSize(new Dimension(80, 50));
