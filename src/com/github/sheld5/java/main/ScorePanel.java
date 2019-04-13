@@ -26,7 +26,7 @@ public class ScorePanel extends JPanel {
     private JLabel turnCount;
 
     /**
-     * ScorePanel constructor. Initializes all components of the ScorePanel.
+     * ScorePanel constructor. Initializes the Swing components of the ScorePanel.
      * @param place the place on which the car whose information this ScorePanel shows has finished.
      * @param playerName the player name of the player driving the car whose information this ScorePanel shows.
      * @param aiName the name of the AI which has been driving the car.
@@ -78,6 +78,9 @@ public class ScorePanel extends JPanel {
         add(this.turnCount);
     }
 
+    /**
+     * Transforms the CarPanel into a special CarPanels used as the heading for the carMainPanel.
+     */
     public void makeIntoHeading() {
         setBackground(Color.black);
         place.setText("PLACE");

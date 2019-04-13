@@ -13,7 +13,7 @@ public class AICompiler {
 
     /**
      * Compiles the AI of the given CarPanel if it has not been compiled yet and returns an instance of it.
-     * Uses the jOOR library.
+     * Uses the jOOR library. Uses the get-methods of the CarPanel to get the name of the AI and the name of its file.
      * @param carPanel the CarPanel from which the methods gets the required information about the AI.
      * @return an instance of the AI described in the CarPanel given as the parameter.
      * @throws IOException

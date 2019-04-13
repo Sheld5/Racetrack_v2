@@ -34,7 +34,7 @@ public class CarPanel extends JPanel {
     private JComboBox aiSelector;
 
     /**
-     * CarPanel constructor.
+     * CarPanel constructor. Initializes all components of the CarPanel.
      * @param id the id this instance of CarPanel is to have.
      * @param menu the instance of Menu to whose JPanel carMainPanel this instance of CarPanel will be added.
      * @see Menu
@@ -101,7 +101,8 @@ public class CarPanel extends JPanel {
     }
 
     /**
-     * Cycles through color options for the car and sets the button to match the currently selected color.
+     * Cycles through the color options for the car
+     * and sets the appearance of the color button to match the currently selected color.
      */
     private void changeColor() {
         switch (carColor.getText()) {

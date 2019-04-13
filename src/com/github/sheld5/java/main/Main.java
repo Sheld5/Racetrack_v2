@@ -42,7 +42,7 @@ public class Main {
     /**
      * The main method of the application.
      * Calls Resources.load() to load resources.
-     * Calls initialization methods.
+     * Calls menu and game initialization methods.
      * @see Resources
      * @see Main#initFrame()
      * @see Main#initMenu()
@@ -96,7 +96,8 @@ public class Main {
 
     /**
      * Hides game and shows menu.
-     * Gives the last tile-size (corresponds to the zoom-level) used in the game before leaving to menu to save it.
+     * Calls menu.setLastGameTileSize() to save the last tile-size (corresponds to the zoom-level) used in the game.
+     * @see Menu#setLastGameTileSize(int)
      */
     static void goToMenu(int lastTileSize) {
         menu.setLastGameTileSize(lastTileSize);

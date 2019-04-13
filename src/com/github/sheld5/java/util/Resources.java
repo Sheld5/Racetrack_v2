@@ -67,7 +67,7 @@ public class Resources {
     }
 
     /**
-     * Creates BufferedImage from ResourceStream from the image file.
+     * Creates a BufferedImage from a ResourceStream from the image file.
      * @param fileName the name of the image file.
      * @return the BufferedImage created from the image file.
      */

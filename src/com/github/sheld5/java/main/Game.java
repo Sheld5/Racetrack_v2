@@ -18,7 +18,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 /**
- * Manages the game, all components of the game, the turn cycle of the game, all game logic, game GUI and view.
+ * Manages the game. (all components of the game, the turn cycle of the game, all game logic, game GUI and game view)
  */
 public class Game extends JPanel implements KeyListener {
 
@@ -113,10 +113,10 @@ public class Game extends JPanel implements KeyListener {
 
     /**
      * Initializes the game with information gathered with get-methods of the menu instance given to it as parameter.
-     * Calls other init-methods to initialize different parts of the class.
+     * Calls other init-methods to initialize different parts of the game.
      * @param menu the instance of Menu from which the game should gather information to initialize the game.
      * @throws IOException
-     * @throws StartNotFoundException
+     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
      * @throws SAXException
      * @throws ParserConfigurationException
      * @see Menu
@@ -224,7 +224,7 @@ public class Game extends JPanel implements KeyListener {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws StartNotFoundException
+     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
      * @see Map
      */
     private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, StartNotFoundException {
@@ -278,7 +278,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Initializes checkpoints. Treats more CHECKPOINT tiles next to each other as one checkpoint.
+     * Finds all CHECKPOINT tiles on the map and initializes checkpoints.
+     * Treats more CHECKPOINT tiles next to each other as one checkpoint.
      * @param numberOfCars the number of instances of Car in the game.
      * @see Checkpoint
      */
@@ -378,7 +379,7 @@ public class Game extends JPanel implements KeyListener {
 
     /**
      * Calls the init() method of each AI in the game
-     * and then calls the nextTurn() method to start the first turn.
+     * and then calls the nextTurn() method to start the first turn of the first player.
      * @see DriverAI#init(Tile[][])
      * @see Game#nextTurn()
      */
@@ -392,24 +393,25 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Is called when new turn is to begin (turn is treated here as one move of one car).
+     * Is called when a new turn is to begin (turn is treated here as one move of one player).
+     * Calls itself recursively to maintain the turn cycle.
      * Cycles through cars so different one is on turn each time.
      * Increases the turn count by one every time the game cycles through all cars.
      * Determines whether a human or an AI is on turn.
      * If an AI is on turn, calls its drive() method to determine its next move,
      * checks if the move made by AI is valid,
      * shows it by highlighting the corresponding crosshair tile
-     * and waits for the user to press ENTER (keyPressed() is called),
-     * which is going to call nextTurn() again.
-     * If a human is on turn, waits for the crosshair to be clicked (onCHClick() is called),
-     * which is going to call nextTurn() again.
-     * Calls itself recursively to maintain the turn cycle.
+     * and waits for the user to press ENTER (see keyPressed() method),
+     * which calls the drive() method and then calls nextTurn() again.
+     * If a human is on turn, waits for the crosshair to be clicked (see onCHClick() method),
+     * which calls the drive() method and then calls nextTurn() again.
      * Calls the endRace() method to end the race when all cars are finished or sunk or the turn-max is reached.
      * @see Game#updateTurnCount()
      * @see Game#nextCar()
      * @see Game#nextAiMoveValid()
      * @see Game#keyPressed(KeyEvent)
      * @see Game#onCHClick(int[])
+     * @see Game#drive(Car, int[])
      * @see Game#endRace()
      * @see DriverAI#drive(int[], int[], Tile[][])
      */
@@ -470,8 +472,7 @@ public class Game extends JPanel implements KeyListener {
 
     /**
      * Is called when crosshair is clicked.
-     * Receives the index of the clicked crosshair tile as parameter.
-     * Calls drive() method and passes the crosshair index to it as parameter.
+     * Calls drive() method and passes the index of the crosshair tile clicked received as parameter.
      * The crosshair index corresponds to the acceleration vector,
      * which is to be added to the velocity vector of the car.
      * Then calls nextTurn() to start the next turn.
@@ -542,10 +543,11 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Finds the straightest and shortest path from the current location of the car to the target location.
+     * Finds the straightest symmetrical path from the current location of the car to the target location.
      * (target location = current location + car velocity vector)
-     * Car then moves tile by tile through the path. It can move to any adjacent tile including diagonal ones.
-     * checkTile() method is called for each tile the car is to move over to determine if the car can move there
+     * The car can move to any adjacent tile including diagonal ones.
+     * Car then moves tile by tile through the path.
+     * checkTile() method is called for each tile the car moves over to determine if the car can move there
      * and if any special actions are to be made on that tile.
      * Stops going through tiles if the car crashes (drives into a wall) or sinks (drives into water).
      * @param car the car which is to change its position by adding its velocity vector to it
@@ -635,9 +637,9 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Checks whether the tile is rideable using the Map.isTileRideable(int x, int y)
+     * Checks whether the tile is rideable using the Map.isTileRideable() method
      * and moves the car there or calls the onCarCrash() method accordingly.
-     * Then calls the checkForSpecialTiles() method to check if any special actions are to be made on this tile.
+     * Calls the checkForSpecialTiles() method to check if any special actions are to be made on this tile.
      * @param car the car which is to be moved to the tile or crashed depending on the type of the tile.
      * @param x the X coordinate of the tile which is to be checked.
      * @param y the Y coordinate of the tile which is to be checked.
@@ -688,7 +690,7 @@ public class Game extends JPanel implements KeyListener {
 
     /**
      * Checks whether the tile is checkpoint and saves that the car has passed this checkpoint
-     * using the Checkpoint.carPassed(int carIndex) if so.
+     * using the Checkpoint.carPassed() if so.
      * @param x the X coordinate of the tile which is to be checked.
      * @param y the Y coordinate of the tile which is to be checked.
      * @see Checkpoint

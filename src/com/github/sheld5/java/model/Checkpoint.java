@@ -15,7 +15,8 @@ public class Checkpoint {
     private boolean[] carsPassed;
 
     /**
-     * The Checkpoint class constructor.
+     * The Checkpoint class constructor. Creates new Checkpoint containing one tile.
+     * Initializes boolean[] carPassed with the length equal to the number of cars in the game.
      * @param x the X coordinate of the first tile to be added to this checkpoint.
      * @param y the Y coordinate of the first tile to be added to this checkpoint.
      * @param numberOfCars the number of cars in the game.

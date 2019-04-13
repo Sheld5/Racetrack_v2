@@ -34,12 +34,13 @@ public class Map extends JPanel {
     private Tile[][] mapTile;
 
     /**
-     * The Map class constructor. Uses the DataReader class to get the required data from the map file.
+     * The Map class constructor. Initializes attributes of the map.
+     * Uses the DataReader class to get the required data from the map file.
      * @param mapFileName the name of the map file from which the data for initialization of this map are to be gathered.
      * @param tileSetFileName the name of the tile-set file which is to be used to 'translate'
      *                        the data in numbers from the map file to the enum Tile format.
      * @param game the instance of Game to which this map is going to be added.
-     * @throws StartNotFoundException
+     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
@@ -58,7 +59,7 @@ public class Map extends JPanel {
 
     /**
      * Finds the start on the map and saves its coordinates.
-     * @throws StartNotFoundException
+     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
      */
     private void findStart() throws StartNotFoundException {
         start = new int[2];

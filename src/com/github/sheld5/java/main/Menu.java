@@ -81,7 +81,7 @@ class Menu extends JPanel {
     private int lastGameTileSize;
 
     /**
-     * Menu constructor. Calls other init-methods.
+     * Menu constructor. Initializes the main panel (background etc). Calls other init-methods.
      * @see Menu#initMenuSelection()
      * @see Menu#initGameModeSelection()
      */
@@ -98,7 +98,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * Initializes components of the main menu.
+     * Initializes the Swing components of the main menu.
      */
     @SuppressWarnings("Duplicates")
     private void initMenuSelection() {
@@ -128,7 +128,7 @@ class Menu extends JPanel {
     }
 
     /**
-     * Initializes components of the game settings menu.
+     * Initializes the Swing components of the game settings menu.
      * Uses the getListOfFiles() method of the DataReader to get the list of map files.
      * @see DataReader#getListOfFiles(String)
      */
@@ -209,6 +209,8 @@ class Menu extends JPanel {
 
     /**
      * Hides the main menu and shows the game settings menu.
+     * @see Menu#setVisibleGameModeSelection(boolean)
+     * @see Menu#setVisibleMainMenu(boolean)
      */
     private void goToGameModeSelection() {
         setVisibleGameModeSelection(true);

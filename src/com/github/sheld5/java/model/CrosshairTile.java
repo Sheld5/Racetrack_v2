@@ -36,7 +36,7 @@ public class CrosshairTile extends JPanel implements MouseListener {
     private boolean isNextAiMove;
 
     /**
-     * The CrosshairTile class constructor.
+     * The CrosshairTile class constructor. Initializes attributes of the crosshair tile.
      * @param index the index of this tile of the crosshair.
      * @param game the game to which is this crosshair going to be added.
      */
@@ -113,8 +113,8 @@ public class CrosshairTile extends JPanel implements MouseListener {
     }
 
     /**
-     * Calls the game.onCHClick() method when this crosshair tile is clicked by the user
-     * and passes the index of this crosshair tile to it.
+     * Calls the game.onCHClick() method when the crosshair tile is clicked by the user
+     * and passes the index of the crosshair tile to it.
      * @see Game#onCHClick(int[])
      * @param e
      */

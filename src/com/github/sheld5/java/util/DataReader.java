@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class DataReader {
 
     /**
-     * Creates Document from the given file in the /maps directory.
+     * Creates Document from the given file from the /maps directory.
      * @param fileName the name of the file from which is the document to be made.
      * @return the document made from the given file.
      * @throws IOException
@@ -44,7 +44,7 @@ public class DataReader {
     }
 
     /**
-     * Returns a 2d int array extracted from the map file.
+     * Returns an int[][] array extracted from the map file representing all tiles of the map.
      * Uses createDocFromFile() method to create Document from the given file, so it can be read.
      * @param mapFile
      * @return
@@ -67,7 +67,7 @@ public class DataReader {
     }
 
     /**
-     * Returns HashMap&lt;Integer, Tile&gt; extracted from the tile-set file in the /maps directory.
+     * Returns HashMap&lt;Integer, Tile&gt; extracted from the tile-set file from the /maps directory.
      * Uses createDocFromFile() method to create Document from the given file, so it can be read.
      * @param fileName the name of the tile-set file.
      * @return the HashMap&lt;Integer, Tile&gt; containing pairs of tile types and the number
@@ -108,8 +108,9 @@ public class DataReader {
     }
 
     /**
-     * Returns 2d Tile array representing the map given as the parameter.
-     * Uses getIntData() and getTileSet methods to read the map and the tile-set files.
+     * Returns a Tile[][] array representing the map given as the parameter.
+     * Uses getIntData() and getTileSet methods to read the map and the tile-set files
+     * and then converts the int[][] array from the map file into a Tile[][] array using the HashMap from the tile-set.
      * @param mapFileName the name of the map file which is to be read and converted into Tile[][] array.
      * @param tileSetFileName the name of the tile-set file which is to be used
      *                        to 'translate' the numbers in the map file to values of the enum Tile.
@@ -138,6 +139,11 @@ public class DataReader {
         return mapTile;
     }
 
+    /**
+     * Returns a String[] array containing all file names from the given text file.
+     * @param fileList the name of the file to be read.
+     * @return the String[] array containing all file names from the given file.
+     */
     public String[] getListOfFiles(String fileList) {
         try {
             ArrayList<String> array = new ArrayList<>();

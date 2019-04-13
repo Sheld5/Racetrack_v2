@@ -69,7 +69,7 @@ public class Car extends JPanel {
     private int crashCountdown;
 
     /**
-     * The Car class constructor.
+     * The Car class constructor. Initializes the attributes of the car.
      * @param playerName the name of the player whose this car is.
      * @param aiName the name of the AI driving this car. (NULL if human is driving the car.)
      * @param color the color of the car.
@@ -149,6 +149,7 @@ public class Car extends JPanel {
     /**
      * Sets the coordinates of the car to the given values.
      * @param coordinates the values to which are the coordinates of the car to be set.
+     * @throws IllegalArgumentException thrown if the length of the int[] given as the parameter is not 2.
      */
     public void setCoordinates(int[] coordinates) {
         if (coordinates.length != 2) {
@@ -159,8 +160,10 @@ public class Car extends JPanel {
     }
 
     /**
-     * Changes the velocity vector of the car by adding the acceleration vector given as parameter to it.
+     * Changes the velocity vector of the car by adding the acceleration vector given as parameter.
      * @param a the acceleration vector which is to be added to the velocity vector of the car.
+     * @throws IllegalArgumentException thrown if the length of the int[] given as parameter is not 2
+     *                                  or the values of the int[] are not -1,0 or 1.
      */
     public void accelerate(int[] a) {
         if (a.length != 2) {
@@ -176,6 +179,7 @@ public class Car extends JPanel {
     /**
      * Sets the velocity vector of the car to the given values.
      * @param velocity the values to which is the velocity vector of the car to be set.
+     * @throws IllegalArgumentException thrown if the length of the int[] given as the parameter is not 2.
      */
     public void setVelocity(int[] velocity) {
         if (velocity.length != 2) {
