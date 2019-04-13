@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 /*
 Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
 This AI does take into consideration all special tiles and their functions. (Is able to use sand to brake etc.)
-It is guranteed to always find the fastest path. Hovewer, it is only practical for smaller maps
+It is guaranteed to always find the fastest path. However, it is only practical for smaller maps
 or for maps without much open space (e.g. labyrinth-like maps) as it would take hours to calculate the best path
 for a big map with a lot of open space this way.
  */
