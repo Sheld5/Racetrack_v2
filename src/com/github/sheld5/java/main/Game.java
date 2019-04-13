@@ -58,6 +58,10 @@ public class Game extends JPanel implements KeyListener {
      */
     private JButton back;
     /**
+     * Displays instructions on how to control the game.
+     */
+    private JLabel controls;
+    /**
      * Button used to show the score panel again after it has been hidden.
      */
     private JButton showScore;
@@ -190,7 +194,8 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Initializes the JLabel showing the turn count and the JButton used to go back to menu.
+     * Initializes the JLabel showing the turn count, the JButton used to go back to menu
+     * and the JLabel displaying the controls.
      */
     private void initGUI() {
         Font fontBig = new Font(Font.SANS_SERIF, Font.BOLD, 24);
@@ -216,6 +221,12 @@ public class Game extends JPanel implements KeyListener {
         showScore.setBounds(guiX, back.getY() + back.getHeight() + MAP_INDENT / 2, 96, 32);
         showScore.setFont(fontSmall);
         showScore.setForeground(Color.black);
+
+        controls = new JLabel("ENTER -> make AI make its move       PLUS -> zoom in        MINUS -> zoom out");
+        controls.setVisible(true);
+        controls.setBounds(MAP_INDENT, MAP_INDENT + map.getHeight(), 500, 32);
+        controls.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+        controls.setForeground(Color.black);
     }
 
     /**
@@ -358,12 +369,14 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Adds the JLabel showing the turn count and the JButton used to go back to menu.
+     * Adds the JLabel showing the turn count, the JButton used to go back to menu
+     * and the JLabel displaying the controls.
      */
     private void addGUI() {
         add(turnLabel);
         add(back);
         add(showScore);
+        add(controls);
     }
 
     /**
@@ -943,18 +956,19 @@ public class Game extends JPanel implements KeyListener {
             moveCar(car, car.getTileX(), car.getTileY());
         }
         moveCH(ch[1][1].getTileX(), ch[1][1].getTileY());
-        repaint();
         moveGUI();
+        repaint();
     }
 
     /**
-     *  Move the turn count and back button to the correct position.
+     *  Moves the GUI elements to the correct positions.
      */
     private void moveGUI() {
         int guiX = MAP_INDENT + map.getWidthInTiles() * tileSize + MAP_INDENT;
         turnLabel.setBounds(guiX, MAP_INDENT,50, 50);
         back.setBounds(guiX, turnLabel.getY() + turnLabel.getHeight() + MAP_INDENT, 96, 32);
         showScore.setBounds(guiX, back.getY() + back.getHeight() + MAP_INDENT / 2, 96, 32);
+        controls.setBounds(MAP_INDENT, MAP_INDENT + map.getHeightInTiles() * tileSize, 500, 32);
     }
 
     /**

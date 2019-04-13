@@ -198,7 +198,7 @@ class Menu extends JPanel {
         carScrollPane.setPreferredSize(new Dimension(512, carScrollPane.getPreferredSize().height));
         add(carScrollPane, c);
 
-        addCar = new JButton("Add car");
+        addCar = new JButton("Add Player");
         addCar.setVisible(true);
         addCar.addActionListener(e -> addCar());
         addCar.setBorder(BorderFactory.createLineBorder(Color.gray));

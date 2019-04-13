@@ -1,0 +1,65 @@
+<h1 id="o-aplikaci">O aplikaci</h1>
+<p>Tato aplikace je počítačovým zpracováním známé hry <em>Racetrack</em> s rozhraním pro jednoduchou implementaci vlastního AI.</p>
+<p>Hra Racetrack se většinou hraje s tužkou a papírem v několika lidech. Každý hráč má jedno autíčko a cílem hry je projet předem namalovanou závodní dráhu za co nejméně tahů. Každé autíčko má svůj vektor pohybu, který znázorňuje, kterým směrem a jak rychle se autíčko pohybuje. Každé kolo je nová pozice autíčka určena tím, že je k jeho pozici přičten jeho vektor pohybu. Hráči autíčka ovládají tím, že každé kolo mohou obě složky (složka rovnoběžná s x-osou a složka rovnoběžná s y-osou) vektoru pohybu svého autíčka zvětšit nebo zmenšit o 1, nebo ponechat stejné.</p>
+<p>SCREENSHOT-VEKTORY</p>
+<p>Aplikace umožňuje:</p>
+<ul>
+<li><p>Hrát hru Racetrack na různých mapách v libovolném počtu hráčů.</p></li>
+<li><p>Hrát proti AI protivníkům.</p></li>
+<li><p>Nechat proti sobě hrát pouze AI hráče.</p></li>
+<li><p>Přidat do hry vlastní AI pomocí jednoduchého rozhraní.</p></li>
+<li><p>S pomocí Tiled map editoru jednoduše vytvořit další mapy do hry.</p></li>
+</ul>
+<h1 id="intalace-a-spuštění">Intalace a spuštění</h1>
+<p>Pro spuštění aplikace není nutná instalace. Stačí si stáhnout soubor Racetrack_v2.jar a spustit ho. Tento soubor lze stáhnout zde: <a href="https://github.com/Sheld5/Racetrack_v2/tree/master/out/artifacts/Racetrack_v2_jar">github.com/Sheld5/Racetrack_v2/tree/master/out/artifacts/Racetrack_v2_jar</a></p>
+<p>Pro fungování aplikace je nutné pouze mít nainstalovanou aktuální verzi softwaru Java (JRE 12). Java lze stáhnout zde: <a href="https://www.java.com/en/download/">www.java.com/en/download</a></p>
+<p>Pro vytváření vlastních map do hry je potřeba si stáhnout a nainstalovat editor map “Tiled”. Ten lze stáhnout zdarma na této adrese: <a href="https://www.mapeditor.org/">www.mapeditor.org</a></p>
+<h1 id="používání-aplikace">Používání aplikace</h1>
+<h2 id="menu">Menu</h2>
+<p>Po spuštění aplikace se otevře okno s hlavním menu. Zde jsou tlačítka “Play” a “Exit”. Pokud chceme hrát hru, klikneme na tlačítko “Play”. Tlačítkem “Exit” můžeme aplikaci vypnout.</p>
+<p>SCREENSHOT-MAIN-MENU</p>
+<p>Po stisknutí tlačítka “Play” se dostaneme do nastavení hry. Zde si můžeme pomocí grafického uživatelského rozhraní zvolit veškerá nastavení hry, než hru zapneme.</p>
+<p>V horní části okna aplikace můžeme pomocí rozbalovacího seznamu vybrat mapu, na které chceme hrát.</p>
+<p>Uprostřed se nachází velký šedý obdélník pro nastavení hráčů. V něm je mimo jiné tlačítko “Add Player”. Tímto tlačítkem můžeme přidávat hráče. Když ho stiskneme, uvidíme, že je do obdélníku přidán nový tmavě šedý pruh, obsahující další různá nastavení, stejný jako ten, co tam byl od začátku. Každý z těchto pruhů znázorňuje jednoho hráče, který bude ve hře závodit, a obsahuje veškerá nastavení pro tohoto hráče. První (zleva) je tlačítko, kterým můžeme vybírat barvu auta pro daného hráče. Klikáním na toto tlačítko rotujeme mezi možnými barvami. Druhé je textové pole, ve kterém si můžeme zvolit jméno hráče. Třetí je rozbalovací seznam, pomocí kterého můžeme nastavit, jestli má být tento hráč ovládán počítačem. Pokud chceme, aby byl tento hráč ovládán člověkem, zvolíme možnost “HUMAN”. Pokud chceme, aby byl ovládán jednou z umělých inteligencí, zvolíme příslušnou z nich v seznamu. Nakonec se zde nachází tlačítko s červeným křížkem, pomocí kterého můžeme hráče odebrat.</p>
+<p>Ve spodní části obrazovky se nachází dvě tlačítka. Tlačítkem “Start Game” spustíme hru s nastavením, které je momentálně zvoleno. Stisknutím tlačítka “Back” se vrátíme zpět do hlavního menu.</p>
+<p>SCREENSHOT-SETTINGS</p>
+<h2 id="ovládání-hry">Ovládání hry</h2>
+<p>Po spuštění hry se nám zobrazí mapa s různými políčky a všechna auta na startu. Přes políčka kolem aut jsou zobrazeny světle zelené čtverečky s puntíky uprostřed, které dohromady tvoří větší čtverec 3x3 políčka velký. Tento čtverec budeme odteď nazývat “crosshair”. Crosshair slouží k tomu, aby hráči mohli ovládat svá autíčka. Crosshair je vždy vykreslen tak, aby jeho prostřední políčko bylo to, kam autíčko hráče, který je na tahu, dojede, pokud jeho vektor pohybu hráč toto kolo nezmění. Hráč ale může každé kolo změnit obě složky pohybového vektoru svého autíčka o +-1 nebo je ponechat stejné. Z toho vyplývá, že má každé kolo přesně 9 možností svého dalšího tahu. Políčka, na kterých jeho autíčko skončí po odehrání tahu jsou znázorněny jednotlivými políčky crosshair. Hráč tedy své autíčko ovládá tak, že vybere políčko crosshair, které odpovídá políčku, na které chce své autíčko přesunout.</p>
+<p>Pokud je na tahu lidksý hráč, při přejíždění kurzorem myši přes crosshair, se jeho políčka, nad kterými se zrovna kurzor nachází, červeně zvýrazňují. Svůj výběr potvrdí hráč kliknutím.</p>
+<p>Pokud je na tahu AI (počítačem řízený) hráč, červeně se zvýrazní políčko, které odpovídá tahu, který chce AI provést. Uživatel pak musí stisknout klávesu ENTER a tím je tah proveden.</p>
+<p>Pomocí tlačítek PLUS a MINUS můžeme zvětšovat a zmenšovat mapu, podle toho, jak se nám to hodí.</p>
+<p>Co dělá které tlačítko, si můžeme připomenout ve spodní části okna pod mapou, kde je ovládání stručně popsáno. Napravo od mapy můžeme v průběhu hry sledovat kolikátý tah právě provádíme, jelikož je zde znázorněn žlutým číslem. Pod ním je tlačítko “Back”, pomocí kterého se můžeme dostat zpět do nastavení hry (tím je ale ztracen stav hry a při příštím spuštění začne hra zase od začátku).</p>
+<p>Po dokončení závodu se zobrazí okno s výsledky jednotlivých hráčů. Zde se můžeme podívat na jména jednotlivých hráčů, jejich umístění v závodě, jména AI, která tato hráče ovládala (pokud nějaké byly) a počet tahů, za který byl tento hráč schopen závod dokončit.</p>
+<h2 id="pravidla-hry">Pravidla hry</h2>
+<p>Jak již bylo zmíněno v úvodu, cílem hry je v Racetrack dostat se ze startu do cíle a vyhrává ten hráč, kterému se tak povede učinit za nejnižší počet tahů. Start je na mapě označen zelenou vlajkou a cíl je označen vlajkou červenou. Pokud je na mapě cílů více, hráč může dojet do libovolného z nich. Dále jsou zde v některých mapách navíc “checkpointy” označené modrou vlajkou. Více modrých vlajek vedle sebe tvoří dohromady jeden checkpoint a to i v případě, že se jeho jednotlivá políčka dotýkají pouze rohem. Aby hráč dokončil závod na mapě s checkpointy, musí před tím, než dojede do cíle, všechny checkpointy v libovolném pořadí projet. Pokud se hráči nepovede dokončit závod za 500 tahů je diskvalifikován.</p>
+<p>Na mapě se kromě startu, cílů a checkpointů nachází samozřejmě i další políčka. Některá z nich nejsou v ničem zvláštní, ale některá mají speciální efekty. Autíčka se “neteleportují” (nelze například “přeskočit” stěnu). To znamená, že autíčko projede v každém kole všechna políčka mezi tím, kde to kolo začíná a tím, kde ho končí. Políčka mezi tím počátečním a koncovým projede přímočarou oboustranně souměrnou trasou, přičemž se může mezi políčky pohybovat i diagonálně. (viz obrázek)</p>
+<p>SCREENSHOT-PATHFINDING</p>
+<p>Zde je přehled všech typů políček a jak fungují:</p>
+<ul>
+<li><p>Silnice (černá) - Nemá žádný speciální efekt.</p></li>
+<li><p>Tráva (zelená) - Nemá žádný speciální efekt.</p></li>
+<li><p>Stěna (cihlová textura) - Po stěně se samozřejmě nedá jezdit. Pokud autíčko do stěny narazí, je zastaveno (jeho vektor pohybu je nastaven na {0,0}) a jako postih za naražení je autíčko na další tři tahy nepojízdné (hráč ovládající toto autíčko další tři tahy nehraje). - Pokud autíčko “narazí” do okraje mapy, je penalizováno stejně, jako při nárazu do stěny.</p></li>
+<li><p>Voda (modrá) - Pokud autíčko během své trasy vjede do vody, “potopí se” a nemůže pokračovat v závodě. Hráč je diskvalifikován.</p></li>
+<li><p>Písek (žlutá) - Pokud autíčko vjede do písku, je zde zastaveno (nedojede celou trasu svého tahu) a jeho vektor pohybu je nastaven na {0,0}. Tím pádem se při přejíždění více políček písku autíčko může pohybovat jen o jedno políčko za kolo.</p></li>
+<li><p>Led (modro-bílá) - Pokud autíčko skončí svůj tah na ledu, dostává se do smyku a v příštím tahu hráč ovládající toto autíčko nemůže měnit jeho vektor pohybu.</p></li>
+</ul>
+<h2 id="implementace-vlastního-ai-do-hry">Implementace vlastního AI do hry</h2>
+<p>Pro přidání vlastního AI do hry je zapotřebí provést tyto kroky:</p>
+<pre><code>1) Napište své AI (samozřejmě v programovacím jazyce Java) jako implementaci rozhraní &quot;DriverAI.java&quot;, které naleznete v jar souboru aplikace ve složce &quot;ai\DriverAI.java&quot;.
+
+2) Vložte java soubor svého AI do jar souboru aplikace do složky &quot;ai\VaseAI.java&quot;.
+
+3) Přidejte jméno souboru vašeho AI do souboru &quot;META-INF\ai.txt&quot; v jar souboru aplikace.
+
+4) Zapněte hru a v nastavení hry přiřaďte vaše AI jednomu z aut.</code></pre>
+<h2 id="přidání-vlastní-mapy-do-hry">Přidání vlastní mapy do hry</h2>
+<p>Pro přidání vlastní mapy do hry je zapotřebí provést tyto kroky:</p>
+<pre><code>1) Stáhněte si a nainstalujte editor map &quot;Tiled&quot;. ([www.mapeditor.org](https://www.mapeditor.org/))
+
+2) Vytvořte novou mapu v programu Tiled pomocí tile-setu, který najde v jar souboru aplikace ve složce &quot;maps\RacetrackTileSet.tsx&quot;.
+
+3) Vložte tmx soubor vaší mapy do jar souboru aplikace do složky &quot;maps\VaseMapa.tmx&quot;.
+
+4) Přidejte jméno souboru vaší mapy do souboru &quot;META-INF\maps.txt&quot;.
+
+5) Zapněte hru a v nastavení hry zvolte vaší mapu.</code></pre>
