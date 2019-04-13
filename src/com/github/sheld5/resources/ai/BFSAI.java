@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 import static java.lang.Math.*;
 
-// Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
-// This AI does take into consideration all special tiles and their functions.
-// Does not go through checkpoints for now.
+/*
+Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
+This AI does take into consideration all special tiles and their functions. (Is able to use sand to brake etc.)
+It is guranteed to always find the fastest path. Hovewer, it is only practical for smaller maps
+or for maps without much open space (e.g. labyrinth-like maps) as it would take hours to calculate the best path
+for a big map with a lot of open space this way.
+ */
 public class BFSAI implements DriverAI {
 
-    // Goes through the moves generated in init() method to get to the Finish.
+    // Goes through the moves generated in init() method to go through the race.
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {
         step++;
         while (movesToFinish.get(step) == null) {
@@ -34,10 +38,10 @@ public class BFSAI implements DriverAI {
     // Is set to true if a Path which ends in a Finish node has been found.
     // Used to break loops.
     private boolean finishFound;
-    // Is set to true if the Node in which the new Path ends has been visited before.
-    // Path which ends in a Node visited before will not be saved.
+    // Is set to true if the Node in which the newly generated Path ends has been visited before.
+    // Path which ends in a Node visited before will be thrown away.
     private boolean visited;
-    // The result of the while loop. Contains moves to be returned in drive() method.
+    // The result of the while loop. Contains moves to finish the race.
     private ArrayList<int[]> movesToFinish;
     // Used to go through 'movesToFinish' step by step in each call of the drive() method.
     private int step;
@@ -57,24 +61,25 @@ public class BFSAI implements DriverAI {
         System.out.println("Checkpoints: " + checkpoints.size());
 
         int i = 0;
+        // Used to store the Path currently being tested.
         Path tryPath;
         // Goes deeper in the search tree in every iteration.
         // In every iteration, considers each next possible move from each Path from previous iteration. (BFS AI)
         // Throws away new Paths which lead to a Node already visited as these would only be longer.
         while(!finishFound) {
-            // Save Paths from the previous iteration into 'tempPaths' and clear 'paths'.
+            // Saves Paths from the previous iteration into 'tempPaths' and clears 'paths'.
             tempPaths = deepCopy(paths);
             paths = new ArrayList<>();
             /*
                 FOR each Path from previous iteration:
                     IF the last Node is a special tile:
-                        -> make a new Path according to the special tile.
+                        -> make a new Path according to the rules of the special tile.
                     ELSE:
                         -> go through all nine possible next moves and create new Paths for them.
             */
             // Whenever a new Path is created, checks whether the last Node has already been visited
-            // and the new Path is not saved if it has.
-            // If Finish is found, all loops are broken.
+            // and the new Path is thrown away if it has.
+            // If Finish is found, all loops are broken and the moves of the Path which leads to Finish are
             for (Path path : tempPaths) {
                 if (path.getLastNode().isWater()) {
                     // This path will be deleted as it ends in water.
@@ -86,13 +91,15 @@ public class BFSAI implements DriverAI {
                     Node node = new Node(path.getLastNode().get(0), path.getLastNode().get(1), 0, 0);
                     node.setWall(path.getLastNode().getWall() - 1);
                     // 'nextMove' is null to represent that no move will be made this turn as the Car is crashed.
-                    checkForVisited(tryPath = new Path(path, node, null));
+                    tryPath = new Path(path, node, null);
+                    checkForVisited(tryPath);
                 } else {
                     for (int dx = -1; dx <= 1; dx++) {
                         for (int dy = -1; dy <= 1; dy++) {
                             tryPath = new Path(path, new int[]{dx,dy}, map, this);
                             checkForVisited(tryPath);
                             if (finishFound) {
+                                movesToFinish = tryPath.getMoves();
                                 break;
                             }
                         }
@@ -107,9 +114,9 @@ public class BFSAI implements DriverAI {
             }
             i++;
             if (finishFound) {
-                System.out.println("Generation " + i + ": Finish found!");
+                System.out.println("Turn " + i + ": Finish found!");
             } else {
-                System.out.println("Generation " + i + ": " + paths.size() + " paths");
+                System.out.println("Turn " + i + ": " + paths.size() + " paths");
             }
         }
 
@@ -117,6 +124,8 @@ public class BFSAI implements DriverAI {
     }
 
     // Checks if the last node of the new path was visited and adds the new Path to 'paths' if not.
+    // The Node only counts as visited if it has been visited with the same velocity vector,
+    // same checkpoints passed and same after-crash waiting value.
     private void checkForVisited(Path tryPath) {
         for (Node node : visitedNodes) {
             if (compareNodes(tryPath.getLastNode(), node) && compareCheckpoints(tryPath, node) && tryPath.getLastNode().getWall() == node.getWall()) {
@@ -133,6 +142,26 @@ public class BFSAI implements DriverAI {
         visited = false;
     }
 
+    // Compares two nodes. Returns true if the coordinates and velocity values are the same.
+    private boolean compareNodes(Node nodeA, Node nodeB) {
+        for (int i = 0; i < 4; i++) {
+            if (nodeA.get(i) != nodeB.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Compares checkpoints passed by a Path and checkpoints passed saved in a Node.
+    private boolean compareCheckpoints(Path path, Node node) {
+        for (int i = 0; i < checkpoints.size(); i++) {
+            if (path.getCheckpointsPassed()[i] != node.getCheckpointsPassed()[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Finds and saves the coordinates of the Start.
     private void findStart() {
         for (int x = 0; x < map.length; x++) {
@@ -145,7 +174,7 @@ public class BFSAI implements DriverAI {
     }
 
     // Finds and saves coordinates of each tile of each Checkpoint.
-    // Each Checkpoint is saved as 2d int array, where the first number selects a tile of the Checkpoint
+    // Each Checkpoint is saved as 2D int array, where the first number selects a tile of the Checkpoint
     // and the second number selects a coordinate of the tile.
     private void findCheckpoints() {
         checkpoints = new ArrayList<>();
@@ -187,32 +216,8 @@ public class BFSAI implements DriverAI {
         return copy;
     }
 
-    // Compares two nodes. Returns true if all attributes have the same values.
-    private boolean compareNodes(Node nodeA, Node nodeB) {
-        for (int i = 0; i < 4; i++) {
-            if (nodeA.get(i) != nodeB.get(i)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Compares checkpoints passed by a Path and checkpoints passed saved in a Node.
-    private boolean compareCheckpoints(Path path, Node node) {
-        for (int i = 0; i < checkpoints.size(); i++) {
-            if (path.getCheckpointsPassed()[i] != node.getCheckpointsPassed()[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     void finishFound() {
         finishFound = true;
-    }
-
-    void setMovesToFinish(ArrayList<int[]> moves) {
-        movesToFinish = moves;
     }
 
     ArrayList<ArrayList<int[]>> getCheckpoints() {
@@ -225,11 +230,14 @@ public class BFSAI implements DriverAI {
 
 
 // Contains X and Y coordinates of a tile and VX and VY coordinates of current velocity vector.
-// Contains additional settings for special tiles.
+// Contains additional fields used to store information about special tiles.
 class Node {
 
+    // Contains the coordinates and velocity values.
     private int[] node;
+    // Stores information about the Node being ICE or WATER.
     private boolean ice, water;
+    // Stores information about the after-crash waiting time.
     private int wall;
     // Used only for saving visited Nodes, not for Nodes in Paths. (Paths have their checkpointsPassed[] lists.)
     private boolean[] checkpointsPassed;
@@ -344,13 +352,13 @@ class Path {
             moves.add(nextMove);
         }
         path.add(createNewNode(nextMove, map, ai));
-        ai.setMovesToFinish(moves);
     }
 
     // Checks the path which would be taken by the car going from the last Node to the new one.
     // Checks for special tiles in the path using the checkForSpecialTiles() method
     // and return new "special" Node if a special tile is encountered.
     // If no special tile is encountered, creates "normal" Node at the end.
+    // (The code for checking the path of the car was taken from the main.Game.goThroughPath() method from the game.)
     @SuppressWarnings("Duplicates")
     private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
         Node last = path.get(path.size() - 1);
