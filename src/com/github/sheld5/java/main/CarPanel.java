@@ -12,9 +12,25 @@ import java.awt.*;
  */
 public class CarPanel extends JPanel {
 
+    /**
+     * The ID of the CarPanel.
+     */
     private int id;
+    /**
+     * The text-field for the user to input the name of the player.
+     */
     private JTextField playerName;
-    private JButton carColor, remove;
+    /**
+     * Button used to cycle through available car colors.
+     */
+    private JButton carColor;
+    /**
+     * Button used to remove the CarPanel. (And remove the car by doing so.)
+     */
+    private JButton remove;
+    /**
+     * Combo-box used to select the AI for the car.
+     */
     private JComboBox aiSelector;
 
     /**

@@ -13,12 +13,30 @@ import java.io.IOException;
  */
 public class Main {
 
+    /**
+     * The title of the game window.
+     */
     private static final String GAME_TITLE = "Racetrack";
+    /**
+     * The initial width of the game window.
+     */
     private static final int GAME_WIDTH = 555;
+    /**
+     * The initial height of the game window.
+     */
     private static final int GAME_HEIGHT = 555;
 
+    /**
+     * The game window.
+     */
     private static JFrame frame;
+    /**
+     * The game menu.
+     */
     private static Menu menu;
+    /**
+     * The game itself.
+     */
     private static Game game;
 
     /**

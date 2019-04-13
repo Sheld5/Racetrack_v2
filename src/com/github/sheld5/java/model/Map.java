@@ -16,9 +16,21 @@ import java.io.IOException;
  */
 public class Map extends JPanel {
 
+    /**
+     * The game of which the map is component.
+     */
     private Game game;
+    /**
+     * The size of the map.
+     */
     private int tileWidth, tileHeight;
+    /**
+     * The coordinates of the start.
+     */
     private int[] start;
+    /**
+     * The array containing the tile types of all tiles.
+     */
     private Tile[][] mapTile;
 
     /**

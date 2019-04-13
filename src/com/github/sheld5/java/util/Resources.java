@@ -9,10 +9,22 @@ import java.io.IOException;
  */
 public class Resources {
 
-    public static BufferedImage windowIcon, fileManagerIcon;
+    /**
+     * The icon used in the head of the game frame.
+     */
+    public static BufferedImage windowIcon;
+    /**
+     * The textures used to display tiles.
+     */
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
+    /**
+     * The textures of game components.
+     */
     public static BufferedImage carRed, carYellow, carBlue, carGreen, carSunk, crosshair, crosshairRed, one, two, three;
 
+    /**
+     * The number of errors encountered while loading the resources.
+     */
     private static int numberOfErrors = 0;
 
     /**
@@ -21,7 +33,6 @@ public class Resources {
      */
     public static void load() {
         windowIcon = loadImage("carIcon.png");
-        fileManagerIcon = loadImage("Windows-10-File-Explorer-icon.png");
 
         tileStart = loadImage("tileStart.png");
         tileFinish = loadImage("tileFinish.png");

@@ -11,17 +11,61 @@ import java.awt.image.BufferedImage;
  * Represents a car in the game. Manages all information about the car and its driver.
  */
 public class Car extends JPanel {
+    /**
+     * How many turns are to be skipped as punishment for crashing into a wall (or the side of the map).
+     */
     private static int TURNS_SKIPPED_ON_CRASH = 3;
+
+    /**
+     * Used to describe the color of the car.
+     */
     public enum Color {
         RED, YELLOW, BLUE, GREEN
     }
 
+    /**
+     * The game of which is the car component.
+     */
     private Game game;
-    private String playerName, aiName;
+    /**
+     * The name of the player controlling this car.
+     */
+    private String playerName;
+    /**
+     * The name of the AI controlling this car if there is one.
+     */
+    private String aiName;
+    /**
+     * The color of the car.
+     */
     private Color color;
+    /**
+     * The AI controlling the car if there is one.
+     */
     private DriverAI driver;
-    private int[] coordinates, velocity;
-    private boolean crashed, sunk, finished;
+    /**
+     * The coordinates at which is the car currently located.
+     */
+    private int[] coordinates;
+    /**
+     * The vector representing the current velocity of the car.
+     */
+    private int[] velocity;
+    /**
+     * Is true if the car has crashed and has to skip turns as punishment.
+     */
+    private boolean crashed;
+    /**
+     * Is true if the car has sunk into water and is no longer able to continue the race.
+     */
+    private boolean sunk;
+    /**
+     * Is true if the car has finished the race.
+     */
+    private boolean finished;
+    /**
+     * Stores the value of how many turn has the car to wait before continuing the race because it has crashed.
+     */
     private int crashCountdown;
 
     /**

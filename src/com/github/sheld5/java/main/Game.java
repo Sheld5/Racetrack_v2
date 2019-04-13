@@ -22,26 +22,93 @@ import static java.lang.Math.sqrt;
  */
 public class Game extends JPanel implements KeyListener {
 
+    /**
+     * The indent of the map from the sides of the screen.
+     */
     private final static int MAP_INDENT = 16;
+    /**
+     * The maximum of turns players can take before being DQed.
+     */
     private final static int TURN_MAX = 500;
+    /**
+     * The name of the tile-set file used for reading map files.
+     */
     private final static String TILE_SET_FILE_NAME = "RacetrackTileSet.tsx";
 
+    /**
+     * Current size of one tile. All in-game components calculate their size from this value.
+     * Is altered to zoom in and out.
+     */
     private int tileSize;
 
+    /**
+     * Contains instances of ScorePanel displaying the post-game score of players.
+     */
     private JPanel scoreMainPanel;
+    /**
+     * Used to be able to scroll in the scoreMainPanel.
+     */
     private JScrollPane scoreScrollPane;
+    /**
+     * Displays the current turn.
+     */
     private JLabel turnLabel;
-    private JButton back, showScore, hideScore;
+    /**
+     * Button used to go back to the menu.
+     */
+    private JButton back;
+    /**
+     * Button used to show the score panel again after it has been hidden.
+     */
+    private JButton showScore;
+    /**
+     * Button used to hide the score panel.
+     */
+    private JButton hideScore;
 
+    /**
+     * The instance of the Map used in the game.
+     */
     private Map map;
+    /**
+     * An array containing all Cars.
+     */
     private Car[] cars;
+    /**
+     * 2D array of CrosshairTiles forming the crosshair used to get input from human players.
+     */
     private CrosshairTile[][] ch;
+    /**
+     * An array containing all Checkpoints.
+     */
     private Checkpoint[] checkpoints;
+    /**
+     * The index of the Car currently on turn.
+     */
     private int activeCarIndex;
+    /**
+     * The Car currently on turn.
+     */
     private Car activeCar;
+    /**
+     * Used to stop the car from moving further. (E.g. after it crashed into a wall.)
+     */
     private boolean stop;
-    private int turn, carsFinished;
+    /**
+     * Stores the current turn.
+     */
+    private int turn;
+    /**
+     * The number of cars which have finished the race.
+     */
+    private int carsFinished;
+    /**
+     * Used to store the next move an AI wants to make.
+     */
     private int[] nextAiMove;
+    /**
+     * Is true when next AI move is stored and the game is waiting for the user to confirm it.
+     */
     private boolean aiWaiting;
 
     /**

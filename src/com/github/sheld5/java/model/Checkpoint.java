@@ -5,7 +5,13 @@ package model;
  */
 public class Checkpoint {
 
+    /**
+     * Stores coordinates of each tile of the checkpoint.
+     */
     private int[][] coordinates;
+    /**
+     * Each boolean of the array is set to true once the corresponding car has passed the checkpoint.
+     */
     private boolean[] carsPassed;
 
     /**

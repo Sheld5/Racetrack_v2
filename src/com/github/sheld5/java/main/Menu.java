@@ -10,21 +10,74 @@ import java.util.ArrayList;
  * Manages the menu, all its components and all its functions.
  */
 class Menu extends JPanel {
+    /**
+     * The value to which the padding of GridBagLayouts used in the menu is set.
+     */
     private final int DEFAULT_IPAD = 5;
 
+    /**
+     * Font used in the menu.
+     */
     private Font fontBig, fontSmall;
+    /**
+     * Heading of the menu.
+     */
     private JLabel racetrack, gmSelection;
-    private JButton playButton, exitButton;
+    /**
+     * Button used to go the the pre-game settings menu.
+     */
+    private JButton playButton;
+    /**
+     * Button used to exit the game.
+     */
+    private JButton exitButton;
+    /**
+     * Contains startButton and backButton.
+     */
     private JPanel startBackPanel;
-    private JButton startButton, backButton;
+    /**
+     * Button used to start the game after choosing the settings.
+     */
+    private JButton startButton;
+    /**
+     * Button used to go back to the main menu.
+     */
+    private JButton backButton;
+    /**
+     * Contains the GUI for changing the map settings.
+     */
     private JPanel mapPanel;
+    /**
+     * Marks the map settings.
+     */
     private JLabel mapLabel;
+    /**
+     * Combo-box used to select the map.
+     */
     private JComboBox mapSelector;
-    private JScrollPane carScrollPane;
+    /**
+     * Contains instances of CarPanel representing the cars.
+     */
     private JPanel carMainPanel;
+    /**
+     * Used to be able to scroll in the carMainPanel.
+     */
+    private JScrollPane carScrollPane;
+    /**
+     * The array containing all CarPanels.
+     */
     private ArrayList<CarPanel> carPanels;
+    /**
+     * The current number of CarPanels.
+     */
     private int carCount;
+    /**
+     * Button used to add a CarPanel to the carMainPanel.
+     */
     private JButton addCar;
+    /**
+     * Used to store the tile-size last used in the previous game.
+     */
     private int lastGameTileSize;
 
     /**

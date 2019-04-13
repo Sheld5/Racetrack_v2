@@ -8,7 +8,22 @@ import java.awt.*;
  */
 public class ScorePanel extends JPanel {
 
-    private JLabel place, playerName, aiName, turnCount;
+    /**
+     * Displays how has the player placed in the race.
+     */
+    private JLabel place;
+    /**
+     * Displays the name of the player.
+     */
+    private JLabel playerName;
+    /**
+     * Displays the name of the AI if there was one controlling the car.
+     */
+    private JLabel aiName;
+    /**
+     * Displays the number of turns it took to the player to finish the race.
+     */
+    private JLabel turnCount;
 
     /**
      * ScorePanel constructor. Initializes all components of the ScorePanel.

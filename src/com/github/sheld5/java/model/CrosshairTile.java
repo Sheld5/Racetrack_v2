@@ -14,10 +14,25 @@ import java.awt.image.BufferedImage;
  */
 public class CrosshairTile extends JPanel implements MouseListener {
 
+    /**
+     * The game of which is the crosshair component.
+     */
     private Game game;
+    /**
+     * The index of the crosshair tile representing which tile of the crosshair it is.
+     */
     private int[] index;
+    /**
+     * The coordinate of the crosshair tile.
+     */
     private int x, y;
+    /**
+     * Is true if the mouse is positioned over this crosshair tile.
+     */
     private boolean mouseOver;
+    /**
+     * Is true if this crosshair tile corresponds to the next move of the AI on turn and is to be highlighted.
+     */
     private boolean isNextAiMove;
 
     /**
