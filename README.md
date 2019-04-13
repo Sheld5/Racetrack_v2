@@ -1,11 +1,16 @@
-# Racetrack_v2
-maturitní projekt na motivy hry "Racetrack"
+# Racetrack
+
+PC version of the classic "racetrack" game (usually played with pen and paper) with AI interface.
 
 ## Basic rules
 
  - The goal of the game is to get to the finish in the least turns.
  - All cars start at the START tile.
+ - Cars are controlled by changing their velocity vector each turn by -1,0 or 1 in each direction.
+ - Each turn the position of the car changes by adding its velocity vector to it.
+ - The car moves through all tiles along the way, so it cannot for example "jump" over walls etc.
  - Cars cannot collide or interfere with each other in any way.
+ - Each turn the car travels from
  - The car has to pass all checkpoints before passing the finish.
  - Adjacent CHECKPOINT tiles count as a single checkpoint.
  - If there is more than one FINISH tile, it does not matter which one the car passes.
@@ -24,12 +29,20 @@ ICE - if the car finishes the turn on ice, it cannot be controlled next turn and
 
 ## AI implementation
 
-Follow these steps to implement your own AI to the game:
+Follow these steps to implement your own AI into the game:
 
-1\) Create your own AI class that implements the java.model.DriverAI interface.
+- Add the .java file of your AI (implementing DriverAI.java) to the /ai directory.
 
-*Optional: Copy your AI into the resource/ai folder. 
+- Add the name of the file to the /META-INF/ai.txt file.
 
-2\) Start the game and add your AI to the game in the AI settings by choosing the .java file in the file explorer. (You can add the same AI more than once.)
+- Run the game and add your AI to one of the cars in the pre-game settings.
 
-3\) All added AIs will control their own cars as long as there are enough cars for them. The rest of the cars will be human-controlled.
+## Adding custom maps
+
+To add a custom map to the game follow these steps:
+
+- Download the "Tiled" map editor and use the tile-set located in /maps/RacetrackTileSet.tsx to create your map.
+
+- Add your map into the /maps directory and add the name of the file to the /META-INF/maps.txt file.
+
+- Run the game and choose your map in the pre-game settings.
