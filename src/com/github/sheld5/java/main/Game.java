@@ -113,7 +113,7 @@ public class Game extends JPanel implements KeyListener {
     /**
      * Is true when next AI move is stored and the game is waiting for the user to confirm it.
      */
-    private boolean aiWaiting;
+    private boolean waitingForEnter;
 
     /**
      * Initializes the game with information gathered with get-methods of the menu instance given to it as parameter.
@@ -152,7 +152,7 @@ public class Game extends JPanel implements KeyListener {
         turn = 0;
         carsFinished = 0;
         nextAiMove = new int[]{0,0};
-        aiWaiting = false;
+        waitingForEnter = false;
 
         System.out.println("Game initialized successfully");
 
@@ -444,8 +444,10 @@ public class Game extends JPanel implements KeyListener {
                 activeCar.countdown();
                 nextTurn();
             } else if (map.getTile(activeCar.getCoordinates()) == Tile.ICE && (activeCar.getVelX() != 0 || activeCar.getVelY() != 0)) {
-                drive(activeCar, new int[]{0,0});
-                nextTurn();
+                nextAiMove = new int[]{0,0};
+                showCH();
+                showNextAiMove(true);
+                waitingForEnter = true;
             } else {
                 showCH();
                 if (!humanOnTurn()) {
@@ -459,7 +461,7 @@ public class Game extends JPanel implements KeyListener {
                         nextAiMove = new int[]{0,0};
                     }
                     showNextAiMove(true);
-                    aiWaiting = true;
+                    waitingForEnter = true;
                 }
                 // in case a human player is on turn, wait for their input from CrosshairTile ( onCHClick() has to be called )
                 // in case an AI player is on turn, show the decision the AI made and wait for ENTER to be pressed ( keyPressed(VK_ENTER) has to be called )
@@ -495,7 +497,7 @@ public class Game extends JPanel implements KeyListener {
      * @see Game#nextTurn()
      */
     public void onCHClick(int[] index) {
-        if (humanOnTurn()) {
+        if (humanOnTurn() && !activeCarOnIce()) {
             hideCH();
             drive(activeCar, index);
             nextTurn();
@@ -518,8 +520,8 @@ public class Game extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (!humanOnTurn() && aiWaiting) {
-                aiWaiting = false;
+            if (waitingForEnter) {
+                waitingForEnter = false;
                 hideCH();
                 drive(activeCar, nextAiMove);
                 nextTurn();
@@ -777,6 +779,14 @@ public class Game extends JPanel implements KeyListener {
             car.sunk();
             stop = true;
             System.out.println("Car" + activeCarIndex + " sunk!");
+        }
+    }
+
+    public boolean activeCarOnIce() {
+        if (map.getTile(activeCar.getCoordinates()) == Tile.ICE) {
+            return true;
+        } else {
+            return false;
         }
     }
 

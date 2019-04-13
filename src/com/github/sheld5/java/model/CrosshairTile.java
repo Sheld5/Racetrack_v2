@@ -62,7 +62,7 @@ public class CrosshairTile extends JPanel implements MouseListener {
         super.paintComponent(g);
         setSize(game.getTileSize(), game.getTileSize());
         BufferedImage image;
-        if (game.humanOnTurn()) {
+        if (game.humanOnTurn() && !game.activeCarOnIce()) {
             if (mouseOver) {
                 image = Resources.crosshairRed;
             } else {
