@@ -11,6 +11,7 @@ It is guaranteed to always find the fastest path. However, it is only practical 
 or for maps without much open space (e.g. labyrinth-like maps) as it would take hours to calculate the best path
 for a big map with a lot of open space this way.
  */
+@SuppressWarnings("Duplicates")
 public class BFSAI implements DriverAI {
 
     // Goes through the moves generated in init() method to go through the race.
@@ -203,15 +204,6 @@ public class BFSAI implements DriverAI {
                 }
             }
         }
-    }
-
-    // Returns deep copy of the ArrayList<Path> given to it as the parameter.
-    private ArrayList<Path> deepCopy(ArrayList<Path> original) {
-        ArrayList<Path> copy = new ArrayList<>();
-        for (Path path : original) {
-            copy.add(path);
-        }
-        return copy;
     }
 
     void finishFound() {
