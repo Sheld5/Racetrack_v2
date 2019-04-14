@@ -6,16 +6,11 @@ Web about the project: https://sheld5.github.io/Racetrack_v2/
 
 ## Installation
 
-To run the game follow these steps:
+To run the game do one of the following:
 
-- Download the project from the github page.
+- Download the jar file. (/out/artifacts/Racetrack_v2_jar/Racetrack_v2.jar)
 
-- Run Ant in the main directory.
-
-    - Ant will create compiled code in the /out/production directory
-      and runnable jar file in the /out/artifacts directory.
-      
-- Run the jar file.
+- Download the source code and run Ant, which will compile the code and create the jar file as well.
 
 ## Basic rules
 
