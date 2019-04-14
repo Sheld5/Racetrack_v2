@@ -36,14 +36,14 @@
 </div>
 <p>Po spuštění aplikace se otevře okno s hlavním menu. Zde jsou tlačítka <em>Play</em> a <em>Exit</em>. Pokud chceme hrát hru, klikneme na tlačítko <em>Play</em>. Tlačítkem <em>Exit</em> můžeme aplikaci vypnout.</p>
 <figure>
-<img src="main_menu.jpg" alt="Hlavní menu" /><figcaption>Hlavní menu</figcaption>
+<img src="images/main_menu.jpg" alt="Hlavní menu" /><figcaption>Hlavní menu</figcaption>
 </figure>
 <p>Po stisknutí tlačítka <em>Play</em> se dostaneme do nastavení hry. Zde si můžeme pomocí grafického uživatelského rozhraní zvolit veškerá nastavení hry, než hru zapneme.</p>
 <p>V horní části okna aplikace můžeme pomocí rozbalovacího seznamu vybrat mapu, na které chceme hrát.</p>
 <p>Uprostřed se nachází velký šedý obdélník pro nastavení hráčů. V něm je mimo jiné tlačítko <em>Add Player</em>. Tímto tlačítkem můžeme přidávat hráče. Když ho stiskneme, uvidíme, že je do obdélníku přidán nový tmavě šedý pruh, obsahující další různá nastavení, stejný jako ten, co tam byl od začátku. Každý z těchto pruhů znázorňuje jednoho hráče, který bude ve hře závodit, a obsahuje veškerá nastavení pro tohoto hráče. První (zleva) je tlačítko, kterým můžeme vybírat barvu auta pro daného hráče. Klikáním na toto tlačítko rotujeme mezi možnými barvami. Druhé je textové pole, ve kterém si můžeme zvolit jméno hráče. Třetí je rozbalovací seznam, pomocí kterého můžeme nastavit, jestli má být tento hráč ovládán počítačem. Pokud chceme, aby byl tento hráč ovládán člověkem, zvolíme možnost "HUMAN". Pokud chceme, aby byl ovládán jednou z umělých inteligencí, zvolíme příslušnou z nich v seznamu. Nakonec se zde nachází tlačítko s červeným křížkem, pomocí kterého můžeme hráče odebrat.</p>
 <p>Ve spodní části obrazovky se nachází dvě tlačítka. Tlačítkem <em>Start Game</em> spustíme hru s nastavením, které je momentálně zvoleno. Stisknutím tlačítka <em>Back</em> se vrátíme zpět do hlavního menu.</p>
 <figure>
-<img src="game_settings.jpg" alt="Nastavení hry"/><figcaption>Nastavení hry</figcaption>
+<img src="images/game_settings.jpg" alt="Nastavení hry"/><figcaption>Nastavení hry</figcaption>
 </figure>
 <div id="ovladani-hry">
 <h2 id="ovladani-hry">Ovládání hry</h2>
@@ -53,19 +53,19 @@
 <p>Pokud je na tahu AI (počítačem řízený) hráč, červeně se zvýrazní políčko, které odpovídá tahu, který chce AI provést. Uživatel pak musí stisknout klávesu ENTER a tím je tah proveden.</p>
 <p>Pokud je autíčko, které je na tahu, na ledu, červeně se zvýrazní prostřední políčko a žádné jiné nelze zvolit bez ohledu na to, jestli je na tahu lidský hráč nebo AI, které chce udělat jiný tah. (Proč tomu tak je, se dozvíme v sekci <em>Pravidla hry</em>.) Uživatel musí stisknout klávesu ENTER, aby byl tah proveden.</p>
 <figure>
-<img src="in-game_view.jpg" alt="Hra - AI na tahu" /><figcaption>Hra - AI na tahu</figcaption>
+<img src="images/in-game_view.jpg" alt="Hra - AI na tahu" /><figcaption>Hra - AI na tahu</figcaption>
 </figure>
 <p>Pomocí tlačítek PLUS a MINUS můžeme zvětšovat a zmenšovat mapu, podle toho, jak se nám to hodí.</p>
 <p>Co dělá které tlačítko, si můžeme připomenout ve spodní části okna pod mapou, kde je ovládání stručně popsáno. Napravo od mapy můžeme v průběhu hry sledovat kolikátý tah právě provádíme, jelikož je zde znázorněn žlutým číslem. Pod ním je tlačítko <em>Back</em>, pomocí kterého se můžeme dostat zpět do nastavení hry (tím je ale ztracen stav hry a při příštím spuštění začne hra zase od začátku).</p>
 <p>Po dokončení závodu se zobrazí okno s výsledky jednotlivých hráčů. Zde se můžeme podívat na jména jednotlivých hráčů, jejich umístění v závodě, jména AI, která tato hráče ovládala (pokud nějaké byly) a počet tahů, za který byl tento hráč schopen závod dokončit. Pomocí tlačítka s červeným nápisem "Hide Score" můžeme okno se Score schovat. Nyní si můžeme všimnout, že na obrazovce přibylo tlačítko <em>Score</em>, které nám po stisknutí opět zobrazí okno s výsledky.</p>
 <figure>
-<img src="post-game_score.jpg" alt="Okno s výsledky" /><figcaption>Okno s výsledky</figcaption>
+<img src="images/post-game_score.jpg" alt="Okno s výsledky" /><figcaption>Okno s výsledky</figcaption>
 </figure>
 <h1 id="pravidla-hry">Pravidla hry</h1>
 <p>Jak již bylo zmíněno v úvodu, cílem hry je v Racetrack dostat se ze startu do cíle a vyhrává ten hráč, kterému se tak povede učinit za nejnižší počet tahů. Start je na mapě označen zelenou vlajkou a cíl je označen vlajkou červenou. Pokud je na mapě cílů více, hráč může dojet do libovolného z nich. Dále jsou zde v některých mapách navíc "checkpointy" označené modrou vlajkou. Více modrých vlajek vedle sebe tvoří dohromady jeden checkpoint a to i v případě, že se jeho jednotlivá políčka dotýkají pouze rohem. Aby hráč dokončil závod na mapě s checkpointy, musí před tím, než dojede do cíle, všechny checkpointy v libovolném pořadí projet. Pokud se hráči nepovede dokončit závod za 500 tahů je diskvalifikován.</p>
 <p>Na mapě se kromě startu, cílů a checkpointů nachází samozřejmě i další políčka. Některá z nich nejsou v ničem zvláštní, ale některá mají speciální efekty. Autíčka se "neteleportují" (nelze například "přeskočit" stěnu). To znamená, že autíčko projede v každém kole všechna políčka mezi tím, kde to kolo začíná a tím, kde ho končí. Políčka mezi tím počátečním a koncovým projede přímočarou oboustranně souměrnou trasou, přičemž se může mezi políčky pohybovat i diagonálně. Na obrázku níže můžeme vidět dva příklady projetí trasy autíčkem. Všimněte si, že při projetí zelené trasy se autíčko pohybuje i diagonálně, zatíco při projetí červené trasy se nikde diagonálně nepohybuje tak, aby trasa byla souměrná.</p>
 <figure>
-<img src="path.jpg" alt="Trasa autíčka" /><figcaption>Trasa autíčka</figcaption>
+<img src="images/path.jpg" alt="Trasa autíčka" /><figcaption>Trasa autíčka</figcaption>
 </figure>
 <p>Zde je přehled všech typů políček a jak fungují:</p>
 <ul>
