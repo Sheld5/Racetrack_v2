@@ -3,6 +3,16 @@ import java.util.ArrayList;
 import static java.lang.Math.*;
 
 /*
+     ! ! ! ! ! ! ! ! ! ! ! !
+This is an exact copy of BFSAI with the only difference of having a replication of a bug which has occurred
+while developing the AI. This bug causes the AI to think that it can "jump" over walls and water.
+(The cause of the bug is on lines 478 and 482 where the lastTile condition should be removed.
+Originally, the bug was caused by a different mistake, but at that point the AI also was not yet able to take
+checkpoints into consideration, so I created this bugged version instead, because I find the bug quite interesting.
+     ! ! ! ! ! ! ! ! ! ! ! !
+ */
+
+/*
 Implementation of DriverAI which uses Breadth-First-Search to find the shortest route to finish.
 This AI does take into consideration all special tiles and their functions. (Is able to use sand to brake etc.)
 It is guaranteed to always find the fastest path. However, it is only practical for smaller maps
@@ -10,7 +20,7 @@ or for maps without much open space (e.g. labyrinth-like maps) as it would take 
 for a big map with a lot of open space this way.
  */
 @SuppressWarnings("Duplicates")
-public class BFSAI implements DriverAI {
+public class BFSAIWallBug implements DriverAI {
 
     // Goes through the moves generated in init() method to go through the race.
     public int[] drive(int[] carCoordinates, int[] carVelocity, Tile[][] map) {
@@ -289,7 +299,7 @@ class Path {
     private boolean[] checkpointsPassed;
 
     // Constructor for the first Path instance with only one Node: the Start.
-    Path(int[] start, BFSAI ai) {
+    Path(int[] start, BFSAIWallBug ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
         path.add(new Node(start[0], start[1], 0, 0));
@@ -320,7 +330,7 @@ class Path {
 
     // Constructs new Path with one more Node than the previous Path given to it as parameter.
     // The new Node is created according to the nextMove given to it as parameter.
-    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAI ai) {
+    Path(Path parentPath, int[] nextMove, Tile[][] map, BFSAIWallBug ai) {
         path = new ArrayList<>();
         moves = new ArrayList<>();
         checkpointsPassed = new boolean[parentPath.getCheckpointsPassed().length];
@@ -348,7 +358,7 @@ class Path {
     // If no special tile is encountered, creates "normal" Node at the end.
     // (The code for checking the path of the car was taken from the main.Game.goThroughPath() method from the game.)
     @SuppressWarnings("Duplicates")
-    private Node createNewNode(int[] nextMove, Tile[][] map, BFSAI ai) {
+    private Node createNewNode(int[] nextMove, Tile[][] map, BFSAIWallBug ai) {
         Node last = path.get(path.size() - 1);
 
         int initX = last.get(0);
@@ -459,7 +469,7 @@ class Path {
 
     // Checks for special tile. Returns "special" Node if a special tile is encountered. Returns null otherwise.
     @SuppressWarnings("Duplicates")
-    private Node checkForSpecialTiles(int x, int y, int lastX, int lastY, Tile[][] map, BFSAI ai, boolean lastTile, int[] nextMove) {
+    private Node checkForSpecialTiles(int x, int y, int lastX, int lastY, Tile[][] map, BFSAIWallBug ai, boolean lastTile, int[] nextMove) {
         try {
             if (map[x][y] == Tile.GRASS) {}
         }  catch (ArrayIndexOutOfBoundsException e) {
@@ -467,11 +477,11 @@ class Path {
             node.setWall(3);
             return node;
         }
-        if (map[x][y] == Tile.WALL) {
+        if (lastTile && map[x][y] == Tile.WALL) {
             Node node = new Node(lastX, lastY, 0, 0);
             node.setWall(3);
             return node;
-        } else if (map[x][y] == Tile.WATER) {
+        } else if (lastTile && map[x][y] == Tile.WATER) {
             Node node = new Node(x, y, 0, 0);
             node.setWaterTrue();
             return node;
