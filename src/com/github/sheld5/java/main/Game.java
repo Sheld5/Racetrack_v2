@@ -439,10 +439,6 @@ public class Game extends JPanel implements KeyListener {
             endRace();
         } else {
             nextCar();
-            if (activeCarIndex == 0) {
-                turn++;
-                updateTurnCount();
-            }
             if (activeCar.isCrashed()) {
                 activeCar.countdown();
                 nextTurn();
@@ -902,7 +898,7 @@ public class Game extends JPanel implements KeyListener {
     }
 
     /**
-     * Rotates activeCarIndex and activeCar to the next car.
+     * Rotates activeCarIndex and activeCar to the next car. Increases whenever the activeCarIndex is 0.
      */
     private void rotateCar() {
         if (activeCarIndex < cars.length - 1) {
@@ -911,6 +907,10 @@ public class Game extends JPanel implements KeyListener {
             activeCarIndex = 0;
         }
         activeCar = cars[activeCarIndex];
+        if (activeCarIndex == 0) {
+            turn++;
+            updateTurnCount();
+        }
     }
 
     /**

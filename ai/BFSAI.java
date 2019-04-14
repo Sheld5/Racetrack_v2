@@ -113,7 +113,7 @@ public class BFSAI implements DriverAI {
             if (finishFound) {
                 System.out.println("Turn " + i + ": Finish found!");
             } else {
-                System.out.println("Turn " + i + ": " + paths.size() + " paths");
+                System.out.println("Turn " + i + ": " + paths.size());
             }
         }
 
