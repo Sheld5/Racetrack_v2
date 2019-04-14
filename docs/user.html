@@ -29,15 +29,13 @@
 <h1 id="instalace-a-spusteni">Instalace a spuštění</h1>
 <p>Pro používání aplikace není nutná instalace. Stačí si stáhnout soubor <em>Racetrack_v2.jar</em> a spustit ho. Tento soubor lze stáhnout zde: <a href="https://github.com/Sheld5/Racetrack_v2/tree/master/out/artifacts/Racetrack_v2_jar"><em>github.com/Sheld5/Racetrack_v2/tree/master/out/artifacts/Racetrack_v2_jar</em></a></p>
 <p>Pro fungování aplikace je nutné pouze mít nainstalovanou aktuální verzi softwaru Java (JRE 12). Java lze stáhnout zde: <a href="https://www.java.com/en/download/"><em>www.java.com/en/download</em></a></p>
+<p>Pokud chcete hrát proti počítačem řízeným protivníkům, můžete si stáhnout soubory AI na<a href="https://github.com/Sheld5/Racetrack_v2/tree/master/ai"><em>github.com/Sheld5/Racetrack_v2/tree/master/ai</em></a>.</p>
 <p>Pro vytváření vlastních map do hry je potřeba si stáhnout a nainstalovat editor map <em>Tiled</em>. Ten lze stáhnout zdarma na této adrese: <a href="https://www.mapeditor.org/"><em>www.mapeditor.org</em></a></p>
 <h1 id="ovladani-aplikace">Ovládání aplikace</h1>
 <div id="menu">
 <h2 id="menu">Menu</h2>
 </div>
 <p>Po spuštění aplikace se otevře okno s hlavním menu. Zde jsou tlačítka <em>Play</em> a <em>Exit</em>. Pokud chceme hrát hru, klikneme na tlačítko <em>Play</em>. Tlačítkem <em>Exit</em> můžeme aplikaci vypnout.</p>
-<figure>
-<img src="images/main_menu.jpg" alt="Hlavní menu" /><figcaption>Hlavní menu</figcaption>
-</figure>
 <p>Po stisknutí tlačítka <em>Play</em> se dostaneme do nastavení hry. Zde si můžeme pomocí grafického uživatelského rozhraní zvolit veškerá nastavení hry, než hru zapneme.</p>
 <p>V horní části okna aplikace můžeme pomocí rozbalovacího seznamu vybrat mapu, na které chceme hrát.</p>
 <p>Uprostřed se nachází velký šedý obdélník pro nastavení hráčů. V něm je mimo jiné tlačítko <em>Add Player</em>. Tímto tlačítkem můžeme přidávat hráče. Když ho stiskneme, uvidíme, že je do obdélníku přidán nový tmavě šedý pruh, obsahující další různá nastavení, stejný jako ten, co tam byl od začátku. Každý z těchto pruhů znázorňuje jednoho hráče, který bude ve hře závodit, a obsahuje veškerá nastavení pro tohoto hráče. První (zleva) je tlačítko, kterým můžeme vybírat barvu auta pro daného hráče. Klikáním na toto tlačítko přepínáme mezi možnými barvami. Druhé je textové pole, ve kterém můžeme zvolit jméno hráče. Dále je zde bílý nápis <em>HUMAN</em>. Ten značí, že v tuto chvíli není pro dané autíčko zvolena žádná AI a bude tedy řízeno lidským hráčem. Pokud chceme pro dané autíčko vybrat AI, použijeme tlačítko s ikonou složky. Po stisknutí tlačítka se otevře prohlížeč souborů, pomocí kterého můžeme zvolit java soubor té AI, kterou chceme použít. Po úspěšném zvolení souboru AI se místo nápisu <em>HUMAN</em> zeleně zobrazí jméno zvolené AI. Nakonec je zde tlačítko s červeným křížkem, kterým můžeme daného hráče odebrat.</p>
@@ -78,6 +76,13 @@
 <li><p>Voda (modrá) - Pokud autíčko během své trasy vjede do vody, "potopí se" a nemůže pokračovat v závodě. Hráč je diskvalifikován.</p></li>
 <li><p>Písek (žlutá) - Pokud autíčko vjede do písku, je zde zastaveno (nedojede celou trasu svého tahu) a jeho vektor pohybu je nastaven na {0,0}. Tím pádem se při přejíždění více políček písku autíčko může pohybovat jen o jedno políčko za kolo.</p></li>
 <li><p>Led (bílo-modrá) - Pokud autíčko skončí svůj tah na ledu, dostává se do smyku a v příštím tahu hráč ovládající toto autíčko nemůže měnit jeho vektor pohybu.</p></li>
+</ul>
+<h1 id="implementace-vlastni-ai">Implementace vlastní AI</h1>
+<p>Pro implementaci vlastní AI do hry proveďte tyto kroky:</p>
+<ul>
+<li><p>Stáhněte si rozhraní <em>DriverAI.java</em> z adresy <a href="https://github.com/Sheld5/Racetrack_v2/tree/master/ai"><em>github.com/Sheld5/Racetrack_v2/tree/master/ai</em></a>.</p></li>
+<li><p>Napište svou AI, která implementuje rozhraní <em>DriverAI.java</em>.</p></li>
+<li><p>V nastavení hry přiřaďte některému z aut vaší AI kliknutím na ikonku složky a výběrem příslušného java souboru.</p></li>
 </ul>
 <h1 id="pridani-vlastni-mapy-do-hry">Přidání vlastní mapy do hry</h1>
 <p>Pro přidání vlastní mapy do hry je zapotřebí provést tyto kroky:</p>

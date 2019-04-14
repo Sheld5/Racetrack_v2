@@ -39,13 +39,11 @@ ICE - if the car finishes the turn on ice, it cannot be controlled next turn and
 
 ## AI implementation
 
-To implement your own AI to the game follow these steps:
+You can download some AIs from the /ai directory or you can write your own AI.
+If you want to add AI in the game, just click on the folder icon in the pre-game settings
+and choose the java file of the AI you want.
 
-- Add the .java file of your AI (implementing DriverAI.java) to the /ai directory.
-
-- Add the name of the file to the /META-INF/ai.txt file.
-
-- Run the game and add your AI to one of the cars in the pre-game settings.
+If you want to write your own AI implement the "DriverAI.java" interface and then use your AI the same way.
 
 ## Adding custom maps
 
