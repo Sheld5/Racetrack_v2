@@ -1,16 +1,12 @@
 import java.util.ArrayList;
 import static java.lang.Math.*;
 
-// Simple AI which creates "Proximity map" which assigns every tile value depending on their proximity to the finish.
-// Then creates simmilar map for each checkpoint on the map and chooses as target the closest checkpoint.
-// Then, every turn the AI chooses the option with the lowest proximity to the target and moves there.
-// The AI only moves one tile per turn because it would crash all the time otherwise.
-// Does not go on ice at any cost.
+// This is a copy of the ProximityAI except it drives fast.
+// Crashes and swims a lot. Also tries to jump over water and walls sometimes.
 @SuppressWarnings("Duplicates")
-public class ProximityAI implements DriverAI {
+public class ProximityAIReckless implements DriverAI {
 
     private Tile[][] map;
-    private int[] start;
     private ArrayList<int[]> finishes;
     private ArrayList<ArrayList<int[]>> checkpoints;
     private boolean[] checkpointsPassed;
@@ -29,7 +25,21 @@ public class ProximityAI implements DriverAI {
         }
 
         if (!hasTarget) {
-            findNewTarget(carCoordinates);
+            if (allCheckpointsPassed()) {
+                target = -1;
+            } else {
+                int value = -1;
+                for (int i = 0; i < checkpoints.size(); i++) {
+                    if (checkpointsPassed[i] == false) {
+                        if (value == -1 || checkpointProximityMaps.get(i)[carCoordinates[0]][carCoordinates[1]] < value) {
+                            target = i;
+                            value = checkpointProximityMaps.get(i)[carCoordinates[0]][carCoordinates[1]];
+                        }
+                    }
+                }
+            }
+            hasTarget = true;
+            System.out.println("New target: " + target);
         }
 
         int bestValue = -1;
@@ -37,19 +47,17 @@ public class ProximityAI implements DriverAI {
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 try {
-                    if (abs(carVelocity[0] + x) <= 1 && abs(carVelocity[1] + y) <= 1) {
-                        if (target == -1) {
-                            int tileValue = finishProximityMap[carCoordinates[0] + carVelocity[0] + x][carCoordinates[1] + carVelocity[1] + y];
-                            if (tileValue != -1 && (bestValue == -1 || bestValue > tileValue)) {
-                                bestValue = tileValue;
-                                move = new int[]{x,y};
-                            }
-                        } else {
-                            int tileValue = checkpointProximityMaps.get(target)[carCoordinates[0] + carVelocity[0] + x][carCoordinates[1] + carVelocity[1] + y];
-                            if (tileValue != -1 && (bestValue == -1 || bestValue > tileValue)) {
-                                bestValue = tileValue;
-                                move = new int[]{x,y};
-                            }
+                    if (target == -1) {
+                        int tileValue = finishProximityMap[carCoordinates[0] + carVelocity[0] + x][carCoordinates[1] + carVelocity[1] + y];
+                        if (tileValue != -1 && (bestValue == -1 || bestValue > tileValue)) {
+                            bestValue = tileValue;
+                            move = new int[]{x,y};
+                        }
+                    } else {
+                        int tileValue = checkpointProximityMaps.get(target)[carCoordinates[0] + carVelocity[0] + x][carCoordinates[1] + carVelocity[1] + y];
+                        if (tileValue != -1 && (bestValue == -1 || bestValue > tileValue)) {
+                            bestValue = tileValue;
+                            move = new int[]{x,y};
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {}
@@ -68,44 +76,14 @@ public class ProximityAI implements DriverAI {
         return true;
     }
 
-    private void findNewTarget(int[] carCoordinates) {
-        if (allCheckpointsPassed()) {
-            target = -1;
-        } else {
-            int value = -1;
-            for (int i = 0; i < checkpoints.size(); i++) {
-                if (checkpointsPassed[i] == false) {
-                    if (value == -1 || checkpointProximityMaps.get(i)[carCoordinates[0]][carCoordinates[1]] < value) {
-                        target = i;
-                        value = checkpointProximityMaps.get(i)[carCoordinates[0]][carCoordinates[1]];
-                    }
-                }
-            }
-        }
-        hasTarget = true;
-        System.out.println("New target: " + target);
-    }
-
     @Override
     public void init(Tile[][] map) {
         this.map = map;
-        findStart();
         findFinishes();
         findCheckpoints();
         initProximityMapForFinishes();
         initProximityMapsForCheckpoints();
         hasTarget = false;
-        findNewTarget(start);
-    }
-
-    private void findStart() {
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[0].length; y++) {
-                if (map[x][y] == Tile.START) {
-                    start = new int[]{x,y};
-                }
-            }
-        }
     }
 
     private void findFinishes() {
