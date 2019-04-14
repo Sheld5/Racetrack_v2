@@ -2,7 +2,7 @@
 
 PC version of the classic "racetrack" game (usually played with pen and paper) with AI interface.
 
-Web about the project: (https://sheld5.github.io/Racetrack_v2/)
+Web about the project: https://sheld5.github.io/Racetrack_v2/
 
 ## Installation
 
