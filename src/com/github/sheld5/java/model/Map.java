@@ -3,8 +3,8 @@ package model;
 import main.Game;
 import org.xml.sax.SAXException;
 import util.DataReader;
+import util.MapFormatException;
 import util.Resources;
-import util.StartNotFoundException;
 
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,13 +40,14 @@ public class Map extends JPanel {
      * @param tileSetFileName the name of the tile-set file which is to be used to 'translate'
      *                        the data in numbers from the map file to the enum Tile format.
      * @param game the instance of Game to which this map is going to be added.
-     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
+     * @throws MapFormatException thrown if there is no start on the map or there is more than one start
+     *                            or if there is no finish.
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      * @see DataReader#getMapData(String, String)
      */
-    public Map(String mapFileName, String tileSetFileName, Game game) throws StartNotFoundException, ParserConfigurationException, SAXException, IOException {
+    public Map(String mapFileName, String tileSetFileName, Game game) throws MapFormatException, ParserConfigurationException, SAXException, IOException {
         this.game = game;
         DataReader dr = new DataReader();
         mapTile = dr.getMapData(mapFileName, tileSetFileName);
@@ -55,13 +56,14 @@ public class Map extends JPanel {
         setSize(tileWidth * game.getTileSize(), tileHeight * game.getTileSize());
         setBackground(Color.BLACK);
         findStart();
+        checkForFinish();
     }
 
     /**
      * Finds the start on the map and saves its coordinates.
-     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
+     * @throws MapFormatException thrown if there is no start on the map or there is more than one.
      */
-    private void findStart() throws StartNotFoundException {
+    private void findStart() throws MapFormatException {
         start = new int[2];
         boolean startFound = false;
         for (int x = 0; x < tileWidth; x++) {
@@ -73,15 +75,30 @@ public class Map extends JPanel {
                         startFound = true;
                     } else {
                         System.out.println("More than one start found on the map");
-                        throw new StartNotFoundException();
+                        throw new MapFormatException();
                     }
                 }
             }
         }
         if (!startFound) {
             System.out.println("No start found on the map");
-            throw new StartNotFoundException();
+            throw new MapFormatException();
         }
+    }
+
+    /**
+     * Checks if the map has at least one finish and throws MapFormatException if it does not.
+     * @throws MapFormatException if the map does not have at least one finish.
+     */
+    private void checkForFinish() throws MapFormatException {
+        for (int x = 0; x < tileWidth; x++) {
+            for (int y = 0; y < tileHeight; y++) {
+                if (getTile(x, y) == Tile.FINISH) {
+                    return;
+                }
+            }
+        }
+        throw new MapFormatException();
     }
 
     /**

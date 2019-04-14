@@ -83,7 +83,8 @@ public class DataReader {
         NodeList nList = doc.getElementsByTagName("tile");
         String imageFileName;
         for (int i = 0; i < nList.getLength(); i++) {
-            imageFileName = nList.item(i).getChildNodes().item(1).getAttributes().item(1).getNodeValue().substring(3);
+            imageFileName = nList.item(i).getChildNodes().item(1).getAttributes().item(1).getNodeValue().substring(10);
+            System.out.println(imageFileName);
             if (imageFileName.equals("TileCheckpoint.png")) {
                 tileSet.put(Integer.parseInt(nList.item(i).getAttributes().item(0).getNodeValue()) + 1, Tile.CHECKPOINT);
             } else if (imageFileName.equals("TileFinish.png")) {

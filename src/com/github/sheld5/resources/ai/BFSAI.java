@@ -30,9 +30,6 @@ public class BFSAI implements DriverAI {
     private ArrayList<ArrayList<int[]>> checkpoints;
     // List of all currently saved paths.
     private ArrayList<Path> paths;
-    // ArrayList<> 'paths' is copied to 'tempPaths' at the beginning of the while loop
-    // to allow for new Paths to be saved in 'paths'.
-    private ArrayList<Path> tempPaths;
     // List of all visited Nodes.
     private ArrayList<Node> visitedNodes;
     // Is set to true if a Path which ends in a Finish node has been found.
@@ -67,8 +64,9 @@ public class BFSAI implements DriverAI {
         // In every iteration, considers each next possible move from each Path from previous iteration. (BFS AI)
         // Throws away new Paths which lead to a Node already visited as these would only be longer.
         while(!finishFound) {
-            // Saves Paths from the previous iteration into 'tempPaths' and clears 'paths'.
-            tempPaths = deepCopy(paths);
+            // ArrayList<> 'paths' is copied to 'tempPaths' at the beginning of the while loop
+            // to allow for new Paths to be saved in 'paths'.
+            ArrayList<Path> tempPaths = paths;
             paths = new ArrayList<>();
             /*
                 FOR each Path from previous iteration:

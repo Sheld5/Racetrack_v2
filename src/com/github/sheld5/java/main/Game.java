@@ -3,7 +3,7 @@ package main;
 import org.xml.sax.SAXException;
 import model.*;
 import util.AICompiler;
-import util.StartNotFoundException;
+import util.MapFormatException;
 
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -121,7 +121,8 @@ public class Game extends JPanel implements KeyListener {
      * Calls other init-methods to initialize different parts of the game.
      * @param menu the instance of Menu from which the game should gather information to initialize the game.
      * @throws IOException
-     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
+     * @throws MapFormatException thrown if there is no start on the map or there is more than one start
+     *                            or if there is no finish.
      * @throws SAXException
      * @throws ParserConfigurationException
      * @see Menu
@@ -136,7 +137,7 @@ public class Game extends JPanel implements KeyListener {
      * @see Game#initCheckpoints(int)
      * @see Game#initRace()
      */
-    Game(Menu menu) throws IOException, StartNotFoundException, SAXException, ParserConfigurationException {
+    Game(Menu menu) throws IOException, MapFormatException, SAXException, ParserConfigurationException {
         tileSize = menu.getLastGameTileSize();
         init();
         initCrosshair();
@@ -236,10 +237,11 @@ public class Game extends JPanel implements KeyListener {
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
-     * @throws StartNotFoundException thrown if there is no start on the map or there is more than one.
+     * @throws MapFormatException thrown if there is no start on the map or there is more than one start
+     *                            or if there is no finish.
      * @see Map
      */
-    private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, StartNotFoundException {
+    private void initMap(String mapName) throws ParserConfigurationException, SAXException, IOException, MapFormatException {
         map = new Map(mapName, TILE_SET_FILE_NAME, this);
         map.setLocation(MAP_INDENT, MAP_INDENT);
         map.setVisible(true);

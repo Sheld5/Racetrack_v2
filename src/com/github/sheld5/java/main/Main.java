@@ -1,8 +1,8 @@
 package main;
 
 import org.xml.sax.SAXException;
+import util.MapFormatException;
 import util.Resources;
-import util.StartNotFoundException;
 
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -88,7 +88,7 @@ public class Main {
             frame.add(game);
             menu.setVisible(false);
             frame.revalidate();
-        } catch (IOException | SAXException | ParserConfigurationException | StartNotFoundException | IllegalArgumentException e) {
+        } catch (IOException | SAXException | ParserConfigurationException | MapFormatException | IllegalArgumentException e) {
             System.out.println("An error occurred. The game could not be initiated.");
             e.printStackTrace();
         }
