@@ -1,3 +1,0 @@
-TestAI.java
-BFSAI.java
-BFSAIwoCheckpoints.java

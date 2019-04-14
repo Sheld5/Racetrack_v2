@@ -14,6 +14,10 @@ public class Resources {
      */
     public static BufferedImage windowIcon;
     /**
+     * Used as the icon the button for choosing the AI file via the file manager in the pre-game settings menu.
+     */
+    public static BufferedImage folder;
+    /**
      * The textures used to display tiles.
      */
     public static BufferedImage tileStart, tileFinish, tileCheckpoint, tileRoad, tileGrass, tileWater, tileWall, tileSand, tileIce;
@@ -33,6 +37,7 @@ public class Resources {
      */
     public static void load() {
         windowIcon = loadImage("carIcon.png");
+        folder = loadImage("folder.png");
 
         tileStart = loadImage("tileStart.png");
         tileFinish = loadImage("tileFinish.png");

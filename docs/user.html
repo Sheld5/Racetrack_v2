@@ -40,10 +40,13 @@
 </figure>
 <p>Po stisknutí tlačítka <em>Play</em> se dostaneme do nastavení hry. Zde si můžeme pomocí grafického uživatelského rozhraní zvolit veškerá nastavení hry, než hru zapneme.</p>
 <p>V horní části okna aplikace můžeme pomocí rozbalovacího seznamu vybrat mapu, na které chceme hrát.</p>
-<p>Uprostřed se nachází velký šedý obdélník pro nastavení hráčů. V něm je mimo jiné tlačítko <em>Add Player</em>. Tímto tlačítkem můžeme přidávat hráče. Když ho stiskneme, uvidíme, že je do obdélníku přidán nový tmavě šedý pruh, obsahující další různá nastavení, stejný jako ten, co tam byl od začátku. Každý z těchto pruhů znázorňuje jednoho hráče, který bude ve hře závodit, a obsahuje veškerá nastavení pro tohoto hráče. První (zleva) je tlačítko, kterým můžeme vybírat barvu auta pro daného hráče. Klikáním na toto tlačítko přepínáme mezi možnými barvami. Druhé je textové pole, ve kterém můžeme zvolit jméno hráče. Třetí je rozbalovací seznam, pomocí kterého můžeme nastavit, jestli má být tento hráč ovládán počítačem. Pokud chceme, aby byl tento hráč ovládán člověkem, zvolíme možnost "HUMAN". Pokud chceme, aby byl ovládán jednou z umělých inteligencí, zvolíme příslušnou z nich v seznamu. Nakonec se zde nachází tlačítko s červeným křížkem, pomocí kterého můžeme hráče odebrat.</p>
+<p>Uprostřed se nachází velký šedý obdélník pro nastavení hráčů. V něm je mimo jiné tlačítko <em>Add Player</em>. Tímto tlačítkem můžeme přidávat hráče. Když ho stiskneme, uvidíme, že je do obdélníku přidán nový tmavě šedý pruh, obsahující další různá nastavení, stejný jako ten, co tam byl od začátku. Každý z těchto pruhů znázorňuje jednoho hráče, který bude ve hře závodit, a obsahuje veškerá nastavení pro tohoto hráče. První (zleva) je tlačítko, kterým můžeme vybírat barvu auta pro daného hráče. Klikáním na toto tlačítko přepínáme mezi možnými barvami. Druhé je textové pole, ve kterém můžeme zvolit jméno hráče. Dále je zde bílý nápis <em>HUMAN</em>. Ten značí, že v tuto chvíli není pro dané autíčko zvolena žádná AI a bude tedy řízeno lidským hráčem. Pokud chceme pro dané autíčko vybrat AI, použijeme tlačítko s ikonou složky. Po stisknutí tlačítka se otevře prohlížeč souborů, pomocí kterého můžeme zvolit java soubor té AI, kterou chceme použít. Po úspěšném zvolení souboru AI se místo nápisu <em>HUMAN</em> zeleně zobrazí jméno zvolené AI. Nakonec je zde tlačítko s červeným křížkem, kterým můžeme daného hráče odebrat.</p>
 <p>Ve spodní části obrazovky se nachází dvě tlačítka. Tlačítkem <em>Start Game</em> spustíme hru s nastavením, které je momentálně zvoleno. Stisknutím tlačítka <em>Back</em> se vrátíme zpět do hlavního menu.</p>
 <figure>
 <img src="images/game_settings.jpg" alt="Nastavení hry" /><figcaption>Nastavení hry</figcaption>
+</figure>
+<figure>
+<img src="images/file_manager.jpg" alt="Výběr souboru AI" /><figcaption>Výběr souboru AI</figcaption>
 </figure>
 <div id="ovladani-hry">
 <h2 id="ovladani-hry">Ovládání hry</h2>
@@ -75,14 +78,6 @@
 <li><p>Voda (modrá) - Pokud autíčko během své trasy vjede do vody, "potopí se" a nemůže pokračovat v závodě. Hráč je diskvalifikován.</p></li>
 <li><p>Písek (žlutá) - Pokud autíčko vjede do písku, je zde zastaveno (nedojede celou trasu svého tahu) a jeho vektor pohybu je nastaven na {0,0}. Tím pádem se při přejíždění více políček písku autíčko může pohybovat jen o jedno políčko za kolo.</p></li>
 <li><p>Led (bílo-modrá) - Pokud autíčko skončí svůj tah na ledu, dostává se do smyku a v příštím tahu hráč ovládající toto autíčko nemůže měnit jeho vektor pohybu.</p></li>
-</ul>
-<h1 id="implementace-vlastni-ai-do-hry">Implementace vlastní AI do hry</h1>
-<p>Pro přidání vlastní AI do hry je zapotřebí provést tyto kroky:</p>
-<ul>
-<li><p>Napište své AI (samozřejmě v programovacím jazyce Java) jako implementaci rozhraní <em>DriverAI.java</em>, které naleznete v jar souboru aplikace ve složce <em>/ai/DriverAI.java</em>.</p></li>
-<li><p>Vložte java soubor svého AI do jar souboru aplikace do složky <em>/ai/VaseAI.java</em>.</p></li>
-<li><p>Přidejte jméno souboru vašeho AI do souboru <em>/META-INF/ai.txt</em> v jar souboru aplikace.</p></li>
-<li><p>Zapněte hru a v nastavení hry přiřaďte vaše AI jednomu z aut.</p></li>
 </ul>
 <h1 id="pridani-vlastni-mapy-do-hry">Přidání vlastní mapy do hry</h1>
 <p>Pro přidání vlastní mapy do hry je zapotřebí provést tyto kroky:</p>

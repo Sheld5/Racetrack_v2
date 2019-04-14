@@ -23,7 +23,8 @@ public class AICompiler {
      */
     public DriverAI compile(CarPanel carPanel) throws IOException {
         try {
-            InputStream in = getClass().getResourceAsStream("/ai/" + carPanel.getAiFile());
+            System.out.println(carPanel.getAiFile().getPath());
+            InputStream in = new FileInputStream(carPanel.getAiFile());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();

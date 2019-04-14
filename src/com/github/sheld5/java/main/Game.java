@@ -264,7 +264,7 @@ public class Game extends JPanel implements KeyListener {
         cars = new Car[carPanels.size()];
         int i = 0;
         for (CarPanel panel : carPanels) {
-            if (panel.getAiFile() == "HUMAN") {
+            if (panel.getAiName() == null) {
                 cars[i] = new Car(panel.getPlayerName(), "HUMAN", panel.getCarColor(), null, this);
             } else {
                 cars[i] = new Car(panel.getPlayerName(), panel.getAiName(), panel.getCarColor(), aiCompiler.compile(panel), this);
