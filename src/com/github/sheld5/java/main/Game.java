@@ -111,7 +111,8 @@ public class Game extends JPanel implements KeyListener {
      */
     private int[] nextAiMove;
     /**
-     * Is true when next AI move is stored and the game is waiting for the user to confirm it.
+     * Is true when next AI move is stored and the game is waiting for the user to confirm it
+     * or if the active car is on ICE and the game is waiting fot he user to confirm its move.
      */
     private boolean waitingForEnter;
 
@@ -782,6 +783,10 @@ public class Game extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Returns true if the active car is on ICE.
+     * @return true if the active car is on ICE.
+     */
     public boolean activeCarOnIce() {
         if (map.getTile(activeCar.getCoordinates()) == Tile.ICE) {
             return true;
